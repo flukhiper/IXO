@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Chat from "@components/Chat.tsx";
 
 const Home: React.FC = () => {
   const [count, setCount] = useState(0);
@@ -27,6 +28,7 @@ const Home: React.FC = () => {
       <h1 className="text-3xl font-bold underline">
         Hello world!
       </h1>
+      <Chat />
     </>
   );
 };

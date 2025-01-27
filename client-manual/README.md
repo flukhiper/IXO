@@ -1,11 +1,6 @@
 # IXO
 
-# Client
-
-deno run -A npm:create-vite@latest --template react-ts or
-https://github.com/denoland/react-vite-ts-template
-
-# Client Manuanl
+## Client Manuanl
 
 deno init deno add npm:react npm:react-dom npm:react-router-dom npm:@types/react
 npm:vite npm:@vitejs/plugin-react npm:@deno/vite-plugin
