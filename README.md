@@ -128,3 +128,25 @@ function App() {
   );
 }
 ```
+
+# Tailwindcss
+
+deno add npm:tailwindcss npm:@tailwindcss/vite
+
+configure vite plugin vite.config.ts
+
+```Typescript
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+  ],
+});
+```
+
+import tailwindcss index.css
+
+```CSS
+@import "tailwindcss";
+```

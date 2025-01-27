@@ -1,7 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client";
+
+// const socket: Socket = io("http://localhost:8081");
 
 const Home: React.FC = () => {
   const [count, setCount] = useState(0);
+
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState<string[]>([]);
+
+  // useEffect(() => {
+  //   socket.on("message", (msg: string) => {
+  //     setChat((prevChat: string) => [...prevChat, msg]);
+  //   });
+
+  //   return () => {
+  //     socket.off("message");
+  //   };
+  // }, []);
+
+  // const sendMessage = () => {
+  //   if (message.trim()) {
+  //     socket.emit("message", message);
+  //     setMessage("");
+  //   }
+  // };
 
   return (
     <>
@@ -25,6 +48,9 @@ const Home: React.FC = () => {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
     </>
   );
 };
