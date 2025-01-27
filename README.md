@@ -71,7 +71,7 @@ export default defineConfig({
 });
 ```
 
-create folder client
+create client folder
 
 ```
 client-manual/
@@ -84,4 +84,17 @@ client-manual/
 │   │   ├── main.jsx              # Entry point
 │   │   └── vite-env.d.ts         # Vite type defination
 │   └── deno.json                 # Project metadata and dependencies
+```
+
+deno add jsr:@oak/oak jsr:@tajpouria/cors
+
+create server folder
+
+```
+client-manual/
+├── server/                  
+│   ├── util/
+│   │   └── routeStaticFilesFrom.ts     # Configure static site routes
+│   ├── main.ts                         # Serve server
+│   └── main_test.ts                    # Testing file
 ```
