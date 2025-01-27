@@ -78,10 +78,10 @@ client-manual/
 ├── client/                  
 │   ├── public/                   # Static files (e.g., images, sounds)
 │   ├── src/
-│   │   ├── App.css               # Main App component
-│   │   ├── App.jsx               # App styles
+│   │   ├── App.css               # App styles
+│   │   ├── App.tsx               # Main App component
 │   │   ├── index.css             # Global styles
-│   │   ├── main.jsx              # Entry point
+│   │   ├── main.tsx              # Entry point
 │   │   └── vite-env.d.ts         # Vite type defination
 │   └── deno.json                 # Project metadata and dependencies
 ```
@@ -97,4 +97,34 @@ client-manual/
 │   │   └── routeStaticFilesFrom.ts     # Configure static site routes
 │   ├── main.ts                         # Serve server
 │   └── main_test.ts                    # Testing file
+```
+
+# React Router
+
+deno add npm:react-router
+
+```
+client/                  
+├── src/
+│   └── pages
+│   │   └── Home.tsx          # Home page
+│   └── App.tsx               # Main App component
+```
+
+refactor code
+
+```Typescript
+import Home from "./pages/Home.tsx";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* Catch-all route for 404 */}
+        {/* <Route path="*" element={<NotFound />} /> */}
+      </Routes>
+    </BrowserRouter>
+  );
+}
 ```
