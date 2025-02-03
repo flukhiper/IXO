@@ -25,26 +25,18 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="p-5">
+    <div>
       <h1>Chat App</h1>
-      <div className="p-2 h-24 overflow-scroll border border-gray-300">
-        {chat.map((msg: string, index: number) => <div key={index}>{msg}</div>)}
+      <div>
+        {chat.map((msg: string, index: number) => <p key={index}>{msg}</p>)}
       </div>
-      <div className="mt-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="p-2 w-4/5"
-        />
-        <button
-          onClick={sendMessage}
-          className="p-2 ml-2"
-        >
-          Send
-        </button>
-      </div>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 };
