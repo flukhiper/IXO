@@ -5,8 +5,10 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@types/express@5": "5.0.0",
     "npm:@types/node@*": "22.5.4",
+    "npm:cors@^2.8.5": "2.8.5",
     "npm:express@^4.21.2": "4.21.2",
-    "npm:socket.io@^4.8.1": "4.8.1"
+    "npm:socket.io@^4.8.1": "4.8.1",
+    "npm:uuid@^11.0.5": "11.0.5"
   },
   "jsr": {
     "@std/assert@1.0.11": {
@@ -544,6 +546,9 @@
     "utils-merge@1.0.1": {
       "integrity": "sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA=="
     },
+    "uuid@11.0.5": {
+      "integrity": "sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA=="
+    },
     "vary@1.1.2": {
       "integrity": "sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg=="
     },
@@ -880,8 +885,10 @@
     "dependencies": [
       "jsr:@std/assert@1",
       "npm:@types/express@5",
+      "npm:cors@^2.8.5",
       "npm:express@^4.21.2",
-      "npm:socket.io@^4.8.1"
+      "npm:socket.io@^4.8.1",
+      "npm:uuid@^11.0.5"
     ]
   }
 }
