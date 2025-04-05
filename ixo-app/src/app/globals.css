@@ -10,6 +10,30 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-mint-500: oklch(0.72 0.11 178);
+
+  --animate-rerender: rerender 1s ease-in-out;
+  @keyframes rerender {
+    0% {
+      border-color: #FF0080;
+    }
+    40% {
+      border-color: #FF0080;
+    }
+  }
+
+  --animate-highlight: highlight 1s ease-in-out;
+  @keyframes highlight {
+    0% {
+      background: #FF0080;
+      color: white;
+    }
+    40% {
+      background: #FF0080;
+      color: white;
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
