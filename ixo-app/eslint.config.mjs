@@ -26,7 +26,7 @@ const eslintConfig = [
       '@stylistic/ts/object-curly-spacing': [ 'error', 'always' ],
       '@stylistic/ts/quotes': [ 'error', 'single' ],
       '@/array-bracket-spacing': [ 'error', 'always' ],
-      '@stylistic/ts/object-property-newline': 0,
+      '@stylistic/ts/object-property-newline': 0
     }
   }
 ];

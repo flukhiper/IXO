@@ -1,15 +1,20 @@
-'use client';
 import ClickCounter from '@/components/clickCounter';
-import StageComponent from './components/stage';
+import { GameProvider } from '@/contexts/game/GameContext';
+
+import StageComponent from './components/Stage';
+import Tools from './components/Tools';
 
 const DemoPage = () => {
 
   return <>
-    <div className='min-h-screen p-5 flex flex-col'>
-      <h1>Demo</h1>
-      <ClickCounter/>
-      <StageComponent />
-    </div>
+    <GameProvider>
+      <div className='min-h-screen p-5 flex flex-col'>
+        <h1>Demo</h1>
+        <Tools/>
+        <ClickCounter/>
+        <StageComponent />
+      </div>
+    </GameProvider>
   </>;
 };
 
