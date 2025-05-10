@@ -31,6 +31,4 @@ const eslintConfig = [
   }
 ];
 
-console.log(eslintConfig);
-
 export default eslintConfig;

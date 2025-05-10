@@ -1,10 +1,9 @@
-export type TokenID = string;
 export type PlayerID = string;
 export type ObjectID = string;
 
 export interface GameState {
   board: BoardState;
-  tokens: Record<TokenID, TokenData>;
+  tokens: Record<ObjectID, TokenData>;
   players: Record<PlayerID, PlayerData>;
 }
 
@@ -26,7 +25,7 @@ export interface MapObject {
 }
 
 export interface TokenData {
-  id: TokenID;
+  id: ObjectID;
   ownerId: PlayerID;
   name: string;
   imageUrl: string;

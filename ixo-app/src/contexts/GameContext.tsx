@@ -1,20 +1,22 @@
 'use client';
 import { createContext, PropsWithChildren, useContext, useState, useEffect } from 'react';
 // import io from 'socket.io-client';
-import type { GameState, PlayerID } from '@/types/game';
+import type { GameState, MapObject, ObjectID, PlayerID } from '@/types/game';
 
 // const socket = io('http://localhost:3000');
 
 type GameContextType = {
   gameState: GameState | null;
   playerId: PlayerID | null;
+  onMapChange: (id: ObjectID, updated: MapObject) => void;
   // moveToken: (tokenId: string, position: { x: number; y: number }) => void;
   // moveObject: (objectId: string, position: { x: number; y: number }) => void;
 };
 
 const GameContext = createContext<GameContextType>({
   gameState: null,
-  playerId: null
+  playerId: null,
+  onMapChange: () => {}
   // moveToken: () => {},
   // moveObject: () => {} 
 });
@@ -100,6 +102,23 @@ export const GameProvider: React.FC<PropsWithChildren> = ({ children }) => {
     // return () => socket.disconnect();
   }, []);
 
+  const onMapChange = (id: ObjectID, updated: MapObject) => {
+    setGameState(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        board: {
+          ...prev.board,
+          maps: {
+            ...prev.board.maps,
+            [id]: updated
+          }
+        }
+      };
+    });
+    // socket.emit('update-object', { id, updated });
+  };
+
   //   const moveToken = (tokenId, position) =>
   //     socket.emit('move-token', { tokenId, position });
 
@@ -108,7 +127,7 @@ export const GameProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <GameContext.Provider
-      value={{ gameState, playerId }}
+      value={{ gameState, playerId, onMapChange }}
     >
       {
         gameState && playerId ? 

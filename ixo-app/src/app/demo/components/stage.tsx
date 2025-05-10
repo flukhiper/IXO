@@ -4,7 +4,9 @@ import { Stage, Layer, Rect, Circle, Text } from 'react-konva';
 import Konva from 'konva';
 
 import useContainerSize from '@/hooks/useContainerSize';
-import { useGame } from '@/contexts/game/GameContext';
+import { useGame } from '@/contexts/GameContext';
+import { useSelection } from '@/contexts/SelectionContext';
+
 import MapObject from './MapObject';
 
 const RealStageComponent = () => {
@@ -13,7 +15,8 @@ const RealStageComponent = () => {
 
   // hooks
   const { size, containerRef } = useContainerSize<HTMLDivElement>();
-  const { gameState } = useGame();
+  const { gameState, onMapChange } = useGame();
+  const { setSelectedObjectId } = useSelection();
 
   // effects
 
@@ -65,6 +68,14 @@ const RealStageComponent = () => {
     });
   };
 
+  const handleDeselect = (e: Konva.KonvaEventObject<MouseEvent> | Konva.KonvaEventObject<TouchEvent>) => {
+    // if clicked on empty area, remove selection
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      setSelectedObjectId(null);
+    }
+  };
+
   if (!gameState) {
     return <div className='flex-grow bg-gray-900' />;
   }
@@ -77,12 +88,17 @@ const RealStageComponent = () => {
         width={size.width} 
         height={size.height}
         onWheel={onStageWheel}
+        onMouseDown={handleDeselect}
+        onTouchStart={handleDeselect}
         draggable
       >
         <Layer>
           {
             gameState.board.maps && Object.values(gameState.board.maps).map((map) => {
-              return <MapObject key={map.id} {...map} />;
+              return <MapObject 
+                key={map.id} {...map} 
+                onChange={onMapChange}
+              />;
             })
           }
         </Layer>
