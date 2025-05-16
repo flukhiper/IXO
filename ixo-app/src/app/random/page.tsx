@@ -25,11 +25,14 @@ const RandomPage: React.FC = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-
     const result = event.target.value
       .split(/\n\s*\n/) // Split by empty lines
-      .map((section) => section.split('\n')); // Split each section by lines
-
+      .map((section) => {
+        const lines = section.split('\n');
+        const teamName = lines[0]; // First line is the team name
+        const members = lines.slice(1).map((member) => `${member} (${teamName})`); // Append team name to each member
+        return members;
+      });
 
     const allMembers = result.flat();
     const newTeams = Array.from<Array<string>>({ length: teamCount }).map<Array<string>>(() => []);
