@@ -93,7 +93,7 @@ export function expressionToString (expr: Expression): string {
       return joinOperands(expr.operands, '||');
 
     case 'not':
-      return `!(${expressionToString(expr.operand)})`;
+      return `!${expressionToString(expr.operand)}`;
 
     case 'eq':
       return `(${expressionToString(expr.operands[0])} == ${expressionToString(expr.operands[1])})`;
