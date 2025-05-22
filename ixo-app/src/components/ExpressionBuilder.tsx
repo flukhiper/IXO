@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 
 import { expressionToString } from '@/libs/engine/evaluation';
 import type { Expression, ExpressionType } from '@/types/expression';
@@ -60,9 +59,19 @@ function expressionTypeSelector (expr: Expression, onChange: (newExpr: Expressio
     </select>
   );
 }
+interface ExpressionBuilderProps {
+  value: Expression;
+  onChange: (expression: Expression) => void;
+  availableVariables: string[];
+  availableFunctions?: string[];
+}
 
-const ExpressionBuilder: React.FC = () => {
-  const [ expr, setExpr ] = useState<Expression>({ type: 'constant', value: 0 });
+export default function ExpressionBuilder ({
+  value,
+  onChange,
+  availableVariables
+  // availableFunctions
+}: ExpressionBuilderProps) {
 
   const renderEditor = (expr: Expression, update: (e: Expression) => void) => {
     switch (expr.type) {
@@ -85,12 +94,17 @@ const ExpressionBuilder: React.FC = () => {
         );
       case 'variable':
         return (
-          <input
-            type="text"
-            className="border px-2 py-1 rounded w-24"
+          <select
             value={expr.name}
             onChange={(e) => update({ type: 'variable', name: e.target.value })}
-          />
+            className="ml-2 border px-2 py-1 rounded"
+          >
+            {availableVariables.map((variable) => 
+              <option key={variable} value={variable}>
+                {variable}
+              </option>
+            )}
+          </select>
         );
       case 'add':
       case 'subtract':
@@ -192,16 +206,16 @@ const ExpressionBuilder: React.FC = () => {
     const newType = e.target.value as ExpressionType;
     switch (newType) {
       case 'constant':
-        setExpr({ type: 'constant', value: 0 });
+        onChange({ type: 'constant', value: 0 });
         break;
       case 'variable':
-        setExpr({ type: 'variable', name: 'x' });
+        onChange({ type: 'variable', name: availableVariables[0] });
         break;
       case 'not':
-        setExpr({ type: 'not', operand: { type: 'constant', value: true } });
+        onChange({ type: 'not', operand: { type: 'constant', value: true } });
         break;
       case 'if':
-        setExpr({
+        onChange({
           type: 'if',
           condition: { type: 'constant', value: true },
           then: { type: 'constant', value: 1 },
@@ -214,7 +228,7 @@ const ExpressionBuilder: React.FC = () => {
       case 'lt':
       case 'gte':
       case 'lte':
-        setExpr({
+        onChange({
           type: newType,
           operands: [
             { type: 'constant', value: 1 },
@@ -223,7 +237,7 @@ const ExpressionBuilder: React.FC = () => {
         });
         break;
       default:
-        setExpr({
+        onChange({
           type: newType,
           operands: [
             { type: 'constant', value: 1 },
@@ -234,16 +248,20 @@ const ExpressionBuilder: React.FC = () => {
     }
   };
 
+  const filteredOperators = operators.filter((op)=> 
+    op !== 'variable' || availableVariables.length
+  );
+
   return (
     <div className="p-4 space-y-4 font-sans">
       <div>
         <label className="text-sm font-medium">Expression Type:</label>
         <select
-          value={expr.type}
+          value={value.type}
           onChange={handleTypeChange}
           className="ml-2 border px-2 py-1 rounded"
         >
-          {operators.map((op) => 
+          {filteredOperators.map((op) => 
             <option key={op} value={op}>
               {op}
             </option>
@@ -253,17 +271,15 @@ const ExpressionBuilder: React.FC = () => {
 
       <div>
         <div className="text-sm font-semibold">Editor:</div>
-        {renderEditor(expr, setExpr)}
+        {renderEditor(value, onChange)}
       </div>
 
       <div>
         <div className="text-sm font-semibold">Output:</div>
         <div className="border p-2 rounded font-mono whitespace-pre-wrap">
-          {expressionToString(expr)}
+          {expressionToString(value)}
         </div>
       </div>
     </div>
   );
-};
-
-export default ExpressionBuilder;
+}
