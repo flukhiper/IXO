@@ -1,23 +1,15 @@
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
 import ClickCounter from '@/components/clickCounter';
 import { GameProvider } from '@/contexts/GameContext';
 import { SelectionProvider } from '@/contexts/SelectionContext';
-
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { protectRoute } from '@/libs/auth/protectRoute';
 
 import StageComponent from './components/Stage';
 import Tools from './components/Tools';
 import Menu from './components/menu/Menu';
 
 const DemoPage = async () => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect('/login?callbackUrl=/demo');
-  }
-
-  console.log('session', session);
+  const session = await protectRoute('/demo');
+  console.log(session);
 
   return <>
     <GameProvider>
