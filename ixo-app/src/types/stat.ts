@@ -1,9 +1,10 @@
-import type { ModifierValue } from './value';
+import type { MultiLangText } from './common';
+import type { FixValue, ModifierValue } from './value';
 
 export interface StatConfig {
   id: string;
-  name: string;
-  description?: string;
-  value: number;
+  name: MultiLangText;
+  description?: MultiLangText;
+  value: FixValue;
   modifiers: Array<ModifierValue>;
 }

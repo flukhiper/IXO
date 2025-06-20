@@ -1,20 +1,22 @@
-// utils/conditionConfig/create.ts
 import { generateId } from '@/utils/helper';
 import type { ConditionConfig, ConditionEffect, TickTrigger, ConditionStackConfig } from '@/types/condition';
 
-export interface CreateConditionConfigParams {
+interface CreateConditionConfigParams {
   name: string;
+  nameTh?: string;
   description?: string;
+  descriptionTh?: string;
   tags?: string[];
   stack?: ConditionStackConfig;
   ticks?: TickTrigger[];
   effects: ConditionEffect[];
 }
-
 export function createConditionConfig (params: CreateConditionConfigParams): ConditionConfig {
   const {
     name,
-    description,
+    nameTh = '',
+    description = '',
+    descriptionTh = '',
     tags = [],
     stack,
     ticks = [],
@@ -23,8 +25,14 @@ export function createConditionConfig (params: CreateConditionConfigParams): Con
 
   return {
     id: generateId(name),
-    name,
-    description,
+    name: {
+      en: name,
+      th: nameTh
+    },
+    description: {
+      en: description,
+      th: descriptionTh
+    },
     tags,
     stack,
     ticks,

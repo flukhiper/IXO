@@ -6,6 +6,7 @@ import {
 } from '@/constants/condition';
 
 import type { ConditionValue, DiceValue, FixValue, ModifierValue, SavingValue } from './value';
+import type { MultiLangText } from './common';
 
 export type StackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
 
@@ -147,8 +148,8 @@ export type ConditionEffect =
 // --- Final ConditionConfig ---
 export interface ConditionConfig {
   id: string;
-  name: string;
-  description?: string;
+  name: MultiLangText;
+  description?: MultiLangText;
   tags?: string[];
 
   stack?: ConditionStackConfig;
