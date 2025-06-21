@@ -2,13 +2,15 @@ import { createAttributeConfigDiceValue, createAttributeConfigExpendableValue, c
 
 import type { AttributeConfig } from '@/types/attribute';
 import type { StatConfig } from '@/types/stat';
+import type { DamageScaleConfig, DamageTypeConfig } from '@/types/damage';
+import type { ConditionConfig } from '@/types/condition';
+import type { ActionConfig } from '@/types/action';
 
 import { AttributeConfigManager } from './AttributeConfigManager';
 import { StatConfigManager } from './StatConfigManager';
 import { DamageConfigManager } from './DamageConfigManager';
 import { ConditionConfigManager } from './ConditionConfigManager';
-import { DamageScaleConfig, DamageTypeConfig } from '@/types/damage';
-import { ConditionConfig } from '@/types/condition';
+import { ActionConfigManager } from './ActionConfigManager';
 
 const initialAttributes: AttributeConfig[] = [
   createAttributeConfigExpendableValue({
@@ -95,6 +97,7 @@ interface GameSystemOption {
   damageTypes?: DamageTypeConfig[]; 
   damageScales?: DamageScaleConfig[]; 
   conditions?: ConditionConfig[]; 
+  actions?: ActionConfig[]; 
 }
 export class GameSystem {
   readonly attributeManager: AttributeConfigManager;
@@ -105,10 +108,13 @@ export class GameSystem {
 
   readonly conditionManager: ConditionConfigManager;
 
+  readonly actionManager: ActionConfigManager;
+
   constructor (options?: GameSystemOption) {
     this.attributeManager = new AttributeConfigManager(options?.attributes ?? initialAttributes);
     this.statManager = new StatConfigManager(options?.stats);
     this.damageManager = new DamageConfigManager({ types: options?.damageTypes, scales: options?.damageScales });
     this.conditionManager = new ConditionConfigManager(options?.conditions);
+    this.actionManager = new ActionConfigManager(options?.actions);
   }
 }
