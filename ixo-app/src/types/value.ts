@@ -1,4 +1,4 @@
-import { CONDITION_VALUE_COMPARATOR, RESTORE_VALUE_TYPE, VALUE_TYPE } from '@/constants/value';
+import { CONDITION_VALUE_COMPARATOR, EQUIPMENT_REF_VALUE_TYPE, RESTORE_VALUE_TYPE, VALUE_TYPE } from '@/constants/value';
 
 export interface Value<T> {
   type: T;
@@ -27,6 +27,16 @@ export interface FixValue extends Value<typeof VALUE_TYPE.FIX> {
 
 export interface DiceValue extends Value<typeof VALUE_TYPE.DICE> {
   formula: string;
+}
+
+export type EquipmentRefValueType = typeof EQUIPMENT_REF_VALUE_TYPE[keyof typeof EQUIPMENT_REF_VALUE_TYPE];
+
+export interface EquipmentRefValue extends Value<typeof VALUE_TYPE.EQUIPMENT_REF> {
+  value: EquipmentRefValueType;
+}
+
+export interface AttributeRefValue extends Value<typeof VALUE_TYPE.ATTRIBUTE_REF> {
+  attribute: string; // Attribute ID
 }
 
 export interface FullValue extends Value<typeof VALUE_TYPE.FULL> {}
