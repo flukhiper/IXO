@@ -1,5 +1,5 @@
 // src/manager/actionConfig.ts
-import type { ActionConfig } from '@/types/action';
+import type { ActionConfig } from '@/types/config/action';
 
 export class ActionConfigManager {
   private map = new Map<string, ActionConfig>();

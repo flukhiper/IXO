@@ -5,60 +5,60 @@ import {
   CONDITION_TYPE_SOURCE
 } from '@/constants/condition';
 
-import type { ConditionValue, DiceValue, FixValue, ModifierValue, SavingValue } from './value';
-import type { MultiLangText } from './common';
+import type { ConditionValue, DiceValue, FixValue, ModifierValue, SavingValue } from '../value';
+import type { MultiLangText } from '../common';
 
-export type StackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
+export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
 
 export interface ConditionStackConfig {
   id: string;
-  type: StackType;
+  type: ConditionStackType;
   priority?: number; // only used with 'overwrite'
 }
 
 // --- Tick Trigger Types ---
-export type TickType = typeof CONDITION_TICK_TYPE[keyof typeof CONDITION_TICK_TYPE];
-export type TickSource = typeof CONDITION_TYPE_SOURCE[keyof typeof CONDITION_TYPE_SOURCE];
+export type ConditionTickType = typeof CONDITION_TICK_TYPE[keyof typeof CONDITION_TICK_TYPE];
+export type ConditionTickSource = typeof CONDITION_TYPE_SOURCE[keyof typeof CONDITION_TYPE_SOURCE];
 
-export interface TickTagTrigger {
+export interface ConditionTickTagTrigger {
   type: typeof CONDITION_TICK_TYPE.TAG;
-  source: TickSource;
+  source: ConditionTickSource;
   tags: string[];
 }
 
-export interface TickDamageTrigger {
+export interface ConditionTickDamageTrigger {
   type: typeof CONDITION_TICK_TYPE.DAMAGE;
   damageTypes: string[]; // DamageTypeConfig.id[]
   saving?: SavingValue;
 }
 
-export interface TickDurationTrigger {
+export interface ConditionTickDurationTrigger {
   type: typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND | typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN;
   duration: number;
   saving?: SavingValue;
 }
 
-export interface TickConditionTrigger {
+export interface ConditionTickConditionTrigger {
   type: typeof CONDITION_TICK_TYPE.CONDITION;
   condition: ConditionValue;
 }
 
-export interface TickImmediateTrigger {
+export interface ConditionTickImmediateTrigger {
   type: typeof CONDITION_TICK_TYPE.IMMEDIATE;
 }
 
-export type TickTrigger =
-  | TickTagTrigger
-  | TickDamageTrigger
-  | TickDurationTrigger
-  | TickConditionTrigger
-  | TickImmediateTrigger;
+export type ConditionTickTrigger =
+  | ConditionTickTagTrigger
+  | ConditionTickDamageTrigger
+  | ConditionTickDurationTrigger
+  | ConditionTickConditionTrigger
+  | ConditionTickImmediateTrigger;
 
 // --- Effects ---
 export type ConditionEffectType = typeof CONDITION_EFFECT_TYPE[keyof typeof CONDITION_EFFECT_TYPE];
 
 // Damage effect
-export interface DamageEffect {
+export interface ConditionDamageEffect {
   type: typeof CONDITION_EFFECT_TYPE.DAMAGE;
   damage: {
     type: string; // DamageTypeConfig.id
@@ -67,7 +67,7 @@ export interface DamageEffect {
 }
 
 // Resistance effect
-export interface ResistanceEffect {
+export interface ConditionResistanceEffect {
   type: typeof CONDITION_EFFECT_TYPE.RESISTENCE;
   damage: {
     types: string[]; // DamageTypeConfig.id[]
@@ -76,43 +76,43 @@ export interface ResistanceEffect {
 }
 
 // Modifier effect
-export interface ModifierEffect {
+export interface ConditionModifierEffect {
   type: typeof CONDITION_EFFECT_TYPE.MODIFIER;
   modifier: ModifierValue;
 }
 
 // Disable action
-export interface DisableEffect {
+export interface ConditionDisableEffect {
   type: typeof CONDITION_EFFECT_TYPE.DISABLE;
   tags: string[]; // action tags
 }
 
 // Disadvantage effect
-export interface DisadvantageEffect {
+export interface ConditionDisadvantageEffect {
   type: typeof CONDITION_EFFECT_TYPE.DISADVANTAGE;
   attributes: string[]; // attribute IDs or special values like 'all-ability'
 }
 
 // Advantage effect
-export interface AdvantageEffect {
+export interface ConditionAdvantageEffect {
   type: typeof CONDITION_EFFECT_TYPE.ADVANTAGE;
   attributes: string[]; // attribute IDs or special values like 'all-saving'
 }
 
 // Fusion effect
-export interface FusionEffect {
+export interface ConditionFusionEffect {
   type: typeof CONDITION_EFFECT_TYPE.FUSION;
   baseConditions: string[];   // tag or ID
   resultConditions: string[]; // condition ID to apply
 }
 
 // Action/Boost/Weak/Force effect (you can expand these similarly)
-export interface ActionEffect {
+export interface ConditionActionEffect {
   type: typeof CONDITION_EFFECT_TYPE.ACTION;
   actions: string[]; // action ID or definition
 }
 
-export interface BoostEffect {
+export interface ConditionBoostEffect {
   type: typeof CONDITION_EFFECT_TYPE.BOOST;
   damage: {
     type: string;
@@ -120,7 +120,7 @@ export interface BoostEffect {
   };
 }
 
-export interface WeakEffect {
+export interface ConditionWeakEffect {
   type: typeof CONDITION_EFFECT_TYPE.WEAK;
   damage: {
     type: string;
@@ -128,23 +128,23 @@ export interface WeakEffect {
   };
 }
 
-export interface ForceEffect {
+export interface ConditionForceEffect {
   type: typeof CONDITION_EFFECT_TYPE.FORCE;
   actions: string[];
 }
 
 export type ConditionEffect =
-  | DamageEffect
-  | ResistanceEffect
-  | ModifierEffect
-  | DisableEffect
-  | DisadvantageEffect
-  | AdvantageEffect
-  | FusionEffect
-  | ActionEffect
-  | BoostEffect
-  | WeakEffect
-  | ForceEffect;
+  | ConditionDamageEffect
+  | ConditionResistanceEffect
+  | ConditionModifierEffect
+  | ConditionDisableEffect
+  | ConditionDisadvantageEffect
+  | ConditionAdvantageEffect
+  | ConditionFusionEffect
+  | ConditionActionEffect
+  | ConditionBoostEffect
+  | ConditionWeakEffect
+  | ConditionForceEffect;
 
 // --- Final ConditionConfig ---
 export interface ConditionConfig {
@@ -155,7 +155,7 @@ export interface ConditionConfig {
 
   stack?: ConditionStackConfig;
 
-  ticks: TickTrigger[]; // empty = permanent until removed manually
+  ticks: ConditionTickTrigger[]; // empty = permanent until removed manually
 
   effects: ConditionEffect[];
 }

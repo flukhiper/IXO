@@ -1,6 +1,6 @@
 // src/utils/actionConfig/create.ts
 import { generateId } from '@/utils/helper';
-import type { ActionConfig, ActionRequirement, ActionType, ActionLevelConfig } from '@/types/action';
+import type { ActionConfig, ActionRequirement, ActionType, ActionLevelConfig } from '@/types/config/action';
 
 interface CreateActionConfigParams {
   name: string;

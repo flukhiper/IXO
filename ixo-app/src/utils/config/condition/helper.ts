@@ -1,6 +1,6 @@
 // utils/conditionConfig/create.ts
 import type { DiceValue, FixValue } from '@/types/value';
-import type { DamageEffect, ModifierEffect, TickDurationTrigger, TickSource, TickTagTrigger } from '@/types/condition';
+import type { DamageEffect, ModifierEffect, TickDurationTrigger, TickSource, TickTagTrigger } from '@/types/config/condition';
 
 import { VALUE_TYPE } from '@/constants/value';
 import { CONDITION_EFFECT_TYPE, CONDITION_TICK_TYPE } from '@/constants/condition';

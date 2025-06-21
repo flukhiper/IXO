@@ -1,5 +1,5 @@
 import { generateId } from '@/utils/helper';
-import type { ConditionConfig, ConditionEffect, TickTrigger, ConditionStackConfig } from '@/types/condition';
+import type { ConditionConfig, ConditionEffect, TickTrigger, ConditionStackConfig } from '@/types/config/condition';
 
 interface CreateConditionConfigParams {
   name: string;

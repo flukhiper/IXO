@@ -1,5 +1,5 @@
-import type { AttributeConfig, AttributeType } from '@/types/attribute';
-import { isAttributeTypeUnique } from '@/utils/attributeConfig/typeGuard';
+import type { AttributeConfig, AttributeType } from '@/types/config/attribute';
+import { isAttributeTypeUnique } from '@/utils/config/attribute/typeGuard';
 
 export class AttributeConfigManager {
   private map = new Map<string, AttributeConfig>();

@@ -1,17 +1,17 @@
-import type { StatConfig } from '@/types/config/stat';
+import type { PathConfig } from '@/types/config/path';
 
-export class StatConfigManager {
-  private map = new Map<string, StatConfig>();
+export class PathConfigManager {
+  private map = new Map<string, PathConfig>();
 
-  constructor (initial: StatConfig[] = []) {
+  constructor (initial: PathConfig[] = []) {
     for (const config of initial) {
       this.add(config);
     }
   }
 
-  add (config: StatConfig) {
+  add (config: PathConfig) {
     if (this.map.has(config.id)) {
-      throw new Error(`Stat "${config.id}" already exists.`);
+      throw new Error(`Path "${config.id}" already exists.`);
     }
 
     this.map.set(config.id, config);
@@ -25,7 +25,7 @@ export class StatConfigManager {
     return this.map.has(id);
   }
 
-  list (): StatConfig[] {
+  list (): PathConfig[] {
     return Array.from(this.map.values());
   }
 

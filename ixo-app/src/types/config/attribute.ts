@@ -1,6 +1,6 @@
 import { ATTRIBUTE_TYPE_DICE_VALUE, ATTRIBUTE_TYPE_EXPENDABLE_VALUE, ATTRIBUTE_TYPE_FIX_VALUE, ATTRIBUTE_TYPE_OTHER } from '@/constants/attribute';
-import type { DiceValue, ExpendableValue, FixValue } from './value';
-import type { MultiLangText } from './common';
+import type { DiceValue, ExpendableValue, FixValue } from '../value';
+import type { MultiLangText } from '../common';
 
 export type AttributeTypeOther = typeof ATTRIBUTE_TYPE_OTHER[keyof typeof ATTRIBUTE_TYPE_OTHER];
 export type AttributeTypeFixValue = typeof ATTRIBUTE_TYPE_FIX_VALUE[keyof typeof ATTRIBUTE_TYPE_FIX_VALUE];

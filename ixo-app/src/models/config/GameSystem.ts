@@ -1,16 +1,20 @@
-import { createAttributeConfigDiceValue, createAttributeConfigExpendableValue, createAttributeConfigFixValue } from '@/utils/attributeConfig/creator';
+import { createAttributeConfigDiceValue, createAttributeConfigExpendableValue, createAttributeConfigFixValue } from '@/utils/config/attribute/creator';
 
-import type { AttributeConfig } from '@/types/attribute';
-import type { StatConfig } from '@/types/stat';
-import type { DamageScaleConfig, DamageTypeConfig } from '@/types/damage';
-import type { ConditionConfig } from '@/types/condition';
-import type { ActionConfig } from '@/types/action';
+import type { AttributeConfig } from '@/types/config/attribute';
+import type { StatConfig } from '@/types/config/stat';
+import type { DamageScaleConfig, DamageTypeConfig } from '@/types/config/damage';
+import type { ConditionConfig } from '@/types/config/condition';
+import type { ActionConfig } from '@/types/config/action';
+import type { PathConfig } from '@/types/config/path';
+import type { SkillConfig } from '@/types/config/skill';
 
 import { AttributeConfigManager } from './AttributeConfigManager';
 import { StatConfigManager } from './StatConfigManager';
 import { DamageConfigManager } from './DamageConfigManager';
 import { ConditionConfigManager } from './ConditionConfigManager';
 import { ActionConfigManager } from './ActionConfigManager';
+import { PathConfigManager } from './PathConfigManager';
+import { SkillConfigManager } from './SkillConfigManager';
 
 const initialAttributes: AttributeConfig[] = [
   createAttributeConfigExpendableValue({
@@ -98,6 +102,8 @@ interface GameSystemOption {
   damageScales?: DamageScaleConfig[]; 
   conditions?: ConditionConfig[]; 
   actions?: ActionConfig[]; 
+  path?: PathConfig[]; 
+  skills?: SkillConfig[]; 
 }
 export class GameSystem {
   readonly attributeManager: AttributeConfigManager;
@@ -109,6 +115,10 @@ export class GameSystem {
   readonly conditionManager: ConditionConfigManager;
 
   readonly actionManager: ActionConfigManager;
+  
+  readonly pathManager: PathConfigManager;
+
+  readonly skillManager: SkillConfigManager;
 
   constructor (options?: GameSystemOption) {
     this.attributeManager = new AttributeConfigManager(options?.attributes ?? initialAttributes);
@@ -116,5 +126,7 @@ export class GameSystem {
     this.damageManager = new DamageConfigManager({ types: options?.damageTypes, scales: options?.damageScales });
     this.conditionManager = new ConditionConfigManager(options?.conditions);
     this.actionManager = new ActionConfigManager(options?.actions);
+    this.pathManager = new PathConfigManager(options?.path);
+    this.skillManager = new SkillConfigManager(options?.skills);
   }
 }

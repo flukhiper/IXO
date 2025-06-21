@@ -1,5 +1,5 @@
-import type { MultiLangText } from './common';
-import type { FixValue } from './value';
+import type { MultiLangText } from '../common';
+import type { FixValue } from '../value';
 
 export interface DamageScaleConfig {
   id: string;

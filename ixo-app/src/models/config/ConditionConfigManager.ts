@@ -1,4 +1,4 @@
-import type { ConditionConfig } from '@/types/condition';
+import type { ConditionConfig } from '@/types/config/condition';
 
 export class ConditionConfigManager {
   private conditionMap = new Map<string, ConditionConfig>();

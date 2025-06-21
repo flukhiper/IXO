@@ -5,7 +5,8 @@ export interface Value<T> {
 }
 
 export interface ModifierValue extends Value<typeof VALUE_TYPE.MODIFIER> {
-  attribute: string;
+  attribute?: string;
+  stat?: string;
   formula: string;
 }
 

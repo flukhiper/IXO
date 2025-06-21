@@ -1,5 +1,5 @@
 import { VALUE_TYPE } from '@/constants/value';
-import type { DamageScaleConfig, DamageTypeConfig } from '@/types/damage';
+import type { DamageScaleConfig, DamageTypeConfig } from '@/types/config/damage';
 import { generateId } from '@/utils/helper';
 
 interface CreateDamageScaleConfigParams {

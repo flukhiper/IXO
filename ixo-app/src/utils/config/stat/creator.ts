@@ -1,6 +1,6 @@
 import { VALUE_TYPE } from '@/constants/value';
-import type { StatConfig } from '@/types/stat';
-import { generateId } from '../helper';
+import type { StatConfig } from '@/types/config/stat';
+import { generateId } from '../../helper';
 
 type Modifier = {
   attribute: string;

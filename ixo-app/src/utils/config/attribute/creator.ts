@@ -1,4 +1,4 @@
-import type { AttributeConfigDiceValue, AttributeConfigExpendableValue, AttributeConfigFixValue, AttributeTypeDiceValue, AttributeTypeExpendableValue, AttributeTypeFixValue, AttributeTypeOther } from '@/types/attribute';
+import type { AttributeConfigDiceValue, AttributeConfigExpendableValue, AttributeConfigFixValue, AttributeTypeDiceValue, AttributeTypeExpendableValue, AttributeTypeFixValue, AttributeTypeOther } from '@/types/config/attribute';
 import type { RestoreType } from '@/types/value';
 import { generateId, createFixValue, createDiceValue, createExpendableValue } from '@/utils/helper';
 

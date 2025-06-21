@@ -1,4 +1,4 @@
-import type { DamageScaleConfig, DamageTypeConfig } from '@/types/damage';
+import type { DamageScaleConfig, DamageTypeConfig } from '@/types/config/damage';
 
 interface DamageConfigInitial { 
   scales?: DamageScaleConfig[]; 

@@ -1,6 +1,6 @@
 import { ACTION_CONDITION_APPLY_TO_TYPE, ACTION_HIT_TYPE, ACTION_REQUIREMENT, ACTION_TARGET_AREA_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE } from '@/constants/action';
-import type { MultiLangText } from './common';
-import type { AttributeRefValue, DiceValue, EquipmentRefValue, FixValue } from './value';
+import type { MultiLangText } from '../common';
+import type { AttributeRefValue, DiceValue, EquipmentRefValue, FixValue } from '../value';
 
 export type ActionApplyConditionApplyToType = typeof ACTION_CONDITION_APPLY_TO_TYPE[keyof typeof ACTION_CONDITION_APPLY_TO_TYPE];
 
