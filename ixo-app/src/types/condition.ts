@@ -29,6 +29,7 @@ export interface TickTagTrigger {
 export interface TickDamageTrigger {
   type: typeof CONDITION_TICK_TYPE.DAMAGE;
   damageTypes: string[]; // DamageTypeConfig.id[]
+  saving?: SavingValue;
 }
 
 export interface TickDurationTrigger {

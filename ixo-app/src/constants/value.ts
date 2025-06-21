@@ -5,6 +5,8 @@ export const VALUE_TYPE = {
   FIX: 'fix',
   DICE: 'dice',
   FORMULA: 'formula',
+  EQUIPMENT_REF: 'equipment-ref',
+  ATTRIBUTE_REF: 'attribute-ref',
   FULL: 'full',
   EXPENDABLE: 'expendable'
 } as const;
@@ -21,3 +23,10 @@ export const CONDITION_VALUE_COMPARATOR = {
   GT: '>',
   EQ: '='
 } as const;
+
+
+export const EQUIPMENT_REF_VALUE_TYPE = {
+  MAIN_WEAPON: 'main-weapon',
+  SECONDARY_WEAPON: 'secondary-weapon'
+} as const;
+
