@@ -1,7 +1,11 @@
-import type { AttributeConfig, AttributeType } from '@/types/config/attribute';
+import { ATTRIBUTE_REF_ID } from '@/constants/attribute';
 import { isAttributeTypeUnique } from '@/utils/config/attribute/typeGuard';
 
+import type { AttributeConfig, AttributeType } from '@/types/config/attribute';
+
 export class AttributeConfigManager {
+  readonly refId = ATTRIBUTE_REF_ID;
+
   private map = new Map<string, AttributeConfig>();
 
   constructor (initial: AttributeConfig[] = []) {
@@ -38,6 +42,10 @@ export class AttributeConfigManager {
     return Array.from(this.map.values());
   }
 
+  listIds (): string[] {
+    return Array.from(this.map.keys());
+  }
+
   delete (id: string): boolean {
     return this.map.delete(id);
   }
@@ -52,5 +60,9 @@ export class AttributeConfigManager {
         uniqueTypes.add(config.attrType);
       }
     }
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

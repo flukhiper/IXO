@@ -1,3 +1,5 @@
+export const ATTRIBUTE_REF_ID = 'attribute' as const;
+
 export const ATTRIBUTE_TYPE_OTHER = {
   COMMON: 'common', 
   MODIFIER: 'modifier'

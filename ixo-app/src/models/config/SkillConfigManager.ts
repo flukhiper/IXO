@@ -1,6 +1,10 @@
+import { SKILL_REF_ID } from '@/constants/skill';
+
 import type { SkillConfig } from '@/types/config/skill';
 
 export class SkillConfigManager {
+  readonly refId = SKILL_REF_ID;
+
   private map = new Map<string, SkillConfig>();
 
   constructor (initialSkills: SkillConfig[] = []) {
@@ -24,6 +28,10 @@ export class SkillConfigManager {
     return Array.from(this.map.values());
   }
 
+  listIds (): string[] {
+    return Array.from(this.map.keys());
+  }
+
   delete (id: string): boolean {
     return this.map.delete(id);
   }
@@ -44,5 +52,9 @@ export class SkillConfigManager {
     return this.list().filter(skill =>
       skill.stack?.id === stackId
     );
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

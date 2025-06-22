@@ -1,6 +1,6 @@
 import type { AttributeConfigDiceValue, AttributeConfigExpendableValue, AttributeConfigFixValue, AttributeTypeDiceValue, AttributeTypeExpendableValue, AttributeTypeFixValue, AttributeTypeOther } from '@/types/config/attribute';
-import type { RestoreType } from '@/types/value';
-import { generateId, createFixValue, createDiceValue, createExpendableValue } from '@/utils/helper';
+import type { RestoreType } from '@/types/config/value';
+import { generateId, createFixValue, createDiceValue, createExpendableValue } from '@/utils/config/helper';
 
 interface CreateAttributeConfigFixValueParams {
   name: string;

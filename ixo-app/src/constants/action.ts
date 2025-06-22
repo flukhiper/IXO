@@ -1,3 +1,5 @@
+export const ACTION_REF_ID = 'action' as const;
+
 // Action apply to types
 export const ACTION_TYPE = {
   COMMON: 'common',

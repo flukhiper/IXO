@@ -1,19 +1,19 @@
 import { ACTION_CONDITION_APPLY_TO_TYPE, ACTION_HIT_TYPE, ACTION_REQUIREMENT, ACTION_TARGET_AREA_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE } from '@/constants/action';
-import type { MultiLangText } from '../common';
-import type { AttributeRefValue, DiceValue, EquipmentRefValue, FixValue } from '../value';
+import type { MultiLangText } from '@/types/common';
+import type { DiceValue, FixValue, ModifierValue, ReferenceValue } from './value';
 
 export type ActionApplyConditionApplyToType = typeof ACTION_CONDITION_APPLY_TO_TYPE[keyof typeof ACTION_CONDITION_APPLY_TO_TYPE];
 
 export interface ActionApplyConditionConfig {
   applyTo: ActionApplyConditionApplyToType;
-  conditionId: string;
-  concentrateId?: string; // optional
+  condition: ReferenceValue;
+  concentrateCondition?: ReferenceValue; // optional
 }
 
 export interface ActionDamageConfig {
-  type: string; // DamageTypeConfig.id or special like 'main-weapon'
-  value: AttributeRefValue | EquipmentRefValue | DiceValue | FixValue;
-  modifierFormula?: string;
+  damageType: ReferenceValue;
+  value: ReferenceValue | DiceValue | FixValue;
+  modifier?: ModifierValue;
 }
 
 export interface ActionHitAlways {
@@ -21,12 +21,19 @@ export interface ActionHitAlways {
 }
 
 export interface ActionHitRoll {
-  type: typeof ACTION_HIT_TYPE.ATTACK_ROLL | typeof ACTION_HIT_TYPE.DIFFICULTY_CLASS;
-  value: AttributeRefValue | EquipmentRefValue | DiceValue | FixValue;
-  modifierFormula?: string; // optional
+  type: typeof ACTION_HIT_TYPE.ATTACK_ROLL;
+  value: ReferenceValue | DiceValue | FixValue;
+  modifier?: ModifierValue;
 }
 
-export type ActionHitConfig = ActionHitRoll | ActionHitAlways;
+export interface ActionHitDifficulty {
+  type: typeof ACTION_HIT_TYPE.DIFFICULTY_CLASS;
+  saving: ReferenceValue;
+  difficultyClass: FixValue;
+  modifier?: ModifierValue;
+}
+
+export type ActionHitConfig = ActionHitDifficulty | ActionHitRoll | ActionHitAlways;
 
 export type ActionTargetType = typeof ACTION_TARGET_TYPE[keyof typeof ACTION_TARGET_TYPE];
 
@@ -34,7 +41,7 @@ export interface ActionTargetConfigBase {
   type: ActionTargetType;
 }
 
-export type ActionTargetRange = FixValue | EquipmentRefValue;
+export type ActionTargetRange = FixValue | ReferenceValue;
 
 export interface ActionTargetWithRangeConfig extends ActionTargetConfigBase {
   range: ActionTargetRange;
@@ -53,18 +60,18 @@ export type ActionTargetConfig =
   | ActionTargetWithRangeConfig
   | ActionAreaTargetConfig;
 
-export interface ActionCost {
-  attribute: string; // Attribute ID
+export interface ActionCostConfig {
+  attribute: ReferenceValue; // Attribute ID
   value: FixValue | DiceValue;
 }
 
 export interface ActionLevelConfig {
-  costs: ActionCost[];
+  costs: ActionCostConfig[];
   target: ActionTargetConfig;
   hit: ActionHitConfig;
   damage?: ActionDamageConfig;
   condition?: ActionApplyConditionConfig[];
-  entity?: string; // entity ID
+  entity?: ReferenceValue; // entity ID
 }
 
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
@@ -77,6 +84,6 @@ export interface ActionConfig {
   tags?: string[];
   type: ActionType; // 'common' | 'attack' | 'support' | 'debuff' | 'summon'
   level: Record<number, ActionLevelConfig>;
-  attributes: string[]; // referenced attribute IDs
+  references: ReferenceValue[]; // referenced attribute IDs
   requirements: ActionRequirement[]; // e.g., ['advantage']
 }

@@ -1,6 +1,9 @@
+import { PATH_REF_ID } from '@/constants/path';
 import type { PathConfig } from '@/types/config/path';
 
 export class PathConfigManager {
+  readonly refId = PATH_REF_ID;
+
   private map = new Map<string, PathConfig>();
 
   constructor (initial: PathConfig[] = []) {
@@ -29,7 +32,15 @@ export class PathConfigManager {
     return Array.from(this.map.values());
   }
 
+  listIds (): string[] {
+    return Array.from(this.map.keys());
+  }
+
   delete (id: string): boolean {
     return this.map.delete(id);
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

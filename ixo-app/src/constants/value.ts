@@ -1,14 +1,14 @@
 export const VALUE_TYPE = {
-  MODIFIER: 'modifier',
-  SAVING: 'saving',
-  CONDITION: 'condition',
   FIX: 'fix',
   DICE: 'dice',
-  FORMULA: 'formula',
-  EQUIPMENT_REF: 'equipment-ref',
-  ATTRIBUTE_REF: 'attribute-ref',
   FULL: 'full',
-  EXPENDABLE: 'expendable'
+  INFINITE: 'infinite',
+  ALL_SAVING: 'all-saving',
+  ALL_ATTRIBUTE: 'all-attribute',
+  MODIFIER: 'modifier',
+  REFERENCE: 'reference',
+  EXPENDABLE: 'expendable',
+  CONDITION: 'condition'
 } as const;
 
 export const RESTORE_VALUE_TYPE = {
@@ -23,10 +23,3 @@ export const CONDITION_VALUE_COMPARATOR = {
   GT: '>',
   EQ: '='
 } as const;
-
-
-export const EQUIPMENT_REF_VALUE_TYPE = {
-  MAIN_WEAPON: 'main-weapon',
-  SECONDARY_WEAPON: 'secondary-weapon'
-} as const;
-

@@ -1,5 +1,5 @@
-import { generateId } from '@/utils/helper';
-import type { ConditionConfig, ConditionEffect, TickTrigger, ConditionStackConfig } from '@/types/config/condition';
+import { generateId } from '@/utils/config/helper';
+import type { ConditionConfig, ConditionEffectConfig, ConditionTickTriggerConfig, ConditionStackConfig } from '@/types/config/condition';
 
 interface CreateConditionConfigParams {
   name: string;
@@ -8,8 +8,8 @@ interface CreateConditionConfigParams {
   descriptionTh?: string;
   tags?: string[];
   stack?: ConditionStackConfig;
-  ticks?: TickTrigger[];
-  effects: ConditionEffect[];
+  ticks?: ConditionTickTriggerConfig[];
+  effects: ConditionEffectConfig[];
 }
 export function createConditionConfig (params: CreateConditionConfigParams): ConditionConfig {
   const {

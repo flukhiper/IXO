@@ -1,7 +1,10 @@
+import { CONDITION_REF_ID } from '@/constants/condition';
 import type { ConditionConfig } from '@/types/config/condition';
 
 export class ConditionConfigManager {
-  private conditionMap = new Map<string, ConditionConfig>();
+  readonly refId = CONDITION_REF_ID;
+
+  private map = new Map<string, ConditionConfig>();
 
   constructor (initialConditions: ConditionConfig[] = []) {
     for (const condition of initialConditions) {
@@ -10,26 +13,30 @@ export class ConditionConfigManager {
   }
 
   add (condition: ConditionConfig) {
-    if (this.conditionMap.has(condition.id)) {
+    if (this.map.has(condition.id)) {
       throw new Error(`Condition "${condition.id}" already exists.`);
     }
-    this.conditionMap.set(condition.id, condition);
+    this.map.set(condition.id, condition);
   }
 
   get (id: string): ConditionConfig | undefined {
-    return this.conditionMap.get(id);
+    return this.map.get(id);
   }
 
   list (): ConditionConfig[] {
-    return Array.from(this.conditionMap.values());
+    return Array.from(this.map.values());
+  }
+
+  listIds (): string[] {
+    return Array.from(this.map.keys());
   }
 
   delete (id: string): boolean {
-    return this.conditionMap.delete(id);
+    return this.map.delete(id);
   }
 
   has (id: string): boolean {
-    return this.conditionMap.has(id);
+    return this.map.has(id);
   }
 
   // Find all conditions that have a certain tag
@@ -44,5 +51,9 @@ export class ConditionConfigManager {
     return this.list().filter(condition =>
       condition.stack?.id === stackId
     );
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

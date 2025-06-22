@@ -1,8 +1,8 @@
-// src/utils/actionConfig/create.ts
-import { generateId } from '@/utils/helper';
+import { generateId } from '@/utils/config/helper';
 import type { ActionConfig, ActionRequirement, ActionType, ActionLevelConfig } from '@/types/config/action';
+import type { ReferenceValue } from '@/types/config/value';
 
-interface CreateActionConfigParams {
+export interface CreateActionConfigParams {
   name: string;
   nameTh?: string;
   description?: string;
@@ -10,7 +10,7 @@ interface CreateActionConfigParams {
   tags?: string[];
   type: ActionType;
   level: Record<number, ActionLevelConfig>;
-  attributes?: string[];
+  references?: ReferenceValue[];
   requirements?: ActionRequirement[];
 }
 
@@ -23,7 +23,7 @@ export function createActionConfig (params: CreateActionConfigParams): ActionCon
     tags = [],
     type,
     level,
-    attributes = [],
+    references = [],
     requirements = []
   } = params;
 
@@ -40,7 +40,7 @@ export function createActionConfig (params: CreateActionConfigParams): ActionCon
     tags,
     type,
     level,
-    attributes,
+    references,
     requirements
   };
 }

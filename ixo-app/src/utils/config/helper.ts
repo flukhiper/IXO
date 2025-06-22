@@ -1,5 +1,5 @@
 import { RESTORE_VALUE_TYPE, VALUE_TYPE } from '@/constants/value';
-import type { DiceValue, ExpendableValue, FixValue, FullValue, RestoreType, RestoreValue } from '@/types/value';
+import type { AllAttributeValue, AllSavingValue, ConditionComparator, ConditionValue, DiceValue, ExpendableValue, FixValue, FullValue, InfiniteValue, ModifierValue, ReferenceValue, RestoreType, RestoreValue } from '@/types/config/value';
 
 export function generateId (name: string): string {
   return name
@@ -10,23 +10,35 @@ export function generateId (name: string): string {
 }
 
 export function createFixValue (value: number): FixValue {
-  return {
-    type: VALUE_TYPE.FIX,
-    value
-  };
+  return { type: VALUE_TYPE.FIX, value };
 }
 
 export function createDiceValue (formula: string): DiceValue {
-  return {
-    type: VALUE_TYPE.DICE,
-    formula
-  };
+  return { type: VALUE_TYPE.DICE, formula };
 }
 
 export function createFullValue (): FullValue {
-  return {
-    type: VALUE_TYPE.FULL
-  };
+  return { type: VALUE_TYPE.FULL };
+}
+
+export function createInfiniteValue (): InfiniteValue {
+  return { type: VALUE_TYPE.INFINITE };
+}
+
+export function createAllSavingValue (): AllSavingValue {
+  return { type: VALUE_TYPE.ALL_SAVING };
+}
+
+export function createAllAttributeValue (): AllAttributeValue {
+  return { type: VALUE_TYPE.ALL_ATTRIBUTE };
+}
+
+export function createReferenceValue (ref: string, id: string): ReferenceValue {
+  return { type: VALUE_TYPE.REFERENCE, ref, id };
+}
+
+export function createModifierValue (formula: string): ModifierValue {
+  return { type: VALUE_TYPE.MODIFIER, formula };
 }
 
 interface CreateExpendableValueParam {
@@ -60,4 +72,21 @@ export function createExpendableValue (params: CreateExpendableValueParam): Expe
     max,
     restores: formattedRestores
   };
+}
+
+export function createConditionValue (
+  comparator: ConditionComparator,
+  formula: string
+): ConditionValue {
+  return {
+    type: VALUE_TYPE.CONDITION,
+    comparator,
+    formula
+  };
+}
+
+export function normalizeReferenceList (ids: (string | ReferenceValue)[], refId: string): ReferenceValue[] {
+  return ids.map(entry => 
+    typeof entry === 'string' ? createReferenceValue(refId, entry) : entry
+  );
 }

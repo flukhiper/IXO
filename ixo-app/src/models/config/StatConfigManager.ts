@@ -1,6 +1,10 @@
+import { STAT_REF_ID } from '@/constants/stat';
+
 import type { StatConfig } from '@/types/config/stat';
 
 export class StatConfigManager {
+  readonly refId = STAT_REF_ID;
+
   private map = new Map<string, StatConfig>();
 
   constructor (initial: StatConfig[] = []) {
@@ -29,7 +33,15 @@ export class StatConfigManager {
     return Array.from(this.map.values());
   }
 
+  listIds (): string[] {
+    return Array.from(this.map.keys());
+  }
+
   delete (id: string): boolean {
     return this.map.delete(id);
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

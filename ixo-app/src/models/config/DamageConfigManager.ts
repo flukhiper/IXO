@@ -1,3 +1,4 @@
+import { DAMAGE_SCALE_REF_ID, DAMAGE_TYPE_REF_ID } from '@/constants/damage';
 import type { DamageScaleConfig, DamageTypeConfig } from '@/types/config/damage';
 
 interface DamageConfigInitial { 
@@ -5,6 +6,8 @@ interface DamageConfigInitial {
   types?: DamageTypeConfig[]; 
 }
 export class DamageConfigManager {
+  readonly refId: Array<string> = [ DAMAGE_SCALE_REF_ID, DAMAGE_TYPE_REF_ID ];
+
   private scaleMap = new Map<string, DamageScaleConfig>();
   
   private typeMap = new Map<string, DamageTypeConfig>();
@@ -40,6 +43,10 @@ export class DamageConfigManager {
     return Array.from(this.scaleMap.values());
   }
 
+  listScaleIds (): string[] {
+    return Array.from(this.scaleMap.keys());
+  }
+
   deleteScale (id: string): boolean {
     return this.scaleMap.delete(id);
   }
@@ -64,7 +71,15 @@ export class DamageConfigManager {
     return Array.from(this.typeMap.values());
   }
 
+  listTypeIds (): string[] {
+    return Array.from(this.scaleMap.keys());
+  }
+
   deleteType (id: string): boolean {
     return this.typeMap.delete(id);
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId.includes(id);
   }
 }

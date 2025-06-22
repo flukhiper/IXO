@@ -1,4 +1,4 @@
-import type { MultiLangText } from '../common';
+import type { MultiLangText } from '@/types/common';
 
 export interface PathConfig {
   id: string;

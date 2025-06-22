@@ -1,7 +1,9 @@
-// src/manager/actionConfig.ts
+import { ACTION_REF_ID } from '@/constants/action';
 import type { ActionConfig } from '@/types/config/action';
 
 export class ActionConfigManager {
+  readonly refId = ACTION_REF_ID;
+
   private map = new Map<string, ActionConfig>();
 
   constructor (initial: ActionConfig[] = []) {
@@ -26,7 +28,15 @@ export class ActionConfigManager {
     return Array.from(this.map.values());
   }
 
+  listIds (): string[] {
+    return Array.from(this.map.keys());
+  }
+
   clear (): void {
     this.map.clear();
+  }
+
+  hasRefId (id: string): boolean {
+    return this.refId === id;
   }
 }

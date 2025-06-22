@@ -1,3 +1,5 @@
+export const CONDITION_REF_ID = 'condition' as const;
+
 // Stack types for ConditionStackConfig
 export const CONDITION_STACK_TYPE = {
   STACK: 'stack',

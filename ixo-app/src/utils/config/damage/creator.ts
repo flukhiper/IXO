@@ -1,6 +1,5 @@
-import { VALUE_TYPE } from '@/constants/value';
 import type { DamageScaleConfig, DamageTypeConfig } from '@/types/config/damage';
-import { generateId } from '@/utils/helper';
+import { createFixValue, generateId } from '@/utils/config/helper';
 
 interface CreateDamageScaleConfigParams {
   name: string;
@@ -21,10 +20,7 @@ export function createDamageScaleConfig (params: CreateDamageScaleConfigParams):
       en: description,
       th: descriptionTh
     },
-    value: {
-      type: VALUE_TYPE.FIX,
-      value
-    }
+    value: createFixValue(value)
   };
 }
 

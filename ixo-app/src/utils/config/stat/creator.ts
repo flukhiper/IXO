@@ -1,22 +1,17 @@
-import { VALUE_TYPE } from '@/constants/value';
-import type { StatConfig } from '@/types/config/stat';
-import { generateId } from '../../helper';
+import { createFixValue, generateId } from '@/utils/config/helper';
 
-type Modifier = {
-  attribute: string;
-  formula: string;
-};
+import type { StatConfig, StatModifierConfig } from '@/types/config/stat';
 
-export interface CreateStatConfigFixValueParams {
+export interface CreateStatConfigParams {
   name: string;
   nameTh?: string;
   description?: string;
   descriptionTh?: string;
   value: number;
-  modifiers: Array<Modifier>;
+  modifiers: Array<StatModifierConfig>;
 }
 
-export function createStatConfigFixValue (params: CreateStatConfigFixValueParams): StatConfig {
+export function createStatConfig (params: CreateStatConfigParams): StatConfig {
   const {
     name,
     nameTh = '',
@@ -25,11 +20,6 @@ export function createStatConfigFixValue (params: CreateStatConfigFixValueParams
     value,
     modifiers = []
   } = params;
-  const formattedModifiers = modifiers.map(({ attribute, formula }) => ({
-    type: VALUE_TYPE.MODIFIER,
-    attribute,
-    formula
-  }));
   return {
     id: generateId(name),
     name: {
@@ -40,7 +30,7 @@ export function createStatConfigFixValue (params: CreateStatConfigFixValueParams
       en: description,
       th: descriptionTh
     },
-    value: { type: VALUE_TYPE.FIX, value },
-    modifiers: formattedModifiers
+    value: createFixValue(value),
+    modifiers
   };
 }

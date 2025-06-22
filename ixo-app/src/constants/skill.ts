@@ -1,3 +1,5 @@
+export const SKILL_REF_ID = 'skill' as const;
+
 // Skill stack types
 export const SKILL_STACK_TYPE = {
   STACK: 'stack',
@@ -11,8 +13,7 @@ export const SKILL_REQUIREMENT_TYPE = {
   SKILL: 'skill',
   ATTRIBUTE: 'attribute',
   STAT: 'stat',
-  LEVEL: 'level',
-  ACQUIRE: 'acquire'
+  LEVEL: 'level'
 } as const;
 
 // Skill effect types

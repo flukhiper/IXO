@@ -1,5 +1,5 @@
 import type { PathConfig } from '@/types/config/path';
-import { generateId } from '@/utils/helper';
+import { generateId } from '@/utils/config/helper';
 
 export interface CreatePathConfigFixValueParams {
   name: string;
