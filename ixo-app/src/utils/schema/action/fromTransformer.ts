@@ -4,7 +4,7 @@ import { createConditionValue, createFixValue, createModifierValue } from '@/uti
 import { ACTION_TARGET_TYPE } from '@/constants/action';
 import { VALUE_TYPE } from '@/constants/value';
 
-import type { ActionApplyConditionApplyToType, ActionApplyConditionConfig, ActionAreaTargetConfig, ActionAreaType, ActionConfig, ActionCostConfig, ActionDamageConfig, ActionHitConfig, ActionLevelConfig, ActionRequirementConfig, ActionTargetConfig, ActionTargetWithRangeConfig } from '@/types/config/action';
+import type { ActionApplyConditionApplyToType, ActionApplyConditionConfig, ActionAreaTargetConfig, ActionAreaType, ActionConfig, ActionCostConfig, ActionDamageConfig, ActionHitConfig, ActionLevelConfig, ActionRequirementConfig, ActionTargetConfig, ActionTargetWithRangeConfig, ActionType } from '@/types/config/action';
 import type { ActionApplyConditionSchema, ActionConfigSchema, ActionCostSchema, ActionDamageSchema, ActionHitSchema, ActionLevelSchema, ActionRequirementSchema, ActionTargetSchema } from '@/types/schema/action';
 import type { ConditionComparator, DiceValue, FixValue } from '@/types/config/value';
 
@@ -14,7 +14,7 @@ export function fromActionSchema (schema: ActionConfigSchema): ActionConfig {
     name: schema.name,
     description: schema.description,
     tags: schema.tags,
-    type: schema.type,
+    type: schema.type as ActionType,
     level: Object.fromEntries(
       Object.entries(schema.level).map(([ lvl, lvlSchema ]) => [
         lvl,

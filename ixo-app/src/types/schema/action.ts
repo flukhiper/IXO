@@ -1,6 +1,6 @@
 import { ACTION_HIT_TYPE } from '@/constants/action';
 
-import type{ ActionTargetType, ActionType } from '@/types/config/action';
+import type{ ActionTargetType } from '@/types/config/action';
 
 import type { ReferenceValueSchema } from './value';
 import type { BaseMapSchema } from './base';
@@ -68,7 +68,7 @@ export interface ActionRequirementSchema {
 
 export interface ActionConfigSchema extends BaseMapSchema {
   tags: string[];
-  type: ActionType;
+  type: string;
   level: Record<number, ActionLevelSchema>;
   references?: ReferenceValueSchema[];
   requirements?: Array<ActionRequirementSchema>;
