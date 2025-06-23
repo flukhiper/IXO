@@ -2,6 +2,7 @@ import { ITEM_PROPERTY_TYPE, ITEM_REQUIREMENT_TYPE, ITEM_TYPE } from '@/constant
 
 import type { MultiLangText } from '@/types/common';
 import type { FixValue, DiceValue, ConditionValue, ReferenceValue, ModifierValue } from './value';
+import type { BaseMapConfig } from './base';
 
 export type ItemType = typeof ITEM_TYPE[keyof typeof ITEM_TYPE];
 export type ItemRequirementType = typeof ITEM_REQUIREMENT_TYPE[keyof typeof ITEM_REQUIREMENT_TYPE];
@@ -131,10 +132,7 @@ export interface ItemUtilityConfig {
   };
 }
 
-export interface ItemConfigBase<T extends ItemType> {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface ItemConfigBase<T extends ItemType> extends BaseMapConfig {
   tags: string[];
   space: { rows: number; columns: number };
   weight: number;

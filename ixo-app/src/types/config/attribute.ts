@@ -1,6 +1,7 @@
 import { ATTRIBUTE_TYPE_DICE_VALUE, ATTRIBUTE_TYPE_EXPENDABLE_VALUE, ATTRIBUTE_TYPE_FIX_VALUE, ATTRIBUTE_TYPE_OTHER } from '@/constants/attribute';
+
 import type { DiceValue, ExpendableValue, FixValue } from './value';
-import type { MultiLangText } from '@/types/common';
+import type { BaseMapConfig } from './base';
 
 export type AttributeTypeOther = typeof ATTRIBUTE_TYPE_OTHER[keyof typeof ATTRIBUTE_TYPE_OTHER];
 export type AttributeTypeFixValue = typeof ATTRIBUTE_TYPE_FIX_VALUE[keyof typeof ATTRIBUTE_TYPE_FIX_VALUE];
@@ -14,12 +15,9 @@ export type AttributeValue =
   | DiceValue
   | ExpendableValue;
 
-type AttributeConfigBase<T extends AttributeType> = {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+interface AttributeConfigBase<T extends AttributeType> extends BaseMapConfig {
   attrType: T;
-};
+}
 
 
 export type AttributeConfigFixValue = AttributeConfigBase<AttributeTypeOther | AttributeTypeFixValue> & {

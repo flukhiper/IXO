@@ -1,7 +1,7 @@
 import { RACE_GAIN_TYPE } from '@/constants/race';
 
-import type { MultiLangText } from '@/types/common';
-import type { ModifierValue, ReferenceValue } from '@/types/config/value';
+import type { BaseMapConfig } from './base';
+import type { ModifierValue, ReferenceValue } from './value';
 
 export type RaceGainType = typeof RACE_GAIN_TYPE[keyof typeof RACE_GAIN_TYPE];
 
@@ -17,10 +17,7 @@ export interface RaceGainAcquireConfig {
 
 export type RaceGainConfig = RaceGainModifierConfig | RaceGainAcquireConfig;
 
-export interface RaceConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface RaceConfig extends BaseMapConfig {
   tags?: string[];
   gains: RaceGainConfig[];
 }

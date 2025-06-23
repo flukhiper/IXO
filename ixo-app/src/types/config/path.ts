@@ -1,8 +1,5 @@
-import type { MultiLangText } from '@/types/common';
+import type { BaseMapConfig } from './base';
 
-export interface PathConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface PathConfig extends BaseMapConfig {
   tags?: string[];
 }

@@ -1,6 +1,7 @@
 import { ACTION_CONDITION_APPLY_TO_TYPE, ACTION_HIT_TYPE, ACTION_REQUIREMENT, ACTION_TARGET_AREA_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE } from '@/constants/action';
-import type { MultiLangText } from '@/types/common';
-import type { DiceValue, FixValue, ModifierValue, ReferenceValue } from './value';
+
+import type { ConditionValue, DiceValue, FixValue, ModifierValue, ReferenceValue } from './value';
+import type { BaseMapConfig } from './base';
 
 export type ActionApplyConditionApplyToType = typeof ACTION_CONDITION_APPLY_TO_TYPE[keyof typeof ACTION_CONDITION_APPLY_TO_TYPE];
 
@@ -75,15 +76,24 @@ export interface ActionLevelConfig {
 }
 
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
-export type ActionRequirement = typeof ACTION_REQUIREMENT[keyof typeof ACTION_REQUIREMENT];
+export interface ActionRequirementAdvantageConfig {
+  type: typeof ACTION_REQUIREMENT.ADVANTAGE;
+}
 
-export interface ActionConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface ActionRequirementStatConfig {
+  type: typeof ACTION_REQUIREMENT.STAT;
+  stat: ReferenceValue;
+  value: ConditionValue;
+}
+
+export type ActionRequirementConfig =
+  | ActionRequirementAdvantageConfig
+  | ActionRequirementStatConfig;
+
+export interface ActionConfig extends BaseMapConfig {
   tags?: string[];
   type: ActionType; // 'common' | 'attack' | 'support' | 'debuff' | 'summon'
   level: Record<number, ActionLevelConfig>;
   references: ReferenceValue[]; // referenced attribute IDs
-  requirements: ActionRequirement[]; // e.g., ['advantage']
+  requirements: ActionRequirementConfig[]; // e.g., ['advantage']
 }

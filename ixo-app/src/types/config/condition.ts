@@ -6,7 +6,7 @@ import {
 } from '@/constants/condition';
 
 import type { AllAttributeValue, AllSavingValue, ConditionValue, DiceValue, FixValue, ModifierValue, ReferenceValue } from './value';
-import type { MultiLangText } from '@/types/common';
+import type { BaseMapConfig } from './base';
 
 export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
 
@@ -152,10 +152,7 @@ export type ConditionEffectConfig =
   | ConditionForceEffectConfig;
 
 // --- Final ConditionConfig ---
-export interface ConditionConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface ConditionConfig extends BaseMapConfig {
   tags?: string[];
 
   stack?: ConditionStackConfig;

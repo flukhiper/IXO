@@ -1,15 +1,9 @@
-import type { MultiLangText } from '@/types/common';
+import type { BaseMapConfig } from './base';
 import type { FixValue } from './value';
 
-export interface DamageScaleConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface DamageScaleConfig extends BaseMapConfig {
   value: FixValue;
 }
 
-export interface DamageTypeConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface DamageTypeConfig extends BaseMapConfig {
 }

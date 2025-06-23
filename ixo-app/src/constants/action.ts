@@ -10,7 +10,8 @@ export const ACTION_TYPE = {
 } as const;
 
 export const ACTION_REQUIREMENT = {
-  ADVANTAGE: 'advantage'
+  ADVANTAGE: 'advantage',
+  STAT: 'stat'
 } as const;
 
 // Action apply to types

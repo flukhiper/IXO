@@ -1,8 +1,11 @@
-import { createDiceValue, createFixValue, createModifierValue, createReferenceValue } from '@/utils/config/helper';
+import { createConditionValue, createDiceValue, createFixValue, createModifierValue, createReferenceValue } from '@/utils/config/helper';
 import { ENTITY_REF_ID } from '@/constants/entity';
 import { ATTRIBUTE_REF_ID } from '@/constants/attribute';
 import { EQUIPMENT_REF_ID, WEAPON_SLOT_ID } from '@/constants/equipment';
-import { ACTION_HIT_TYPE, ACTION_TARGET_TYPE } from '@/constants/action';
+import { ACTION_HIT_TYPE, ACTION_REQUIREMENT, ACTION_TARGET_TYPE } from '@/constants/action';
+import { DAMAGE_TYPE_REF_ID } from '@/constants/damage';
+import { CONDITION_REF_ID } from '@/constants/condition';
+import { STAT_REF_ID } from '@/constants/stat';
 
 import type {
   ActionLevelConfig,
@@ -16,11 +19,11 @@ import type {
   ActionHitAlways,
   ActionHitRoll,
   ActionHitDifficulty,
-  ActionApplyConditionApplyToType
+  ActionApplyConditionApplyToType,
+  ActionRequirementConfig
 } from '@/types/config/action';
 import type { WeaponSlotId } from '@/types/config/equipment';
-import { DAMAGE_TYPE_REF_ID } from '@/constants/damage';
-import { CONDITION_REF_ID } from '@/constants/condition';
+import type { ConditionComparator } from '@/types/config/value';
 
 export interface CreateActionLevelConfigParams {
   costs: ActionCostConfig[];
@@ -185,4 +188,12 @@ export function createActionApplyConditionConfig (
     condition: createReferenceValue(CONDITION_REF_ID, conditionId), 
     ...rawConcentrateCondition 
   };
+}
+
+// Requirement helpers
+export function createActionRequiremenAdvantageConfig (): ActionRequirementConfig {
+  return { type: ACTION_REQUIREMENT.ADVANTAGE };
+}
+export function createActionRequirementStatConfig (statId: string, comparator: ConditionComparator, condition: string): ActionRequirementConfig {
+  return { type: ACTION_REQUIREMENT.STAT, stat: createReferenceValue(STAT_REF_ID, statId), value: createConditionValue(comparator, condition) };
 }

@@ -1,42 +1,25 @@
 import { ACTION_REF_ID } from '@/constants/action';
+
 import type { ActionConfig } from '@/types/config/action';
+import type { ActionConfigSchema } from '@/types/schema/action';
 
-export class ActionConfigManager {
+import { toActionSchema } from '@/utils/schema/action/toTransformer';
+import { fromActionSchema } from '@/utils/schema/action/fromTransformer';
+
+import { BaseMapConfigManager } from './BaseConfigManager';
+
+export class ActionConfigManager extends BaseMapConfigManager<ActionConfig, ActionConfigSchema> {
   readonly refId = ACTION_REF_ID;
-
-  private map = new Map<string, ActionConfig>();
-
+  
   constructor (initial: ActionConfig[] = []) {
-    for (const config of initial) {
-      this.add(config);
-    }
+    super(initial);
   }
 
-  add (config: ActionConfig): void {
-    this.map.set(config.id, config);
+  toSchema (config: ActionConfig, meta: { gameSystemId: string; ownerId: string }): ActionConfigSchema {
+    return toActionSchema(config, { ...meta, isPublic: this.isPublish });
   }
 
-  get (id: string): ActionConfig | undefined {
-    return this.map.get(id);
-  }
-
-  has (id: string): boolean {
-    return this.map.has(id);
-  }
-
-  list (): ActionConfig[] {
-    return Array.from(this.map.values());
-  }
-
-  listIds (): string[] {
-    return Array.from(this.map.keys());
-  }
-
-  clear (): void {
-    this.map.clear();
-  }
-
-  hasRefId (id: string): boolean {
-    return this.refId === id;
+  fromSchema (schema: ActionConfigSchema): ActionConfig {
+    return fromActionSchema(schema);
   }
 }

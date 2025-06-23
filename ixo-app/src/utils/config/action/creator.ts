@@ -1,5 +1,5 @@
 import { generateId } from '@/utils/config/helper';
-import type { ActionConfig, ActionRequirement, ActionType, ActionLevelConfig } from '@/types/config/action';
+import type { ActionConfig, ActionRequirementConfig, ActionType, ActionLevelConfig } from '@/types/config/action';
 import type { ReferenceValue } from '@/types/config/value';
 
 export interface CreateActionConfigParams {
@@ -11,21 +11,20 @@ export interface CreateActionConfigParams {
   type: ActionType;
   level: Record<number, ActionLevelConfig>;
   references?: ReferenceValue[];
-  requirements?: ActionRequirement[];
+  requirements?: ActionRequirementConfig[];
 }
 
-export function createActionConfig (params: CreateActionConfigParams): ActionConfig {
-  const {
-    name,
-    nameTh = '',
-    description = '',
-    descriptionTh = '',
-    tags = [],
-    type,
-    level,
-    references = [],
-    requirements = []
-  } = params;
+export function createActionConfig ({
+  name,
+  nameTh = '',
+  description = '',
+  descriptionTh = '',
+  tags = [],
+  type,
+  level,
+  references = [],
+  requirements = []
+}: CreateActionConfigParams): ActionConfig {
 
   return {
     id: generateId(name),

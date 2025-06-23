@@ -1,5 +1,6 @@
 import { SKILL_EFFECT_CONDITION_WHEN, SKILL_EFFECT_TYPE, SKILL_REQUIREMENT_TYPE, SKILL_STACK_TYPE } from '@/constants/skill';
-import type { MultiLangText } from '@/types/common';
+
+import type { BaseMapConfig } from './base';
 import type { ConditionValue, FixValue, ModifierValue, ReferenceValue } from '@/types/config/value';
 
 export type SkillStackType = typeof SKILL_STACK_TYPE[keyof typeof SKILL_STACK_TYPE];
@@ -71,10 +72,7 @@ export type SkillEffectConfig =
   | SkillEffectConditionConfig
   | SkillEffectProficiencyConfig;
 
-export interface SkillConfig {
-  id: string;
-  name: MultiLangText;
-  description?: MultiLangText;
+export interface SkillConfig extends BaseMapConfig {
   tags?: string[];
   stack?: SkillStackConfig;
   requirement: SkillRequirementConfig[];
