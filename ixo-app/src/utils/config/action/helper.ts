@@ -95,8 +95,11 @@ interface CreateActionHitRollParams {
   reference?: typeof ATTRIBUTE_REF_ID | typeof EQUIPMENT_REF_ID;
   modifier?: string;
 }
-export function createActionHitRoll (params: CreateActionHitRollParams): ActionHitRoll {
-  const { value, reference, modifier } = params;
+export function createActionHitRoll ({ 
+  value, 
+  reference, 
+  modifier 
+}: CreateActionHitRollParams): ActionHitRoll {
 
   const rawModifier = modifier && { modifier: createModifierValue(modifier) };
   if (reference === ATTRIBUTE_REF_ID || reference === EQUIPMENT_REF_ID) {

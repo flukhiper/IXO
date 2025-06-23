@@ -13,11 +13,11 @@ export abstract class BaseMapConfigManager<Config extends BaseMapConfig, Schema>
 
   abstract refId: string;
 
-  abstract toSchema (config: Config, meta: { gameSystemId: string; ownerId: string }): Schema;
+  abstract toSchema (config: Config): Schema;
   abstract fromSchema (schema: Schema): Config;
 
-  toSchemaAll (meta: { gameSystemId: string; ownerId: string }): Schema[] {
-    return this.list().map(config => this.toSchema(config, meta));
+  toSchemaAll (): Schema[] {
+    return this.list().map(config => this.toSchema(config));
   }
 
   fromSchemaAll (schemas: Schema[]): void {

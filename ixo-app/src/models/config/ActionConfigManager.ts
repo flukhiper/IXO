@@ -15,8 +15,8 @@ export class ActionConfigManager extends BaseMapConfigManager<ActionConfig, Acti
     super(initial);
   }
 
-  toSchema (config: ActionConfig, meta: { gameSystemId: string; ownerId: string }): ActionConfigSchema {
-    return toActionSchema(config, { ...meta, isPublic: this.isPublish });
+  toSchema (config: ActionConfig): ActionConfigSchema {
+    return toActionSchema(config, { isPublic: this.isPublish });
   }
 
   fromSchema (schema: ActionConfigSchema): ActionConfig {

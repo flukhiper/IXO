@@ -5,10 +5,8 @@ import type { ActionConfig, ActionLevelConfig, ActionCostConfig, ActionHitConfig
 import type { ActionConfigSchema, ActionLevelSchema, ActionCostSchema, ActionHitSchema, ActionDamageSchema, ActionApplyConditionSchema, ActionRequirementSchema, ActionTargetSchema } from '@/types/schema/action';
 
 export function toActionSchema (config: ActionConfig, {
-  gameSystemId,
-  ownerId,
   isPublic = true
-}: { gameSystemId: string; ownerId: string; isPublic: boolean }): ActionConfigSchema {
+}: { isPublic: boolean }): ActionConfigSchema {
   return {
     id: config.id,
     name: config.name,
@@ -20,8 +18,6 @@ export function toActionSchema (config: ActionConfig, {
     ),
     references: config.references?.map(serializeReference) ?? [],
     requirements: config.requirements?.map(toRequirementSchema) ?? [],
-    gameSystemId: gameSystemId,
-    ownerId: ownerId,
     isPublic: isPublic
   };
 }

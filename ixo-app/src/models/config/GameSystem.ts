@@ -28,6 +28,8 @@ import type { ItemConfig } from '@/types/config/item';
 import type { RaceConfig } from '@/types/config/race';
 import type { ProgressConfig } from '@/types/config/progress';
 import type { EquipmentConfig } from '@/types/config/equipment';
+import { MultiLangText } from '@/types/common';
+import { generateId } from '@/utils/config/helper';
 
 const initialAttributes: AttributeConfig[] = [
   createAttributeConfigExpendableValue({
@@ -171,6 +173,10 @@ interface GameSystemOption {
   equipment?: EquipmentConfig;
 }
 export class GameSystem {
+  private id: string;
+
+  private name: MultiLangText;
+
   readonly attributeManager: AttributeConfigManager;
 
   readonly statManager: StatConfigManager;
@@ -195,7 +201,13 @@ export class GameSystem {
 
   readonly equipmentManager: EquipmentConfigManager;
 
-  constructor (options?: GameSystemOption) {
+  constructor (name: string, options?: GameSystemOption) {
+    this.id = generateId(name);
+    this.name = {
+      en: name,
+      th: name
+    };
+
     this.attributeManager = new AttributeConfigManager(options?.attributes ?? initialAttributes);
     this.statManager = new StatConfigManager(options?.stats);
     this.damageManager = new DamageConfigManager({ types: options?.damageTypes, scales: options?.damageScales });
@@ -208,6 +220,19 @@ export class GameSystem {
     this.raceManager = new RaceConfigManager(options?.races);
     this.progressManager = new ProgressConfigManager(options?.progress);
     this.equipmentManager = new EquipmentConfigManager(options?.equipment ?? initialEquipment);
+  }
+
+  getId (): string {
+    return this.id;
+  }
+
+  getName (): MultiLangText {
+    return this.name;
+  }
+
+  setName (name: MultiLangText): void {
+    this.id = generateId(name.en);
+    this.name = name;
   }
 
   getManagerByRefId (refId: string): GameConfigManager | undefined {

@@ -7,14 +7,14 @@ export class GameSystemService {
     private readonly actionRepo = new ActionConfigRepository()
   ) {}
 
-  async save (gameSystem: GameSystem, meta: { gameSystemId: string; ownerId: string }) {
+  async save (gameSystem: GameSystem, ownerId: string) {
     const manager = gameSystem.actionManager;
-    const schemas = manager.toSchemaAll(meta);
-    await this.actionRepo.saveMany(schemas, meta.gameSystemId);
+    const schemas = manager.toSchemaAll();
+    await this.actionRepo.saveMany(schemas, gameSystem.getId(), ownerId);
   }
 
-  async load (gameSystem: GameSystem, meta: { gameSystemId: string; ownerId: string }): Promise<void> {
-    const actionSchemas = await this.actionRepo.loadMany(meta.gameSystemId);
+  async load (gameSystem: GameSystem): Promise<void> {
+    const actionSchemas = await this.actionRepo.loadMany(gameSystem.getId());
 
     gameSystem.actionManager.fromSchemaAll(actionSchemas);
   }
