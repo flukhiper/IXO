@@ -35,7 +35,7 @@ export interface ConditionTickDamageTriggerConfig {
 
 export type ConditionTickDurationTriggerType = typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND | typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN;
 export interface ConditionTickDurationTriggerConfig {
-  type: typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND | typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN;
+  type: ConditionTickDurationTriggerType;
   duration: FixValue;
   saving?: ReferenceValue;
   difficultyClass?: FixValue;

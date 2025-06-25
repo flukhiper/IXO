@@ -91,40 +91,33 @@ export interface ItemWeaponConfig {
   properties?: ItemPropertyConfig[];
   conditions?: ReferenceValue[];
 }
-
 export interface ItemShieldConfig {
   modifier: ModifierValue; // Typically an AC or block boost
 }
-
 export interface ItemArmorArmorClassConfig {
   base?: FixValue;
   modifier?: ModifierValue;
   maxModifier?: FixValue;
 }
-
 export interface ItemArmorConfig {
   armorSlotType: ReferenceValue; // e.g., 'clothwear', 'footwear', 'headwear'
   armorClass?: ItemArmorArmorClassConfig;
   properties?: ItemPropertyConfig[];
   conditions?: ReferenceValue[]; // applied when wearer is hit or hit others
 }
-
 export interface ItemAccessoryConfig {
   inventorySlot?: { rows: number; columns: number }; // e.g. backpack
   wearSlot?: FixValue; // e.g. belt gives more utility slots
 }
-
 export interface ItemConsumableRestorConfig {
   attribute: ReferenceValue;
   value: FixValue;
 }
-
 export interface ItemConsumableConfig {
   numberOfUse?: FixValue;
   restore?: ItemConsumableRestorConfig;
   conditions?: ReferenceValue[]; // conditions applied when used
 }
-
 export interface ItemUtilityConfig {
   damage?: {
     damageType: ReferenceValue;
