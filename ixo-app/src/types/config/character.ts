@@ -1,4 +1,3 @@
-import type { BaseConfig } from './base';
 import type { InventorySpace } from './common';
 
 export interface ActionPoolFilter {
@@ -31,7 +30,7 @@ export interface CharacterEquipmentConfig {
   defaultInventorySpace: InventorySpace;
 }
 
-export interface CharacterConfig extends BaseConfig {
+export interface CharacterConfig {
   startingActions?: string[];  // Action IDs granted at creation
   startingItems?: string[];    // Item IDs granted at creation
   startProficiencyPoint?: number; // Number of points player can assign to proficiencies at creation

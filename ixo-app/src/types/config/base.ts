@@ -8,7 +8,7 @@ export interface BaseConfig {
   id: string;
   name: LocalizeText;
   description?: LocalizeText; // Optional short flavor (can move fully to Game Codex later)
-  createdAt: string;
+  createdAt?: string;
   updatedAt?: string;
 }
 
@@ -32,7 +32,8 @@ export interface FractionValue {
 
 export interface RefValue {
   type: typeof VALUE_TYPE.REF;
-  ref: string; // e.g. 'attack-roll', 'main-weapon', etc.
+  ref: string; // e.g. 'attribute', 'equip-slot', etc.
+  id: string; // e.g. 'attack-roll', 'main-weapon', etc.
 }
 
 export type ParsedValue = FixedValue | DiceValue | FractionValue;

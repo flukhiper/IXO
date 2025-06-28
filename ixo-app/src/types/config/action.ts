@@ -60,7 +60,7 @@ export interface RestoreConfig {
 }
 export interface DamageConfig {
   damageTypeId: string;    // e.g. 'fire', 'piercing'
-  baseValue: FixedValue | DiceValue;
+  baseValue: FixedValue | DiceValue | RefValue;
   scalingFormula?: string; // optional scaling
 }
 

@@ -1,4 +1,4 @@
-import { ITEM_BONUS_EFFECT_TYPE, ITEM_TYPE } from '@/constants/config/item';
+import { ITEM_ARMOR_WEIGHT, ITEM_BONUS_EFFECT_TYPE, ITEM_CUSTOMIZE_TYPE, ITEM_TYPE } from '@/constants/config/item';
 import type { BaseConfig, FixedValue, DiceValue, RefValue } from './base';
 import type { InventorySpace, StatThresholdRequirement } from './common';
 
@@ -85,6 +85,28 @@ export interface ItemBaseConfig extends BaseConfig {
 }
 
 // Equipment Types
+type ItemCustomizeConfig =
+  | { type: typeof ITEM_CUSTOMIZE_TYPE.DAMAGE; damage: ItemDamageConfig }
+  | { type: typeof ITEM_CUSTOMIZE_TYPE.EFFECT; effect: ItemBonusEffectConfig };
+export interface WeaponPropertyConfig {
+  finesse?: boolean;            // Use DEX instead of STR if higher
+  light?: boolean;              // Usable for off-hand dual wield
+  thrown?: {
+    range: {
+      normal: number;           // e.g., 6
+      max: number;              // e.g., 18
+    };
+  };
+  extraReach?: {
+    bonusMeters: number;        // e.g., 1.5 (increased melee range)
+  };
+  twoHanded?: boolean;          // Requires two hands to use
+  versatile?: {
+    alternateDamage: ItemDamageConfig; // Damage when used 2-handed
+  };
+  enhancement?: 1 | 2 | 3; // 💡 New: Magical/quality boost, max +3
+  customize?: ItemCustomizeConfig;
+}
 export interface ItemWeaponConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.WEAPON;
   weapon?: {
@@ -93,7 +115,9 @@ export interface ItemWeaponConfig extends ItemBaseConfig {
     restores?: ItemRestoreConfig[];
     conditionIds?: string[];
     removeConditionIds?: string[];
-    properties?: string[];
+    
+    // NEW refined weapon property system
+    property?: WeaponPropertyConfig;
   };
 }
 
@@ -103,12 +127,21 @@ export interface ItemShieldConfig extends ItemBaseConfig {
     armorClassBonus: number;
   };
 }
-
+export interface ArmorPropertyConfig {
+  enhancement?: 1 | 2 | 3;
+  customize?: {
+    type: typeof ITEM_CUSTOMIZE_TYPE.EFFECT;
+    effect: ItemBonusEffectConfig;
+  };
+  weight?: typeof ITEM_ARMOR_WEIGHT[keyof typeof ITEM_ARMOR_WEIGHT];
+}
 export interface ItemArmorConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.ARMOR;
   armor?: {
     armorClass: FixedValue | RefValue;
     scalingFormula?: string;
+
+    property?: ArmorPropertyConfig;
   };
 }
 

@@ -4,7 +4,9 @@ import type { BaseConfig } from './base';
 export type DowntimeEffectType = typeof DOWNTIME_EFFECT_TYPE[keyof typeof DOWNTIME_EFFECT_TYPE];
 export type DowntimeEffectTarget = typeof DOWNTIME_EFFECT_TARGET[keyof typeof DOWNTIME_EFFECT_TARGET];
 export type DowntimeEffectConfig =
-  | DowntimeEffectReplaceActionConfig;
+| DowntimeEffectReplaceActionConfig
+| DowntimeEffectRestoreAttributeConfig
+| DowntimeEffectTriggerProjectConfig;
 export interface DowntimeEffectReplaceActionConfig {
   type: typeof DOWNTIME_EFFECT_TYPE.REPLACE_ACTION;
   tags: string[];             // tags of action eligible for replacement
@@ -28,5 +30,8 @@ export interface DowntimeConfig extends BaseConfig {
   icon?: string;
   tags?: string[];
 
-  effects: Record<DowntimeEffectIntensity, DowntimeEffectConfig>;
+  effects: {
+    half?: DowntimeEffectConfig;
+    full?: DowntimeEffectConfig;
+  };
 }

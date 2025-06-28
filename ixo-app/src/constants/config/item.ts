@@ -8,6 +8,16 @@ export const ITEM_TYPE = {
   // ...add more as needed
 } as const;
 
+export const ITEM_CUSTOMIZE_TYPE = {
+  DAMAGE: 'damage',
+  EFFECT: 'effect'
+} as const;
+
+export const ITEM_ARMOR_WEIGHT = {
+  MEDIUM: 'medium',
+  HEAVY: 'heavy'
+} as const;
+
 // Item bonus effect types
 export const ITEM_BONUS_EFFECT_TYPE = {
   STAT_MODIFY: 'stat-modify',
