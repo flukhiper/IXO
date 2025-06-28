@@ -12,7 +12,7 @@ export interface ActionUsageLimit {
   isTemporary?: boolean; // True if granted temporarily (e.g. from a Trait)
   maxUses?: number;      // How many times it can be used before reset
   resetOn?: ActionUsageReset; // Reset condition
-  cooldownRounds?: number; // Rounds before action can be used again after one use
+  cooldownTurns?: number; // Turn before action can be used again after one use
 }
 
 export type ActionTargetType = typeof ACTION_TARGET_TYPE[keyof typeof ACTION_TARGET_TYPE];
@@ -57,13 +57,11 @@ export interface SummonConfig {
 export interface RestoreConfig {
   attributeId: string;         // e.g. 'hit-point', 'energy-point'
   formula: string;             // e.g. "1d8 + stat(charisma)"
-  conditionIds?: string[];     // optional conditions that may apply when restored (e.g. 'inspired', 'regenerating')
 }
 export interface DamageConfig {
   damageTypeId: string;    // e.g. 'fire', 'piercing'
   baseValue: FixedValue | DiceValue;
   scalingFormula?: string; // optional scaling
-  conditionIds?: string[]; // references to ConditionConfig that will apply to target when hit
 }
 
 export type ActionHitType = typeof ACTION_HIT_TYPE[keyof typeof ACTION_HIT_TYPE];
@@ -72,7 +70,6 @@ export type HitCheckConfig =
   | HitAttackRollConfig
   | HitDifficultyClassConfig
   | HitAlwaysConfig;
-
 export interface HitAttackRollConfig {
   type: typeof ACTION_HIT_TYPE.ATTACK_ROLL;
   baseValue: FixedValue | DiceValue | RefValue;
@@ -97,20 +94,31 @@ export interface ActionLevelConfig {
   cost?: ActionCost[]; // multiple attribute-based costs
   hit?: HitCheckConfig;
   damage?: DamageConfig[];
-  selfConditionIds?: string[]; // references to ConditionConfig that will apply self when use
+  restore?: RestoreConfig[];
+
+  // Condition effects moved here for better clarity
+  conditionIds?: string[];         // Applies to target when hit
+  removeConditionIds?: string[];   // Removes from target when hit
+  
   summon?: SummonConfig[]; // multiple summons allowed
   target?: ActionTargetConfig;
   usageLimit?: ActionUsageLimit;
   restrictions?: ActionRestrictions;
+  selfConditionIds?: string[]; // references to ConditionConfig that will apply self when use
 }
 
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
-
 export interface ActionConfig extends BaseConfig {
   type: ActionType;
-  isCrucial: boolean;
   icon?: string;
   tags?: string[];
+  
+  isCrucial: boolean;
+  isConcentration?: boolean; // This marks the action as requiring concentratio
+  
+  pathId: string; // e.g., 'warrior', 'mage', or 'any' for no filter
+  requiredCharacterLevel?: number; // Needed level to gain/use this action
+  requiredStatThresholds?: StatThresholdRequirement[];  // Used for pool filtering
 
   levelConfigs: Record<number, ActionLevelConfig>; // each level defines cost, hit, damage, etc.
 }

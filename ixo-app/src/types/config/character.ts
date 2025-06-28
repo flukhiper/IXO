@@ -1,16 +1,14 @@
 import type { BaseConfig } from './base';
-import type { StatThresholdRequirement } from './common';
+import type { InventorySpace } from './common';
 
 export interface ActionPoolFilter {
-  requiredActionTags?: string[]; // e.g., ["support", "fire"]
-  requiredLevel?: number;        // only include actions with level ≤ this
-  requiredStatThresholds?: StatThresholdRequirement[];
+  includedActionTags?: string[];   // Must include ALL these tags
+  excludedActionTags?: string[];   // Must NOT include ANY of these tags
 }
 
 export interface SkillPoolFilter {
-  requiredSkillTags?: string[];  // if you later add tags to skills
-  requiredLevel?: number;
-  requiredStatThresholds?: StatThresholdRequirement[];
+  includedSkillTags?: string[];   // Must include ALL these tags
+  excludedSkillTags?: string[];   // Must NOT include ANY of these tags
 }
 
 export interface CharacterGainConfig {
@@ -30,18 +28,18 @@ export interface CharacterProgressionConfig {
 
 export interface CharacterEquipmentConfig {
   slotLimits?: Record<string, number>;  // e.g., { "main-hand": 1, "off-hand": 1 }
-  inventorySlot: {
-    rows: number;      // e.g., 6
-    columns: number;   // e.g., 12
-  };
+  defaultInventorySpace: InventorySpace;
 }
 
 export interface CharacterConfig extends BaseConfig {
   startingActions?: string[];  // Action IDs granted at creation
   startingItems?: string[];    // Item IDs granted at creation
+  startProficiencyPoint?: number; // Number of points player can assign to proficiencies at creation
 
   equipmentRules?: CharacterEquipmentConfig;
   progression?: CharacterProgressionConfig;
+  
+  defaultDamageScales?: Record<string, string>; 
 
   tags?: string[]; // optional groupings like "starter", "template"
 }
