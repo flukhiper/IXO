@@ -39,6 +39,10 @@ export interface CharacterConfig extends BaseConfig {
   equipmentRules?: CharacterEquipmentConfig;
   progression?: CharacterProgressionConfig;
   
+  halfDowntimeIds?: string[]; // DowntimeConfig ids allowed during half downtime
+  fullDowntimeIds?: string[]; // DowntimeConfig ids allowed during full downtime
+  
+  defaultTraitSize?: number; // Number of traits allowed to choose during character creation
   defaultDamageScales?: Record<string, string>; 
 
   tags?: string[]; // optional groupings like "starter", "template"

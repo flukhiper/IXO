@@ -8,9 +8,15 @@ export type SkillEffectConfig =
 | SkillEffectAttributeModifyConfig
 | SkillEffectRestrictActionConfig
 | SkillEffectRestrictEquipmentConfig
+| SkillEffectBlockConditionConfig
+| SkillEffectConditionalConditionConfig
 | SkillEffectActionConfig
 | SkillEffectResistenceConfig
-| SkillEffectAdvantageAttributeConfig;
+| SkillEffectAdvantageAttributeConfig
+| SkillEffectExtraDowntimeConfig
+| SkillEffectDowntimeConfig
+| SkillEffectExtraProficiencyConfig
+| SkillEffectEquipmentSlotConfig;
 // Passive stat adjustment (possible to be possitive and negetive)
 export interface SkillEffectStatModifyConfig {
   type: typeof SKILL_EFFECT_TYPE.STAT_MODIFY;
@@ -33,6 +39,16 @@ export interface SkillEffectRestrictEquipmentConfig {
   type: typeof SKILL_EFFECT_TYPE.RESTRICT_EQUIPMENT;
   tags?: string[]; // e.g., "main-hand", "off-hand"
 }
+// Prevent condition
+export interface SkillEffectBlockConditionConfig {
+  type: typeof SKILL_EFFECT_TYPE.BLOCK_CONDITION;
+  tags?: string[]; // e.g., ["frightened", "fatigue"]
+}
+export interface SkillEffectConditionalConditionConfig {
+  type: typeof SKILL_EFFECT_TYPE.CONDITIONAL_CONDITION;
+  conditionIds: string[];
+  requirements: string[]; // e.g., ["attr(hit-point).current < attr(hit-point).max / 2"]
+}
 // Action available to use when have skill
 export interface SkillEffectActionConfig {
   type: typeof SKILL_EFFECT_TYPE.ACTION;
@@ -48,6 +64,24 @@ export interface SkillEffectAdvantageAttributeConfig {
   type: typeof SKILL_EFFECT_TYPE.ADVANTAGE_ATTRIBUTE;
   attributeIds: string[]; // Only valid for attributes of type 'ability' or 'saving'
   isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
+}
+export interface SkillEffectExtraDowntimeConfig {
+  type: typeof SKILL_EFFECT_TYPE.EXTRA_DOWNTIME;
+  bonusActivities: number; // e.g., 1
+}
+export interface SkillEffectDowntimeConfig {
+  type: typeof SKILL_EFFECT_TYPE.DOWNTIME;
+  downtimeId: string;   // e.g., 'repair', 'meditate'
+  intense?: string;  // e.g., 'full', 'half'
+}
+export interface SkillEffectExtraProficiencyConfig {
+  type: typeof SKILL_EFFECT_TYPE.EXTRA_PROFICIENCY;
+  points: number; // typically 1
+}
+export interface SkillEffectEquipmentSlotConfig {
+  type: typeof SKILL_EFFECT_TYPE.EQUIPMENT_SLOT;
+  slot: string;     // e.g., 'utility' or 'weapon'
+  bonus: number;    // e.g., 1
 }
 
 export interface SkillConfig extends BaseConfig {
