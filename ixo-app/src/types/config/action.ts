@@ -91,16 +91,16 @@ export interface ActionCost {
 }
 
 export interface ActionLevelConfig {
-  cost?: ActionCost[]; // multiple attribute-based costs
+  costs?: ActionCost[]; // multiple attribute-based costs
   hit?: HitCheckConfig;
-  damage?: DamageConfig[];
-  restore?: RestoreConfig[];
+  damages?: DamageConfig[];
+  restores?: RestoreConfig[];
 
   // Condition effects moved here for better clarity
   conditionIds?: string[];         // Applies to target when hit
   removeConditionIds?: string[];   // Removes from target when hit
   
-  summon?: SummonConfig[]; // multiple summons allowed
+  summons?: SummonConfig[]; // multiple summons allowed
   target?: ActionTargetConfig;
   usageLimit?: ActionUsageLimit;
   restrictions?: ActionRestrictions;

@@ -11,7 +11,7 @@ export type AttributeValue =
 export interface AttributeConfig extends BaseConfig {
   type: AttributeType;
   baseValue: AttributeValue;
-  restoreOn?: RestorePhase[];
+  restoreOns?: RestorePhase[];
   restoreValue?: RestoreValue;
   tags?: string[]; // optional for grouping/filtering
   scalingFormula?: string; // e.g. "base + (level * 2) + (stat(strength) / 3)"

@@ -89,8 +89,8 @@ export interface ItemWeaponConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.WEAPON;
   weapon?: {
     hit?: ItemHitConfig;
-    damage?: ItemDamageConfig[];
-    restore?: ItemRestoreConfig[];
+    damages?: ItemDamageConfig[];
+    restores?: ItemRestoreConfig[];
     conditionIds?: string[];
     removeConditionIds?: string[];
     properties?: string[];
@@ -120,8 +120,8 @@ export interface ItemAccessoryConfig extends ItemBaseConfig {
 export interface ItemConsumableConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.CONSUMABLE;
   consumable?: {
-    damage?: ItemDamageConfig[];
-    restore?: ItemRestoreConfig[];
+    damages?: ItemDamageConfig[];
+    restores?: ItemRestoreConfig[];
     conditionIds?: string[];
     removeConditionIds?: string[];
     usageLimit?: ItemUsageLimit;
