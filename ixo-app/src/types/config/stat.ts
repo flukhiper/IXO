@@ -1,12 +1,5 @@
-import type { FixValue, ModifierValue, ReferenceValue } from './value';
-import type { BaseMapConfig } from './base';
+import type { BaseConfig } from './base'; // assuming you have these already
 
-export interface StatModifierConfig {
-  attribute: ReferenceValue;
-  modifier: ModifierValue;
-}
-
-export interface StatConfig extends BaseMapConfig {
-  value: FixValue;
-  modifiers: Array<StatModifierConfig>;
+export interface StatConfig extends BaseConfig {
+  abbreviation: string; // e.g. "STR"
 }

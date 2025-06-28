@@ -1,6 +1,6 @@
 'use client';
 
-import { expressionToString } from '@/libs/engine/evaluation';
+import { expressionToString } from '@/libs/engine/evaluator';
 import type { Expression, ExpressionType } from '@/types/expression';
 
 const operators: ExpressionType[] = [

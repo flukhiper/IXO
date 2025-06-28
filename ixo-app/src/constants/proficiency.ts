@@ -1,1 +1,0 @@
-export const PROFICIENCY_REF_ID = 'proficiency' as const;

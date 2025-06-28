@@ -1,35 +1,18 @@
-import { ATTRIBUTE_TYPE_DICE_VALUE, ATTRIBUTE_TYPE_EXPENDABLE_VALUE, ATTRIBUTE_TYPE_FIX_VALUE, ATTRIBUTE_TYPE_OTHER } from '@/constants/attribute';
+import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
+import type { BaseConfig, DiceValue, FixedValue, FractionValue, RestorePhase, RestoreValue } from './base';
 
-import type { DiceValue, ExpendableValue, FixValue } from './value';
-import type { BaseMapConfig } from './base';
-
-export type AttributeTypeOther = typeof ATTRIBUTE_TYPE_OTHER[keyof typeof ATTRIBUTE_TYPE_OTHER];
-export type AttributeTypeFixValue = typeof ATTRIBUTE_TYPE_FIX_VALUE[keyof typeof ATTRIBUTE_TYPE_FIX_VALUE];
-export type AttributeTypeDiceValue = typeof ATTRIBUTE_TYPE_DICE_VALUE[keyof typeof ATTRIBUTE_TYPE_DICE_VALUE];
-export type AttributeTypeExpendableValue = typeof ATTRIBUTE_TYPE_EXPENDABLE_VALUE[keyof typeof ATTRIBUTE_TYPE_EXPENDABLE_VALUE];
-export type AttributeTypeUnique = AttributeTypeFixValue | AttributeTypeDiceValue | AttributeTypeExpendableValue;
-export type AttributeType = AttributeTypeOther | AttributeTypeUnique;
+export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
 
 export type AttributeValue =
-  | FixValue
+  | FixedValue
   | DiceValue
-  | ExpendableValue;
+  | FractionValue;
 
-interface AttributeConfigBase<T extends AttributeType> extends BaseMapConfig {
-  attrType: T;
+export interface AttributeConfig extends BaseConfig {
+  type: AttributeType;
+  baseValue: AttributeValue;
+  restoreOn?: RestorePhase[];
+  restoreValue?: RestoreValue;
+  tags?: string[]; // optional for grouping/filtering
+  scalingFormula?: string; // e.g. "base + (level * 2) + (stat(strength) / 3)"
 }
-
-
-export type AttributeConfigFixValue = AttributeConfigBase<AttributeTypeOther | AttributeTypeFixValue> & {
-  value: FixValue;
-};
-
-export type AttributeConfigDiceValue = AttributeConfigBase<AttributeTypeOther | AttributeTypeDiceValue> & {
-  value: DiceValue;
-};
-
-export type AttributeConfigExpendableValue = AttributeConfigBase<AttributeTypeOther | AttributeTypeExpendableValue> & {
-  value: ExpendableValue;
-};
-
-export type AttributeConfig = AttributeConfigFixValue | AttributeConfigDiceValue | AttributeConfigExpendableValue;

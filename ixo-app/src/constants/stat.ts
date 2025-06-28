@@ -1,1 +1,0 @@
-export const STAT_REF_ID = 'stat' as const;

@@ -1,5 +1,5 @@
-import { RESTORE_VALUE_TYPE, VALUE_TYPE } from '@/constants/value';
-import type { AllAttributeValue, AllSavingValue, ConditionComparator, ConditionValue, DiceValue, ExpendableValue, FixValue, FullValue, InfiniteValue, ModifierValue, ReferenceValue, RestoreType, RestoreValue } from '@/types/config/value';
+import { VALUE_TYPE } from '@/constants/config/value';
+import type { DiceValue, FixedValue, FractionValue, ParsedValue, RefValue } from '@/types/config/base';
 
 export function generateId (name: string): string {
   return name
@@ -9,84 +9,51 @@ export function generateId (name: string): string {
     .replace(/\s+/g, '-');           // collapse space to dash
 }
 
-export function createFixValue (value: number): FixValue {
-  return { type: VALUE_TYPE.FIX, value };
+export function parseValue (input: string): ParsedValue {
+  const trimmed = input.trim();
+
+  if (/^\d+d\d+$/.test(trimmed)) {
+    return {
+      type: VALUE_TYPE.DICE,
+      formula: trimmed
+    };
+  }
+
+  if (/^\d+\/\d+$/.test(trimmed)) {
+    const [ numerator, denominator ] = trimmed.split('/').map(Number);
+    return {
+      type: VALUE_TYPE.FRACTION,
+      numerator,
+      denominator
+    };
+  }
+
+  const value = Number(trimmed);
+  if (Number.isFinite(value)) {
+    return {
+      type: VALUE_TYPE.FIXED,
+      value
+    };
+  }
+
+  throw new Error(`Invalid value format: "${input}"`);
 }
 
-export function createDiceValue (formula: string): DiceValue {
-  return { type: VALUE_TYPE.DICE, formula };
-}
-
-export function createFullValue (): FullValue {
-  return { type: VALUE_TYPE.FULL };
-}
-
-export function createInfiniteValue (): InfiniteValue {
-  return { type: VALUE_TYPE.INFINITE };
-}
-
-export function createAllSavingValue (): AllSavingValue {
-  return { type: VALUE_TYPE.ALL_SAVING };
-}
-
-export function createAllAttributeValue (): AllAttributeValue {
-  return { type: VALUE_TYPE.ALL_ATTRIBUTE };
-}
-
-export function createReferenceValue (ref: string, id: string): ReferenceValue {
-  return { type: VALUE_TYPE.REFERENCE, ref, id };
-}
-
-export function createModifierValue (formula: string): ModifierValue {
-  return { type: VALUE_TYPE.MODIFIER, formula };
-}
-
-interface CreateExpendableValueParam {
-  max: number;
-  restores: Array<{
-    when: RestoreType;
-    value?: number | string;
-  }>;
-}
-export function createExpendableValue (params: CreateExpendableValueParam): ExpendableValue {
-  const { max, restores } = params;
-  const formattedRestores = restores.map(restore => {
-    const { when, value } = restore;
-    if (when === RESTORE_VALUE_TYPE.NONE) {
-      return { when };
-    }
-    let restoreValue: RestoreValue;
-    if (typeof value === 'string') {
-      if (value === VALUE_TYPE.FULL) {
-        restoreValue = { type: VALUE_TYPE.FULL } as FullValue;
-      } else {
-        restoreValue = { type: VALUE_TYPE.DICE, formula: value } as DiceValue;
-      }
-    } else {
-      restoreValue = { type: VALUE_TYPE.FIX, value: value as number } as FixValue;
-    }
-    return { when, value: restoreValue };
-  });
+export function parseRefValue (input: string): RefValue {
   return {
-    type: VALUE_TYPE.EXPENDABLE,
-    max,
-    restores: formattedRestores
+    type: VALUE_TYPE.REF,
+    ref: input
   };
 }
 
-export function createConditionValue (
-  comparator: ConditionComparator,
-  formula: string
-): ConditionValue {
-  return {
-    type: VALUE_TYPE.CONDITION,
-    comparator,
-    formula
-  };
+export function isFixedValue (value: ParsedValue): value is FixedValue {
+  return value.type === VALUE_TYPE.FIXED;
 }
 
-export function normalizeReferenceList (ids: (string | ReferenceValue)[], refId: string): ReferenceValue[] {
-  return ids.map(entry => 
-    typeof entry === 'string' ? createReferenceValue(refId, entry) : entry
-  );
+export function isDiceValue (value: ParsedValue): value is DiceValue {
+  return value.type === VALUE_TYPE.DICE;
+}
+
+export function isFractionValue (value: ParsedValue): value is FractionValue {
+  return value.type === VALUE_TYPE.FRACTION;
 }

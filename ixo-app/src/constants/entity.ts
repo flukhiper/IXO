@@ -1,1 +1,0 @@
-export const ENTITY_REF_ID = 'entity' as const;
