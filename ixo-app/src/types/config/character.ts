@@ -34,6 +34,11 @@ export interface CharacterConfig {
   startingActions?: string[];  // Action IDs granted at creation
   startingItems?: string[];    // Item IDs granted at creation
   startProficiencyPoint?: number; // Number of points player can assign to proficiencies at creation
+  startStatPoint?: number;
+  startStatLimit?: {
+    min: number;
+    max: number;
+  };
 
   equipmentRules?: CharacterEquipmentConfig;
   progression?: CharacterProgressionConfig;

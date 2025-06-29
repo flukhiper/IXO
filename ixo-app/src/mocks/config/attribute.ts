@@ -11,7 +11,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'fixed', value: 8 },
     tags: [ 'health' ],
-    scalingFormula: 'base + (stat(strength) * 2)'
+    formula: '(stat(strength) * 2)'
   },
   {
     id: 'carry-capacity',
@@ -21,7 +21,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'fixed', value: 140 },
     tags: [ 'utility' ],
-    scalingFormula: 'base + (stat(strength) * 10)'
+    formula: '(stat(strength) * 10)'
   },
   {
     id: 'speed',
@@ -31,7 +31,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'movement' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'armor-class',
@@ -41,7 +41,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'fixed', value: 10 },
     tags: [ 'defense' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'movement',
@@ -51,7 +51,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'fixed', value: 9 },
     tags: [ 'movement' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'attack-roll',
@@ -61,7 +61,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'combat',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'offense' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'action-slot',
@@ -71,7 +71,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'action-resource',
     baseValue: { type: 'fixed', value: 4 },
     tags: [ 'resource' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'initiative',
@@ -81,7 +81,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'turn-order',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'combat' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'action-point',
@@ -102,7 +102,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'action-resource',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'resource' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
 
   // --- Modifier Attributes ---
@@ -114,7 +114,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(strength)'
+    formula: 'stat(strength)'
   },
   {
     id: 'agility-modifier',
@@ -124,7 +124,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'dexterity-modifier',
@@ -134,7 +134,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'intelligence-modifier',
@@ -144,7 +144,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'sense-modifier',
@@ -154,7 +154,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'charisma-modifier',
@@ -164,7 +164,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'modifier',
     baseValue: { type: 'fixed', value: 0 },
     tags: [ 'stat-modifier' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   },
 
   // --- Core Ability Scores ---
@@ -232,7 +232,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(strength)'
+    formula: 'stat(strength)'
   },
   {
     id: 'sprint',
@@ -242,7 +242,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'acrobatics',
@@ -252,7 +252,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'sleight-of-hand',
@@ -262,7 +262,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'mechanical',
@@ -272,7 +272,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'stealth',
@@ -282,7 +282,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'recall',
@@ -292,7 +292,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'comprehend',
@@ -302,7 +302,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'analyze',
@@ -312,7 +312,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'perceive',
@@ -322,7 +322,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'insight',
@@ -332,7 +332,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'energy-sense',
@@ -342,7 +342,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'persuasion',
@@ -352,7 +352,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   },
   {
     id: 'deception',
@@ -362,7 +362,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   },
   {
     id: 'intimidation',
@@ -372,7 +372,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   },
   {
     id: 'performance',
@@ -382,7 +382,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'ability',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'skill' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   },
 
   // --- Saving Throw Attributes ---
@@ -394,7 +394,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(strength)'
+    formula: 'stat(strength)'
   },
   {
     id: 'agility-saving-throw',
@@ -404,7 +404,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(agility)'
+    formula: 'stat(agility)'
   },
   {
     id: 'dexterity-saving-throw',
@@ -414,7 +414,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(dexterity)'
+    formula: 'stat(dexterity)'
   },
   {
     id: 'intelligence-saving-throw',
@@ -424,7 +424,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(intelligence)'
+    formula: 'stat(intelligence)'
   },
   {
     id: 'sense-saving-throw',
@@ -434,7 +434,7 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(sense)'
+    formula: 'stat(sense)'
   },
   {
     id: 'charisma-saving-throw',
@@ -444,6 +444,6 @@ export const mockAttributes: AttributeConfig[] = // --- Sample Attribute Configu
     type: 'saving-throw',
     baseValue: { type: 'dice', formula: '1d20' },
     tags: [ 'saving-throw' ],
-    scalingFormula: 'base + stat(charisma)'
+    formula: 'stat(charisma)'
   }
 ];

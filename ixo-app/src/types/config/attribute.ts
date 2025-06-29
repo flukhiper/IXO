@@ -14,5 +14,5 @@ export interface AttributeConfig extends BaseConfig {
   restoreOns?: RestorePhase[];
   restoreValue?: RestoreValue;
   tags?: string[]; // optional for grouping/filtering
-  scalingFormula?: string; // e.g. "base + (level * 2) + (stat(strength) / 3)"
+  formula?: string; // e.g. "base + (level * 2) + (stat(strength) / 3)"
 }

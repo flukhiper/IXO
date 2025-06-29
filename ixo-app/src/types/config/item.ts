@@ -1,4 +1,4 @@
-import { ITEM_ARMOR_WEIGHT, ITEM_BONUS_EFFECT_TYPE, ITEM_CUSTOMIZE_TYPE, ITEM_TYPE } from '@/constants/config/item';
+import { ITEM_WEIGHT, ITEM_BONUS_EFFECT_TYPE, ITEM_CUSTOMIZE_TYPE, ITEM_TYPE } from '@/constants/config/item';
 import type { BaseConfig, FixedValue, DiceValue, RefValue } from './base';
 import type { InventorySpace, StatThresholdRequirement } from './common';
 
@@ -54,12 +54,12 @@ export interface ItemUsageLimit {
 }
 export interface ItemHitConfig {
   baseValue: FixedValue | DiceValue | RefValue;
-  scalingFormula?: string;
+  formula?: string;
 }
 export interface ItemDamageConfig {
   damageTypeId: string;
   baseValue: FixedValue | DiceValue;
-  scalingFormula?: string;
+  formula?: string;
 }
 export interface ItemRestoreConfig {
   attributeId: string;
@@ -85,12 +85,17 @@ export interface ItemBaseConfig extends BaseConfig {
 }
 
 // Equipment Types
-type ItemCustomizeConfig =
+export type ItemCustomizeConfig =
   | { type: typeof ITEM_CUSTOMIZE_TYPE.DAMAGE; damage: ItemDamageConfig }
   | { type: typeof ITEM_CUSTOMIZE_TYPE.EFFECT; effect: ItemBonusEffectConfig };
+export type ItemWeight = typeof ITEM_WEIGHT[keyof typeof ITEM_WEIGHT];
 export interface WeaponPropertyConfig {
+  weight?: ItemWeight; // light mean Usable for off-hand dual wield, Medium mean nothing, Heavy mean require stat STR 2 give modify AGI -2 (not stack with armor) except have range properties
+  range?: { // mean this weapon is range weapon
+    normal: number;           // e.g., 6
+    max: number;              // e.g., 18
+  };
   finesse?: boolean;            // Use DEX instead of STR if higher
-  light?: boolean;              // Usable for off-hand dual wield
   thrown?: {
     range: {
       normal: number;           // e.g., 6
@@ -100,7 +105,7 @@ export interface WeaponPropertyConfig {
   extraReach?: {
     bonusMeters: number;        // e.g., 1.5 (increased melee range)
   };
-  twoHanded?: boolean;          // Requires two hands to use
+  twoHanded?: boolean;          // Requires two hands to use and stat STR 2 and give modify AGI -2
   versatile?: {
     alternateDamage: ItemDamageConfig; // Damage when used 2-handed
   };
@@ -121,10 +126,21 @@ export interface ItemWeaponConfig extends ItemBaseConfig {
   };
 }
 
+export interface ShieldPropertyConfig {
+  enhancement?: 1 | 2 | 3;
+  customize?: {
+    type: typeof ITEM_CUSTOMIZE_TYPE.EFFECT;
+    effect: ItemBonusEffectConfig;
+  };
+  weight?: ItemWeight; // light mean full affected by DEX, Medium mean affected by DEX max at 2 and require stat STR 1, Heavy mean not affected by DEX and require stat STR 2 give modify AGI -2 (not stack with armor) 
+}
+
 export interface ItemShieldConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.SHIELD;
   shield?: {
     armorClassBonus: number;
+
+    property?: ShieldPropertyConfig;
   };
 }
 export interface ArmorPropertyConfig {
@@ -133,13 +149,13 @@ export interface ArmorPropertyConfig {
     type: typeof ITEM_CUSTOMIZE_TYPE.EFFECT;
     effect: ItemBonusEffectConfig;
   };
-  weight?: typeof ITEM_ARMOR_WEIGHT[keyof typeof ITEM_ARMOR_WEIGHT];
+  weight?: ItemWeight; // light mean full affected by AGI, Medium mean affected by AGI max at 2 and require stat STR 1, Heavy mean not affected by AGI and require stat STR 2 give modify AGI -2
 }
 export interface ItemArmorConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.ARMOR;
   armor?: {
     armorClass: FixedValue | RefValue;
-    scalingFormula?: string;
+    formula?: string;
 
     property?: ArmorPropertyConfig;
   };

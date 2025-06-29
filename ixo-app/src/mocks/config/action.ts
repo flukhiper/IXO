@@ -22,13 +22,13 @@ export const mockActions: ActionConfig[] = // --- Sample Action Configurations -
         hit: {
           type: 'attack-roll',
           baseValue: { type: 'ref', ref: 'equip-slot', id: 'main-hand' },
-          scalingFormula: 'attr(strength-modifier)'
+          formula: 'attr(strength-modifier)'
         },
         damages: [
           {
             damageTypeId: 'piercing', // Placeholder, ideally this would also come from weapon
             baseValue: { type: 'ref', ref: 'equip-slot', id: 'main-hand' },
-            scalingFormula: 'attr(strength-modifier)'
+            formula: 'attr(strength-modifier)'
           }
         ],
         target: {
@@ -61,13 +61,13 @@ export const mockActions: ActionConfig[] = // --- Sample Action Configurations -
           type: 'difficulty-class',
           baseValue: { type: 'fixed', value: 12 },
           versusSaving: 'dexterity-saving-throw',
-          scalingFormula: 'base + stat(intelligence)'
+          formula: 'stat(intelligence)'
         },
         damages: [
           {
             damageTypeId: 'fire',
             baseValue: { type: 'dice', formula: '3d6' },
-            scalingFormula: 'base + characterLevel / 2'
+            formula: 'characterLevel / 2'
           }
         ],
         conditionIds: [ 'burned' ],
@@ -135,7 +135,7 @@ export const mockActions: ActionConfig[] = // --- Sample Action Configurations -
           type: 'difficulty-class',
           baseValue: { type: 'fixed', value: 11 },
           versusSaving: 'sense-saving-throw',
-          scalingFormula: 'base + stat(charisma)'
+          formula: 'stat(charisma)'
         },
         conditionIds: [ 'stunned' ],
         target: {
@@ -166,13 +166,13 @@ export const mockActions: ActionConfig[] = // --- Sample Action Configurations -
         hit: {
           type: 'attack-roll',
           baseValue: { type: 'dice', formula: '1d20' },
-          scalingFormula: 'base + stat(strength)'
+          formula: 'stat(strength)'
         },
         damages: [
           {
             damageTypeId: 'bludgeoning',
             baseValue: { type: 'dice', formula: '2d8' },
-            scalingFormula: 'base + stat(strength-modifier) * 2'
+            formula: 'stat(strength-modifier) * 2'
           }
         ],
         target: {
@@ -281,7 +281,7 @@ export const mockActions: ActionConfig[] = // --- Sample Action Configurations -
           type: 'difficulty-class',
           baseValue: { type: 'fixed', value: 11 },
           versusSaving: 'sense-saving-throw',
-          scalingFormula: 'base + stat(charisma)'
+          formula: 'stat(charisma)'
         },
         conditionIds: [ 'charmed', 'sleep' ], // Assumed conditions
         target: {

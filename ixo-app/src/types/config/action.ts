@@ -61,7 +61,7 @@ export interface RestoreConfig {
 export interface DamageConfig {
   damageTypeId: string;    // e.g. 'fire', 'piercing'
   baseValue: FixedValue | DiceValue | RefValue;
-  scalingFormula?: string; // optional scaling
+  formula?: string; // optional scaling
 }
 
 export type ActionHitType = typeof ACTION_HIT_TYPE[keyof typeof ACTION_HIT_TYPE];
@@ -73,13 +73,13 @@ export type HitCheckConfig =
 export interface HitAttackRollConfig {
   type: typeof ACTION_HIT_TYPE.ATTACK_ROLL;
   baseValue: FixedValue | DiceValue | RefValue;
-  scalingFormula?: string; // optional scaling
+  formula?: string; // optional scaling
 }
 export interface HitDifficultyClassConfig {
   type: typeof ACTION_HIT_TYPE.DIFFICULTY_CLASS;
   baseValue: FixedValue;
   versusSaving: string; // attributeId of saving throw
-  scalingFormula?: string;
+  formula?: string;
 }
 export interface HitAlwaysConfig {
   type: typeof ACTION_HIT_TYPE.ALWAYS_HIT; // signifies this action automatically succeeds

@@ -15,7 +15,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
         type: 'start-turn',
         duration: 3,
         versusSaving: 'constitution-saving-throw',
-        scalingFormula: 'base + stat(constitution)'
+        formula: 'stat(constitution)'
       }
     ],
     effects: [
@@ -120,7 +120,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
         type: 'end-turn',
         duration: 2,
         versusSaving: 'sense-saving-throw',
-        scalingFormula: 'base + level'
+        formula: 'level'
       }
     ],
     effects: [
@@ -171,7 +171,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
         type: 'end-turn',
         duration: 3,
         versusSaving: 'sense-saving-throw',
-        scalingFormula: 'base + stat(sense)'
+        formula: 'stat(sense)'
       }
     ],
     effects: [
@@ -229,7 +229,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
         type: 'end-turn',
         duration: 2,
         versusSaving: 'sense-saving-throw',
-        scalingFormula: 'base + stat(sense)'
+        formula: 'stat(sense)'
       }
     ],
     effects: [

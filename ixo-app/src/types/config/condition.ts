@@ -74,7 +74,7 @@ export interface ConditionRemoveTickDurationConfig {
   type: typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
   duration: number;
   versusSaving?: string; // attributeId of saving throw
-  scalingFormula?: string;
+  formula?: string;
 }
 export interface ConditionRemoveTickImmediateConfig {
   type: typeof CONDITION_TICK_TYPE.IMMEDIATE;
@@ -83,7 +83,7 @@ export interface ConditionRemoveTickDamageConfig {
   type: typeof CONDITION_TICK_TYPE.DAMAGE;
   damageTypeId: string; // e.g. 'fire', 'piercing'
   versusSaving?: string; // attributeId of saving throw
-  scalingFormula?: string;
+  formula?: string;
 }
 export interface ConditionRemoveTickConditionConfig {
   type: typeof CONDITION_TICK_TYPE.CONDITION;
