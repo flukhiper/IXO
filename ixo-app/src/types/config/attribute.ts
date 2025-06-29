@@ -1,12 +1,11 @@
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import type { BaseConfig, DiceValue, FixedValue, FractionValue, RestorePhase, RestoreValue } from './base';
+import type { BaseConfig, DiceValue, FixedValue, RestorePhase, RestoreValue } from './base';
 
 export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
 
 export type AttributeValue =
   | FixedValue
-  | DiceValue
-  | FractionValue;
+  | DiceValue;
 
 export interface AttributeConfig extends BaseConfig {
   type: AttributeType;

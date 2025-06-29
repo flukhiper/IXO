@@ -1,5 +1,5 @@
 import { VALUE_TYPE } from '@/constants/config/value';
-import type { DiceValue, FixedValue, FractionValue, ParsedValue, RefValue } from '@/types/config/base';
+import type { DiceValue, FixedValue, ParsedValue, RefValue } from '@/types/config/base';
 
 export function generateId (name: string): string {
   return name
@@ -52,8 +52,4 @@ export function isFixedValue (value: ParsedValue): value is FixedValue {
 
 export function isDiceValue (value: ParsedValue): value is DiceValue {
   return value.type === VALUE_TYPE.DICE;
-}
-
-export function isFractionValue (value: ParsedValue): value is FractionValue {
-  return value.type === VALUE_TYPE.FRACTION;
 }

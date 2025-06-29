@@ -51,7 +51,7 @@ export interface LineTargetConfig {
   targetCount?: number;
 }
 export interface SummonConfig {
-  summonId: string;         // reference to summon entity
+  creatureId: string;         // reference to summon creature
   duration: string;         // e.g. "3 rounds", "until destroyed"
 }
 export interface RestoreConfig {

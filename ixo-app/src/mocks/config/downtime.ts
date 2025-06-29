@@ -1,6 +1,6 @@
 import type { DowntimeConfig } from '@/types/config/downtime';
 
-export const mockDowntimes: DowntimeConfig[] = // --- Sample Downtime Configurations ---
+export const mockDowntimes: DowntimeConfig[] = // --- Updated Sample Downtime Configurations ---
 [
   {
     id: 'tend-to-wounds',
@@ -13,13 +13,13 @@ export const mockDowntimes: DowntimeConfig[] = // --- Sample Downtime Configurat
       half: {
         type: 'restore-attribute',
         attributeId: 'hit-point',
-        formula: '1d4 + characterLevel',
+        formula: '1d4 + level',
         target: 'self'
       },
       full: {
         type: 'restore-attribute',
         attributeId: 'hit-point',
-        formula: 'attr(hit-point).max',
+        formula: 'attribute(hit-point).max',
         target: 'any'
       }
     }
@@ -39,6 +39,44 @@ export const mockDowntimes: DowntimeConfig[] = // --- Sample Downtime Configurat
     }
   },
   {
+    id: 'rest',
+    name: { en: 'Rest', th: 'พักผ่อน' },
+    description: { en: 'Take a short break to recover some energy and minor wounds.', th: 'พักสั้นๆ เพื่อฟื้นฟูพลังงานและบาดแผลเล็กน้อย' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/ADD8E6/000000?text=🛌',
+    tags: [ 'recovery' ],
+    effects: {
+      half: {
+        type: 'restore-attribute',
+        attributeId: 'energy-point',
+        formula: 'floor(attribute(energy-point).max / 4)',
+        target: 'self'
+      },
+      full: {
+        type: 'restore-attribute',
+        attributeId: 'energy-point',
+        formula: 'floor(attribute(energy-point).max / 2)',
+        target: 'self'
+      }
+    }
+  },
+  {
+    id: 'long-rest',
+    name: { en: 'Long Rest', th: 'พักผ่อนยาว' },
+    description: { en: 'A substantial period of rest, restoring most resources.', th: 'การพักผ่อนเป็นระยะเวลานาน ฟื้นฟูทรัพยากรส่วนใหญ่' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/4682B4/FFFFFF?text=😴',
+    tags: [ 'recovery' ],
+    effects: {
+      full: {
+        type: 'restore-attribute',
+        attributeId: 'hit-point',
+        formula: 'attribute(hit-point).max',
+        target: 'self'
+      }
+    }
+  },
+  {
     id: 'meditate',
     name: { en: 'Meditate', th: 'ทำสมาธิ' },
     description: { en: 'Clear your mind to regain focus and mental resources.', th: 'ชำระจิตใจเพื่อฟื้นฟูสมาธิและทรัพยากรทางจิต' },
@@ -49,13 +87,35 @@ export const mockDowntimes: DowntimeConfig[] = // --- Sample Downtime Configurat
       half: {
         type: 'restore-attribute',
         attributeId: 'energy-point',
-        formula: 'floor(attr(energy-point).max * 0.25)',
+        formula: 'floor(attribute(energy-point).max * 0.25)',
         target: 'self'
       },
       full: {
         type: 'restore-attribute',
         attributeId: 'energy-point',
-        formula: 'floor(attr(energy-point).max * 0.5)',
+        formula: 'floor(attribute(energy-point).max * 0.5)',
+        target: 'self'
+      }
+    }
+  },
+  {
+    id: 'maintenance',
+    name: { en: 'Maintenance', th: 'การบำรุงรักษา' },
+    description: { en: 'Perform routine maintenance on equipment or your own systems for optimal performance.', th: 'ทำการบำรุงรักษาอุปกรณ์หรือระบบของคุณเป็นประจำเพื่อประสิทธิภาพสูงสุด' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/696969/FFFFFF?text=🔧',
+    tags: [ 'utility', 'equipment' ],
+    effects: {
+      half: {
+        type: 'restore-attribute',
+        attributeId: 'armor-class',
+        formula: '1',
+        target: 'self'
+      },
+      full: {
+        type: 'restore-attribute',
+        attributeId: 'armor-class',
+        formula: '2',
         target: 'self'
       }
     }

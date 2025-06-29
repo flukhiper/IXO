@@ -24,23 +24,16 @@ export interface DiceValue {
   formula: string; // e.g. "1d8"
 }
 
-export interface FractionValue {
-  type: typeof VALUE_TYPE.FRACTION;
-  numerator: number;   // e.g. 1
-  denominator: number; // e.g. 2
-}
-
 export interface RefValue {
   type: typeof VALUE_TYPE.REF;
   ref: string; // e.g. 'attribute', 'equip-slot', etc.
   id: string; // e.g. 'attack-roll', 'main-weapon', etc.
 }
 
-export type ParsedValue = FixedValue | DiceValue | FractionValue;
+export type ParsedValue = FixedValue | DiceValue;
 
 export type RestorePhase = typeof RESTORE_PHASE[keyof typeof RESTORE_PHASE];
 
 export type RestoreValue =
   | FixedValue
-  | DiceValue
-  | FractionValue;
+  | DiceValue;
