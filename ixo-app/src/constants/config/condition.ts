@@ -14,6 +14,8 @@ export const CONDITION_EFFECT_TYPE = {
   STAT_MODIFY: 'stat-modify',
   ATTRIBUTE_MODIFY: 'attribute-modify',
   DAMAGE_OVER_TIME: 'damage-over-time',
+  RESTORE_OVER_TIME: 'restore-over-time',
+  REDUCE_DAMAGE: 'reduce-damage',
   RESTRICT_ACTION: 'restrict-action',
   RESTRICT_EQUIPMENT: 'restrict-equipment',
   ACTION: 'action',

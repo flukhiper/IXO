@@ -1,6 +1,6 @@
 import type { ConditionConfig } from '@/types/config/condition';
 
-export const mockConditions: ConditionConfig[] = // --- Sample Condition Configurations ---
+export const mockConditions: ConditionConfig[] = // --- Updated Sample Condition Configurations ---
 [
   {
     id: 'burned',
@@ -14,7 +14,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
       {
         type: 'start-turn',
         duration: 3,
-        versusSaving: 'constitution-saving-throw',
+        versusSaving: 'strength-saving-throw',
         formula: 'stat(constitution)'
       }
     ],
@@ -75,7 +75,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     effects: [
       {
         type: 'resistence',
-        damageTypeId: 'all', // "all" would be a special case for your damage scaling logic
+        damageTypeId: 'all',
         damageScaleId: 'vulnerable'
       }
     ]
@@ -114,7 +114,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     createdAt: '2023-01-01T00:00:00Z',
     icon: 'https://placehold.co/32x32/B22222/FFFFFF?text=R',
     tags: [ 'buff', 'berserk', 'combat' ],
-    stack: { id: 'furious-rampage-stack', type: 'stack' },
+    stack: { id: 'fury-stack', type: 'stack' },
     removeTicks: [
       {
         type: 'end-turn',
@@ -126,7 +126,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     effects: [
       {
         type: 'attribute-modify',
-        attributeId: 'strength',
+        attributeId: 'strength-ability',
         formula: '4'
       },
       {
@@ -177,7 +177,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     effects: [
       {
         type: 'restrict-action',
-        tags: [ 'attack' ] // Restrict attacking the charmer, specific rule logic needed for charmer target
+        tags: [ 'attack' ]
       },
       {
         type: 'advantage-attribute',
@@ -197,7 +197,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     removeTicks: [
       {
         type: 'damage',
-        damageTypeId: 'any' // Awakens on any damage
+        damageTypeId: 'any'
       },
       {
         type: 'end-turn',
@@ -212,7 +212,7 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
       {
         type: 'attribute-modify',
         attributeId: 'armor-class',
-        formula: '-10' // Easy to hit
+        formula: '-10'
       }
     ]
   },
@@ -235,7 +235,86 @@ export const mockConditions: ConditionConfig[] = // --- Sample Condition Configu
     effects: [
       {
         type: 'advantage-attribute',
-        attributeIds: [ 'attack-roll', 'strength', 'dexterity', 'intelligence', 'sense', 'charisma' ],
+        attributeIds: [ 'attack-roll', 'strength-ability', 'dexterity-ability', 'intelligence-ability', 'sense-ability', 'charisma-ability' ],
+        isDisadvantage: true
+      }
+    ]
+  },
+  {
+    id: 'fury',
+    name: { en: 'Fury', th: 'ความโกรธ' },
+    description: { en: 'A state of battle fury, increasing damage dealt but reducing defenses.', th: 'สภาวะคลั่งในการต่อสู้ เพิ่มความเสียหายที่ทำได้แต่ลดการป้องกัน' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/B22222/FFFFFF?text=R',
+    tags: [ 'buff', 'berserk', 'combat' ],
+    stack: { id: 'fury-stack', type: 'stack' },
+    removeTicks: [
+      {
+        type: 'end-turn',
+        duration: 2,
+        versusSaving: 'sense-saving-throw',
+        formula: 'level'
+      }
+    ],
+    effects: [
+      {
+        type: 'attribute-modify',
+        attributeId: 'strength-ability',
+        formula: '4'
+      },
+      {
+        type: 'attribute-modify',
+        attributeId: 'armor-class',
+        formula: '-2'
+      }
+    ]
+  },
+  {
+    id: 'relentless',
+    name: { en: 'Relentless', th: 'ไม่หยุดยั้ง' },
+    description: { en: 'You defy death, capable of continuing to fight even when critically wounded.', th: 'คุณท้าทายความตาย สามารถต่อสู้ต่อไปได้แม้จะบาดเจ็บสาหัส' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/4B0082/FFFFFF?text=☠️',
+    tags: [ 'buff', 'survival', 'death-defiance' ],
+    stack: { id: 'relentless-overwrite', type: 'overwrite', priority: 15 },
+    removeTicks: [
+      {
+        type: 'end-turn',
+        duration: 1
+      }
+    ],
+    effects: [
+      {
+        type: 'restore-over-time',
+        attributeId: 'hit-point',
+        value: { type: 'fixed', value: 1 },
+        tick: 'immediate'
+      },
+      {
+        type: 'reduce-damage',
+        damageTypeId: 'all',
+        value: { type: 'fixed', value: 5 }
+      }
+    ]
+  },
+  {
+    id: 'dazed',
+    name: { en: 'Dazed', th: 'มึนงง' },
+    description: { en: 'The target has disadvantage on ability checks and cannot take reactions.', th: 'เป้าหมายเสียเปรียบในการตรวจสอบความสามารถและไม่สามารถตอบโต้ได้' },
+    createdAt: '2023-01-01T00:00:00Z',
+    icon: 'https://placehold.co/32x32/FFD700/000000?text=暈',
+    tags: [ 'debuff', 'control', 'mental' ],
+    stack: { id: 'dazed-stack', type: 'stack' },
+    removeTicks: [
+      {
+        type: 'end-turn',
+        duration: 1
+      }
+    ],
+    effects: [
+      {
+        type: 'advantage-attribute',
+        attributeIds: [ 'strength-ability', 'agility-ability', 'dexterity-ability', 'intelligence-ability', 'sense-ability', 'charisma-ability' ],
         isDisadvantage: true
       }
     ]

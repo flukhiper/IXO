@@ -7,6 +7,8 @@ export type ConditionEffectConfig =
 | ConditionEffectStatModifyConfig
 | ConditionEffectAttributeModifyConfig
 | ConditionEffectDamageOverTimeConfig
+| ConditionEffectRestoreOverTimeConfig
+| ConditionEffectReduceDamageConfig
 | ConditionEffectRestrictActionConfig
 | ConditionEffectRestrictEquipmentConfig
 | ConditionEffectActionConfig
@@ -31,6 +33,19 @@ export interface ConditionEffectDamageOverTimeConfig {
   damageTypeId: string;
   value: FixedValue | DiceValue | RefValue;
   tick: typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
+}
+// Ongoing restore
+export interface ConditionEffectRestoreOverTimeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.RESTORE_OVER_TIME;
+  attributeId: string;
+  value: FixedValue | DiceValue | RefValue;
+  tick: typeof CONDITION_TICK_TYPE.IMMEDIATE | typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
+}
+// Reducing damage
+export interface ConditionEffectReduceDamageConfig {
+  type: typeof CONDITION_EFFECT_TYPE.REDUCE_DAMAGE;
+  damageTypeId: string;
+  value: FixedValue | DiceValue;
 }
 // Prevent usage of specific actions or action tags
 export interface ConditionEffectRestrictActionConfig {

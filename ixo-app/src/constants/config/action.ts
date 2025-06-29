@@ -4,7 +4,8 @@ export const ACTION_TYPE = {
   SUPPORT: 'support',
   DEBUFF: 'debuff',
   SUMMON: 'summon',
-  SPECIAL: 'special'
+  SPECIAL: 'special',
+  REACTION: 'reaction'
 } as const;
 
 export const ACTION_TARGET_TYPE = {

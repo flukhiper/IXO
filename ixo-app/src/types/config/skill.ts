@@ -1,5 +1,5 @@
 import { SKILL_EFFECT_TYPE } from '@/constants/config/skill';
-import type { BaseConfig } from './base';
+import type { BaseConfig, DiceValue, FixedValue, LocalizeText } from './base';
 import type { StackConfig, StatThresholdRequirement } from './common';
 
 export type SkillEffectType = typeof SKILL_EFFECT_TYPE[keyof typeof SKILL_EFFECT_TYPE];
@@ -16,7 +16,10 @@ export type SkillEffectConfig =
 | SkillEffectExtraDowntimeConfig
 | SkillEffectDowntimeConfig
 | SkillEffectExtraProficiencyConfig
-| SkillEffectEquipmentSlotConfig;
+| SkillEffectEquipmentSlotConfig
+| SkillEffectReduceDamageConfig
+| SkillEffectFlavorTextConfig
+| SkillEffectSelectableConfig;
 // Passive stat adjustment (possible to be possitive and negetive)
 export interface SkillEffectStatModifyConfig {
   type: typeof SKILL_EFFECT_TYPE.STAT_MODIFY;
@@ -82,6 +85,24 @@ export interface SkillEffectEquipmentSlotConfig {
   type: typeof SKILL_EFFECT_TYPE.EQUIPMENT_SLOT;
   slot: string;     // e.g., 'utility' or 'weapon'
   bonus: number;    // e.g., 1
+}
+// Reducing damage
+export interface SkillEffectReduceDamageConfig {
+  type: typeof SKILL_EFFECT_TYPE.REDUCE_DAMAGE;
+  damageTypeId: string;
+  value: FixedValue | DiceValue;
+}
+export interface SkillEffectFlavorTextConfig {
+  type: typeof SKILL_EFFECT_TYPE.FLAVOR_TEXT;
+  name: LocalizeText;
+  description?: LocalizeText;
+}
+export interface SkillEffectSelectableConfig {
+  type: typeof SKILL_EFFECT_TYPE.SELECTABLE;
+  effects: Array<SkillEffectConfig & {
+    name: LocalizeText;
+    description?: LocalizeText;
+  }>;
 }
 
 export interface SkillConfig extends BaseConfig {

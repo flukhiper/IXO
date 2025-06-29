@@ -1,6 +1,7 @@
 import type { StatConfig } from '@/types/config/stat';
 
-export const mockStats: StatConfig[] = [
+export const mockStats: StatConfig[] = // --- Sample Stat Configurations ---
+[
   {
     id: 'strength',
     name: { en: 'Strength', th: 'ความแข็งแกร่ง' },
@@ -36,7 +37,7 @@ export const mockStats: StatConfig[] = [
   {
     id: 'sense',
     name: { en: 'Sense', th: 'สัมผัส' },
-    description: { en: 'Governs awareness, intuition, and perception. Often associated with \'instincts\' and a combat role in engagement and awareness, influencing initiative and regeneration.', th: 'ควบคุมการรับรู้ สัญชาตญาณ และการมองเห็น มักเกี่ยวข้องกับ \'สัญชาตญาณ\' และบทบาทในการต่อสู้ด้านการเข้าปะทะและการรับรู้ ซึ่งส่งผลต่อการริเริ่มและการฟื้นฟู' },
+    description: { en: 'Governs awareness, intuition, and perception. Often associated with \'instincts\' and a combat role in engagement and awareness, influencing initiative, regeneration, and Energy Slot.', th: 'ควบคุมการรับรู้ สัญชาตญาณ และการมองเห็น มักเกี่ยวข้องกับ \'สัญชาตญาณ\' และบทบาทในการต่อสู้ด้านการเข้าปะทะและการรับรู้ ซึ่งส่งผลต่อการริเริ่ม การฟื้นฟู และช่องพลังงาน' },
     abbreviation: 'SEN',
     tags: [ 'primary', 'engagement', 'awareness' ],
     createdAt: '2023-01-01T00:00:00Z'

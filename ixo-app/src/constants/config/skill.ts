@@ -12,5 +12,8 @@ export const SKILL_EFFECT_TYPE = {
   EXTRA_DOWNTIME: 'extra-downtime',
   DOWNTIME: 'downtime',
   EXTRA_PROFICIENCY: 'extra-proficiency',
-  EQUIPMENT_SLOT: 'equipment_slot'
+  EQUIPMENT_SLOT: 'equipment_slot',
+  REDUCE_DAMAGE: 'reduce-damage',
+  FLAVOR_TEXT: 'flavor-text',
+  SELECTABLE: 'selectable'
 } as const;
