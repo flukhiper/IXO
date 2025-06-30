@@ -26,21 +26,21 @@ export interface SelfTargetConfig {
 }
 export interface SelectTargetConfig {
   type: typeof ACTION_TARGET_TYPE.SELECT;
-  range?: FixedValue | DiceValue | RefValue;
-  targetCount?: number;
+  range: FixedValue | DiceValue | RefValue;
+  targetCount: number;
 }
 export interface AreaTargetConfig {
   type: typeof ACTION_TARGET_TYPE.AREA;
   range: FixedValue | DiceValue | RefValue;
   radius: number;
-  targetCount?: number;
+  targetCount: number;
 }
 
 export interface ConeTargetConfig {
   type: typeof ACTION_TARGET_TYPE.CONE;
   range: FixedValue | DiceValue | RefValue;
   radius: number;
-  targetCount?: number;
+  targetCount: number;
 }
 
 export interface LineTargetConfig {

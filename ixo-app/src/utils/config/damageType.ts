@@ -13,3 +13,16 @@ export function createDamageTypeConfig (
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedDamageTypeConfig = DamageTypeConfig;
+
+export function normalizeDamageTypeConfig (dmgType: DamageTypeConfig): NormalizedDamageTypeConfig {
+  // No special normalization needed, but keep for consistency
+  return { ...dmgType };
+}
+
+export function denormalizeDamageTypeConfig (raw: NormalizedDamageTypeConfig): DamageTypeConfig {
+  // No special denormalization needed, but keep for consistency
+  return { ...raw };
+}

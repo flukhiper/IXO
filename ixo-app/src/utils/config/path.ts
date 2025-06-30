@@ -13,3 +13,16 @@ export function createPathConfig (
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedPathConfig = PathConfig;
+
+export function normalizePathConfig (path: PathConfig): NormalizedPathConfig {
+  // No special normalization needed, but keep for consistency
+  return { ...path };
+}
+
+export function denormalizePathConfig (raw: NormalizedPathConfig): PathConfig {
+  // No special denormalization needed, but keep for consistency
+  return { ...raw };
+}

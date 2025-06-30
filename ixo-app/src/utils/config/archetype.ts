@@ -11,3 +11,16 @@ export function createArchetypeConfig (input: Omit<ArchetypeConfig, 'id' | 'crea
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedArchetypeConfig = ArchetypeConfig;
+
+export function normalizeArchetypeConfig (archetype: ArchetypeConfig): NormalizedArchetypeConfig {
+  // No special normalization needed, but keep for consistency
+  return { ...archetype };
+}
+
+export function denormalizeArchetypeConfig (raw: NormalizedArchetypeConfig): ArchetypeConfig {
+  // No special denormalization needed, but keep for consistency
+  return { ...raw };
+}

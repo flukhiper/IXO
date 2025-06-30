@@ -1,0 +1,28 @@
+import { StatConfigRepository } from '@/repositories/StatConfigRepository';
+import type { StatConfig } from '@/types/config/stat';
+
+export class StatConfigService {
+  private readonly repository = new StatConfigRepository();
+
+  async create (stat: StatConfig) {
+    // Add validation or transformation here if needed
+    await this.repository.saveOne(stat);
+  }
+
+  async getById (id: string): Promise<StatConfig | null> {
+    return this.repository.getById(id);
+  }
+
+  async getAll (): Promise<StatConfig[]> {
+    return this.repository.getAll();
+  }
+
+  async update (id: string, update: Partial<StatConfig>) {
+    // Add validation or transformation here if needed
+    await this.repository.updateOne(id, update);
+  }
+
+  async delete (id: string) {
+    await this.repository.deleteOne(id);
+  }
+} 

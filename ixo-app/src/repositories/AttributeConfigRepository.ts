@@ -26,10 +26,10 @@ export class AttributeConfigRepository extends BaseRepository<AttributeConfig> {
     }
   
     if (update.baseValue !== undefined) {
-      normalizedUpdate.baseValue = normalizeValue(update.baseValue);
+      normalizedUpdate.baseValue = normalizeValue(update.baseValue) as string | number;
     }
     if (update.restoreValue !== undefined) {
-      normalizedUpdate.restoreValue = normalizeValue(update.restoreValue);
+      normalizedUpdate.restoreValue = normalizeValue(update.restoreValue) as string | number;
     }
   
     await super.updateOne(id, normalizedUpdate as Partial<AttributeConfig>);

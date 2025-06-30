@@ -11,3 +11,16 @@ export function createRealmConfig (input: Omit<RealmConfig, 'id' | 'createdAt'>)
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedRealmConfig = RealmConfig;
+
+export function normalizeRealmConfig (realm: RealmConfig): NormalizedRealmConfig {
+  // No special normalization needed, but keep for consistency
+  return { ...realm };
+}
+
+export function denormalizeRealmConfig (raw: NormalizedRealmConfig): RealmConfig {
+  // No special denormalization needed, but keep for consistency
+  return { ...raw };
+}

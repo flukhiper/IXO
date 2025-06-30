@@ -11,3 +11,16 @@ export function createStatConfig (input: Omit<StatConfig, 'id' | 'createdAt'>): 
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedStatConfig = StatConfig;
+
+export function normalizeStatConfig (stat: StatConfig): NormalizedStatConfig {
+  // No special normalization needed for StatConfig, but keep for consistency
+  return { ...stat };
+}
+
+export function denormalizeStatConfig (raw: NormalizedStatConfig): StatConfig {
+  // No special denormalization needed for StatConfig, but keep for consistency
+  return { ...raw };
+}

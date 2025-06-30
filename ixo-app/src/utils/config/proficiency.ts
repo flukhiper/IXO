@@ -13,3 +13,16 @@ export function createProficiencyConfig (
     createdAt: new Date().toISOString()
   };
 }
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedProficiencyConfig = ProficiencyConfig;
+
+export function normalizeProficiencyConfig (prof: ProficiencyConfig): NormalizedProficiencyConfig {
+  // No special normalization needed, but keep for consistency
+  return { ...prof };
+}
+
+export function denormalizeProficiencyConfig (raw: NormalizedProficiencyConfig): ProficiencyConfig {
+  // No special denormalization needed, but keep for consistency
+  return { ...raw };
+}
