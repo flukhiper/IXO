@@ -1,4 +1,4 @@
-import { RESTORE_PHASE, VALUE_TYPE } from '@/constants/config/value';
+import { RESTORE_PHASE, VALUE_TYPE, STACK_TYPE } from '@/constants/config/base';
 
 export interface LocalizeText {
   [local: string]: string;
@@ -30,10 +30,26 @@ export interface RefValue {
   id: string; // e.g. 'attack-roll', 'main-weapon', etc.
 }
 
-export type ParsedValue = FixedValue | DiceValue;
-
 export type RestorePhase = typeof RESTORE_PHASE[keyof typeof RESTORE_PHASE];
 
 export type RestoreValue =
   | FixedValue
   | DiceValue;
+
+export interface StatThresholdRequirement {
+  statId: string;
+  min?: number;
+  max?: number;
+}
+
+export type StackType = typeof STACK_TYPE[keyof typeof STACK_TYPE];
+export interface StackConfig {
+  id: string;
+  type: StackType;
+  priority?: number; // only used with 'overwrite'
+}
+
+export interface InventorySpace {
+  rows: number;      // e.g., 6
+  columns: number;   // e.g., 12
+}

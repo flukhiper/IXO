@@ -13,3 +13,11 @@ export const RESTORE_PHASE = {
   SHORT_DOWNTIME: 'short-downtime',
   FULL_DOWNTIME: 'full-downtime'
 } as const;
+
+// Stack types for StackConfig
+export const STACK_TYPE = {
+  STACK: 'stack',
+  IGNORE: 'ignore',
+  OVERWRITE: 'overwrite',
+  ADDITIVE: 'additive'
+} as const;

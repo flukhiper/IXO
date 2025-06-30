@@ -1,6 +1,5 @@
 import { ITEM_WEIGHT, ITEM_BONUS_EFFECT_TYPE, ITEM_CUSTOMIZE_TYPE, ITEM_TYPE } from '@/constants/config/item';
-import type { BaseConfig, FixedValue, DiceValue, RefValue } from './base';
-import type { InventorySpace, StatThresholdRequirement } from './common';
+import type { BaseConfig, FixedValue, DiceValue, RefValue, InventorySpace, StatThresholdRequirement } from './base';
 
 // Bonus Effects
 export type ItemBonusEffectType = typeof ITEM_BONUS_EFFECT_TYPE[keyof typeof ITEM_BONUS_EFFECT_TYPE];

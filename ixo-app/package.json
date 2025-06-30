@@ -13,6 +13,7 @@
     "canvas": "^3.1.0",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
+    "dotenv": "^17.0.0",
     "konva": "^9.3.20",
     "mathjs": "^14.5.2",
     "mongoose": "^8.16.0",

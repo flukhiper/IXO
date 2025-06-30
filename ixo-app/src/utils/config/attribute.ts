@@ -1,5 +1,7 @@
 import type { AttributeConfig } from '@/types/config/attribute';
 import { generateId } from './helper';
+import { normalizeValue, denormalizeValue } from './helper';
+import type { FixedValue, DiceValue } from '@/types/config/base';
 
 export function createAttributeConfig (
   input: Omit<AttributeConfig, 'id' | 'createdAt'>
@@ -21,4 +23,26 @@ export function createAttributeConfig (
  */
 export function isRestorableAttribute (attr: AttributeConfig): boolean {
   return Array.isArray(attr.restoreOns) && attr.restoreOns.length > 0 && attr.restoreValue !== undefined;
+}
+
+// --- Normalization/Denormalization helpers ---
+export type NormalizedAttributeConfig = Omit<AttributeConfig, 'baseValue' | 'restoreValue'> & {
+  baseValue: string | number;
+  restoreValue?: string | number;
+};
+
+export function normalizeAttributeConfig (attr: AttributeConfig): NormalizedAttributeConfig {
+  return {
+    ...attr,
+    baseValue: normalizeValue(attr.baseValue),
+    restoreValue: attr.restoreValue ? normalizeValue(attr.restoreValue as FixedValue | DiceValue) : undefined
+  };
+}
+
+export function denormalizeAttributeConfig (raw: NormalizedAttributeConfig): AttributeConfig {
+  return {
+    ...raw,
+    baseValue: denormalizeValue(raw.baseValue),
+    restoreValue: raw.restoreValue !== undefined ? denormalizeValue(raw.restoreValue) : undefined
+  } as AttributeConfig;
 }

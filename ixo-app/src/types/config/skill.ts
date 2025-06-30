@@ -1,6 +1,5 @@
 import { SKILL_EFFECT_TYPE } from '@/constants/config/skill';
-import type { BaseConfig, DiceValue, FixedValue, LocalizeText } from './base';
-import type { StackConfig, StatThresholdRequirement } from './common';
+import type { BaseConfig, DiceValue, FixedValue, LocalizeText, StackConfig, StatThresholdRequirement } from './base';
 
 export type SkillEffectType = typeof SKILL_EFFECT_TYPE[keyof typeof SKILL_EFFECT_TYPE];
 export type SkillEffectConfig =

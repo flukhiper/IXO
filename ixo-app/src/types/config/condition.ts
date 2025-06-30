@@ -1,6 +1,5 @@
 import { CONDITION_EFFECT_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
-import type { BaseConfig, FixedValue, DiceValue, RefValue } from './base';
-import type { StackConfig } from './common';
+import type { BaseConfig, FixedValue, DiceValue, RefValue, StackConfig } from './base';
 
 export type ConditionEffectType = typeof CONDITION_EFFECT_TYPE[keyof typeof CONDITION_EFFECT_TYPE];
 export type ConditionEffectConfig =

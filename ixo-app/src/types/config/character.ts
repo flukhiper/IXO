@@ -1,4 +1,4 @@
-import type { InventorySpace } from './common';
+import type { InventorySpace } from './base';
 
 export interface ActionPoolFilter {
   includedActionTags?: string[];   // Must include ALL these tags

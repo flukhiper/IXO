@@ -1,4 +1,4 @@
-import type { BaseConfig } from './base'; // assuming you have these already
+import type { BaseConfig } from './base';
 
 export interface StatConfig extends BaseConfig {
   tags?: string[]; // e.g., ["offense", "tank", "precise"]

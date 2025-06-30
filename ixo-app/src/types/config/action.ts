@@ -1,6 +1,5 @@
 import { ACTION_HIT_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE, ACTION_USAGE_RESET } from '@/constants/config/action';
-import type { BaseConfig, DiceValue, FixedValue, RefValue } from './base';
-import type { StatThresholdRequirement } from './common';
+import type { BaseConfig, DiceValue, FixedValue, RefValue, StatThresholdRequirement } from './base';
 
 export interface ActionRestrictions {
   requiredWeaponTags?: string[]; // e.g. ["melee", "two-handed"]

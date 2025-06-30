@@ -1,5 +1,6 @@
-import { VALUE_TYPE } from '@/constants/config/value';
-import type { DiceValue, FixedValue, ParsedValue, RefValue } from '@/types/config/base';
+import { VALUE_TYPE } from '@/constants/config/base';
+
+import type { DiceValue, FixedValue } from '@/types/config/base';
 
 export function generateId (name: string): string {
   return name
@@ -9,47 +10,30 @@ export function generateId (name: string): string {
     .replace(/\s+/g, '-');           // collapse space to dash
 }
 
-export function parseValue (input: string): ParsedValue {
-  const trimmed = input.trim();
-
-  if (/^\d+d\d+$/.test(trimmed)) {
-    return {
-      type: VALUE_TYPE.DICE,
-      formula: trimmed
-    };
+// --- Normalization helpers ---
+// AttributeValue: FixedValue | DiceValue
+export function normalizeValue (value: FixedValue | DiceValue): string | number {
+  if (value.type === VALUE_TYPE.FIXED) {
+    return value.value;
   }
-
-  if (/^\d+\/\d+$/.test(trimmed)) {
-    const [ numerator, denominator ] = trimmed.split('/').map(Number);
-    return {
-      type: VALUE_TYPE.FRACTION,
-      numerator,
-      denominator
-    };
+  if (value.type === VALUE_TYPE.DICE) {
+    return value.formula;
   }
-
-  const value = Number(trimmed);
-  if (Number.isFinite(value)) {
-    return {
-      type: VALUE_TYPE.FIXED,
-      value
-    };
-  }
-
-  throw new Error(`Invalid value format: "${input}"`);
+  throw new Error('Unsupported value type for normalization');
 }
 
-export function parseRefValue (input: string): RefValue {
-  return {
-    type: VALUE_TYPE.REF,
-    ref: input
-  };
-}
-
-export function isFixedValue (value: ParsedValue): value is FixedValue {
-  return value.type === VALUE_TYPE.FIXED;
-}
-
-export function isDiceValue (value: ParsedValue): value is DiceValue {
-  return value.type === VALUE_TYPE.DICE;
+export function denormalizeValue (val: string | number): FixedValue | DiceValue {
+  if (typeof val === 'number') {
+    return { type: VALUE_TYPE.FIXED, value: val };
+  }
+  if (typeof val === 'string') {
+    if (/^\d+d\d+$/.test(val.trim())) {
+      return { type: VALUE_TYPE.DICE, formula: val.trim() };
+    }
+    const num = Number(val);
+    if (Number.isFinite(num)) {
+      return { type: VALUE_TYPE.FIXED, value: num };
+    }
+  }
+  throw new Error('Cannot denormalize value: ' + val);
 }
