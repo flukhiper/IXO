@@ -1,6 +1,6 @@
 export const ATTRIBUTE_TYPE = {
-  COMBAT: 'combat', // Hit Point, Armor Class, Movement, etc.
-  ACTION_RESOURCE: 'action-resource', // Action Slot, Action Point, Energy Point
+  COMBAT: 'combat', // Armor Class, Speed, Attack Roll, etc.
+  RESOURCE: 'resource', // Hit Point, Movement, Carry Capacity, Action Slot, Action Point, Energy Point
   TURN_ORDER: 'turn-order', // Initiative
   ABILITY: 'ability', // Strength, Agility, Acrobatics, etc.
   SAVING_THROW: 'saving-throw', // Resists dangers

@@ -1,27 +1,62 @@
 import { DOWNTIME_EFFECT_INTENSITY, DOWNTIME_EFFECT_TARGET, DOWNTIME_EFFECT_TYPE } from '@/constants/config/downtime';
-import type { BaseConfig } from './base';
+import type { BaseConfig, DiceValue, FixedValue, LocalizeText } from './base';
 
 export type DowntimeEffectType = typeof DOWNTIME_EFFECT_TYPE[keyof typeof DOWNTIME_EFFECT_TYPE];
 export type DowntimeEffectTarget = typeof DOWNTIME_EFFECT_TARGET[keyof typeof DOWNTIME_EFFECT_TARGET];
 export type DowntimeEffectConfig =
-| DowntimeEffectReplaceActionConfig
+| DowntimeEffectPrepareActionConfig
+| DowntimeEffectPrepareSkillConfig
 | DowntimeEffectRestoreAttributeConfig
-| DowntimeEffectTriggerProjectConfig;
-export interface DowntimeEffectReplaceActionConfig {
-  type: typeof DOWNTIME_EFFECT_TYPE.REPLACE_ACTION;
-  tags: string[];             // tags of action eligible for replacement
-  numberOfAction: number;
-  actionIds: string[];
+| DowntimeEffectRestoreItemUsageConfig
+| DowntimeEffectShowFlavorTextConfig;
+export interface DowntimeEffectPrepareActionConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.PREPARE_ACTION;
+  numberOfSelectableActions: number;
+  selectableActionIds: string[];
+  removeActionIds: string[];
 }
-export interface DowntimeEffectRestoreAttributeConfig {
+export interface DowntimeEffectPrepareSkillConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.PREPARE_SKILL;
+  numberOfSelectableSkills: number;
+  selectableSkillIds: string[];
+  removeSkillIds: string[];
+}
+
+export type DowntimeEffectRestoreAttributeConfig =
+| DowntimeEffectRestoreSelfAttributeConfig
+| DowntimeEffectRestoreTargetAttributeConfig
+| DowntimeEffectRestoreAnyAttributeConfig;
+export interface DowntimeEffectRestoreSelfAttributeConfig {
   type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ATTRIBUTE;
+  target: typeof DOWNTIME_EFFECT_TARGET.SELF;
   attributeId: string;        // e.g., 'hit-point'
-  formula: string;            // e.g., '1d4 + stat(tier)' or 'full'
-  target: DowntimeEffectTarget;
+  baseValue: FixedValue | DiceValue;
+  formula?: string;
 }
-export interface DowntimeEffectTriggerProjectConfig {
-  type: typeof DOWNTIME_EFFECT_TYPE.TRIGGER_PROJECT;
-  notes?: string;             // GM-facing description
+export interface DowntimeEffectRestoreTargetAttributeConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ATTRIBUTE;
+  target: typeof DOWNTIME_EFFECT_TARGET.ALLY;
+  numberOfTargets: number;
+  attributeId: string;        // e.g., 'hit-point'
+  baseValue: FixedValue | DiceValue;
+  formula?: string;
+}
+export interface DowntimeEffectRestoreItemUsageConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ITEM_USAGE;
+  numberOfItems: number;
+}
+export interface DowntimeEffectRestoreAnyAttributeConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ATTRIBUTE;
+  target: typeof DOWNTIME_EFFECT_TARGET.ANY;
+  numberOfTargets: number;
+  attributeId: string;        // e.g., 'hit-point'
+  baseValue: FixedValue | DiceValue;
+  formula?: string;
+}
+export interface DowntimeEffectShowFlavorTextConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+  name: LocalizeText;
+  description?: LocalizeText;
 }
 
 

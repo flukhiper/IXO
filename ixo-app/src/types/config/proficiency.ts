@@ -1,7 +1,6 @@
 import { BaseConfig } from './base';
 
 export interface ProficiencyGainConfig {
-  modifierFormula?: string;      // e.g., "1 + (stat(dexterity) / 4) + (attr(mechanical) / 2)"
   gainedActionIds?: string[];  // Actions unlocked at this level
   gainedSkillIds?: string[];   // Skills unlocked at this level
 }

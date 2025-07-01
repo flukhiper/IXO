@@ -1,15 +1,19 @@
-import { RESTORE_PHASE, VALUE_TYPE, STACK_TYPE } from '@/constants/config/base';
+import { CONDITION_OPERATOR, ON_EVENT_TYPE, PHASE_TYPE, RESTORE_PHASE, VALUE_TYPE } from '@/constants/config/base';
 
 export interface LocalizeText {
   [local: string]: string;
 }
 
-export interface BaseConfig {
+export interface BaseModel {
   id: string;
   name: LocalizeText;
   description?: LocalizeText; // Optional short flavor (can move fully to Game Codex later)
+  ownerId: string; // User ID of the creator
   createdAt?: string;
   updatedAt?: string;
+}
+export interface BaseConfig extends BaseModel {
+  gameSystemId: string; // Reference to GameSystem
 }
 
 export type ValueType = typeof VALUE_TYPE[keyof typeof VALUE_TYPE];
@@ -36,17 +40,68 @@ export type RestoreValue =
   | FixedValue
   | DiceValue;
 
-export interface StatThresholdRequirement {
-  statId: string;
-  min?: number;
-  max?: number;
+
+export type ConditionOperator = typeof CONDITION_OPERATOR[keyof typeof CONDITION_OPERATOR];
+export interface ConditionFormula {
+  operator: ConditionOperator;
+  formula: string;
 }
 
-export type StackType = typeof STACK_TYPE[keyof typeof STACK_TYPE];
-export interface StackConfig {
-  id: string;
-  type: StackType;
-  priority?: number; // only used with 'overwrite'
+export type PhaseType = typeof PHASE_TYPE[keyof typeof PHASE_TYPE];
+
+export type OnEventType = typeof ON_EVENT_TYPE[keyof typeof ON_EVENT_TYPE];
+
+export interface BaseOnEventConfig {
+  priority: number;
+}
+export interface OnEventActionConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_ACTION;
+  actionIds: string[];
+}
+export interface OnEventConditionConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_CONDITION;
+  conditionIds: string[];
+}
+export interface OnEventAdvantageConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_ADVANTAGE;
+  attributeIds: string[];
+}
+export interface OnEventDisadvantageConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_DISADVANTAGE;
+  attributeIds: string[];
+}
+export interface OnEventResistenceConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_RESISTENCE;
+  damageTypeId: string;
+  scaleId: string;
+}
+export interface OnEventAttributeConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_ATTRIBUTE;
+  attributeId: string;
+  conditionFormulas: ConditionFormula[];
+}
+export interface OnEventStatConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_STAT;
+  statId: string;
+  conditionFormulas: ConditionFormula[];
+}
+export interface OnEventGotDamageConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_GOT_DAMAGE;
+  damageTypeId: string;
+  conditionFormulas: ConditionFormula[];
+}
+export interface OnEventGotHitConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_GOT_HIT;
+  tagIds: string[];
+}
+export interface OnEventEquipmentSlotConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_EQUIPMENT_SLOT;
+  equipmentSlotId: string;
+  tags: string[];
+}
+export interface OnEventPhaseConfig extends BaseOnEventConfig {
+  type: typeof ON_EVENT_TYPE.ON_PHASE;
+  phase: PhaseType;
 }
 
 export interface InventorySpace {

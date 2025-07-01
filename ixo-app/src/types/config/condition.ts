@@ -1,114 +1,155 @@
-import { CONDITION_EFFECT_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
-import type { BaseConfig, FixedValue, DiceValue, RefValue, StackConfig } from './base';
+import {  CONDITION_EFFECT_TYPE, CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
+import type { BaseConfig, OnEventPhaseConfig, OnEventGotDamageConfig, OnEventAttributeConfig, OnEventActionConfig, OnEventStatConfig, OnEventEquipmentSlotConfig, OnEventGotHitConfig, DiceValue, FixedValue, LocalizeText } from './base';
 
 export type ConditionEffectType = typeof CONDITION_EFFECT_TYPE[keyof typeof CONDITION_EFFECT_TYPE];
 export type ConditionEffectConfig =
-| ConditionEffectStatModifyConfig
-| ConditionEffectAttributeModifyConfig
-| ConditionEffectDamageOverTimeConfig
-| ConditionEffectRestoreOverTimeConfig
-| ConditionEffectReduceDamageConfig
+| ConditionEffectModifyStatConfig
+| ConditionEffectModifyAttributeConfig
 | ConditionEffectRestrictActionConfig
 | ConditionEffectRestrictEquipmentConfig
-| ConditionEffectActionConfig
+| ConditionEffectBlockConditionConfig
+| ConditionEffectGainActionConfig
+| ConditionEffectGainAdvantageConfig
+| ConditionEffectGainResistenceConfig
+| ConditionEffectReduceDamageConfig
+| ConditionEffectDoDamageOverTimeConfig
+| ConditionEffectDoRestoreOverTimeConfig
 | ConditionEffectForceActionConfig
-| ConditionEffectResistenceConfig
-| ConditionEffectAdvantageAttributeConfig;
-// Passive stat adjustment (possible to be possitive and negetive)
-export interface ConditionEffectStatModifyConfig {
-  type: typeof CONDITION_EFFECT_TYPE.STAT_MODIFY;
+| ConditionEffectShowFlavorTextConfig;
+export interface ConditionEffectModifyStatConfig {
+  type: typeof CONDITION_EFFECT_TYPE.MODIFY_STAT;
   statId: string;
   formula: string; // e.g., "-2", "stat(strength) * 0.5"
 }
-// Passive attribute adjustment (possible to be possitive and negetive)
-export interface ConditionEffectAttributeModifyConfig {
-  type: typeof CONDITION_EFFECT_TYPE.ATTRIBUTE_MODIFY;
+export interface ConditionEffectModifyAttributeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE;
   attributeId: string;
   formula: string; // e.g., "-2", "stat(strength) * 0.5"
 }
-// Ongoing damage
-export interface ConditionEffectDamageOverTimeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.DAMAGE_OVER_TIME;
+export interface ConditionEffectRestrictActionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_ACTION;
+  tags: string[]; // e.g., "melee", "magic"
+}
+export interface ConditionEffectRestrictEquipmentConfig {
+  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_EQUIPMENT;
+  equipmentSlotId: string; // e.g., "main-hand", "off-hand"
+  tags: string[]; // e.g., "melee", "magic"
+}
+export interface ConditionEffectBlockConditionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.BLOCK_CONDITION;
+  tags: string[]; // e.g., ["frightened", "fatigue"]
+}
+export interface ConditionEffectGainActionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_ACTION;
+  actionIds: string[];
+}
+export interface ConditionEffectGainAdvantageConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE;
+  attributeIds: string[];
+  isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
+}
+export interface ConditionEffectGainResistenceConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_RESISTENCE;
   damageTypeId: string;
-  value: FixedValue | DiceValue | RefValue;
-  tick: typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
+  scaleId: string;
 }
-// Ongoing restore
-export interface ConditionEffectRestoreOverTimeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESTORE_OVER_TIME;
-  attributeId: string;
-  value: FixedValue | DiceValue | RefValue;
-  tick: typeof CONDITION_TICK_TYPE.IMMEDIATE | typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
-}
-// Reducing damage
 export interface ConditionEffectReduceDamageConfig {
   type: typeof CONDITION_EFFECT_TYPE.REDUCE_DAMAGE;
   damageTypeId: string;
-  value: FixedValue | DiceValue;
+  baseValue: FixedValue | DiceValue;
+  formula?: string;
 }
-// Prevent usage of specific actions or action tags
-export interface ConditionEffectRestrictActionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_ACTION;
-  tags?: string[]; // e.g., "melee", "magic"
-}
-// Prevent equipment slot usage
-export interface ConditionEffectRestrictEquipmentConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_EQUIPMENT;
-  tags?: string[]; // e.g., "main-hand", "off-hand"
-}
-// Action available to use when in condition
-export interface ConditionEffectActionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.ACTION;
-  actionIds?: string[];
-}
-// Force to use specific action if available
 export interface ConditionEffectForceActionConfig {
   type: typeof CONDITION_EFFECT_TYPE.FORCE_ACTION;
-  actionIds?: string[];
+  actionId: string;
 }
-// Chanage character resistance
-export interface ConditionEffectResistenceConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESISTENCE;
-  damageTypeId: string;    // Reference to DamageTypeConfig id (e.g., 'fire', 'piercing')
-  damageScaleId: string;   // Reference to DamageScaleConfig id (e.g., 'resistant', 'vulnerable')
+export interface ConditionEffectShowFlavorTextConfig {
+  type: typeof CONDITION_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+  name: LocalizeText;
+  description?: LocalizeText;
 }
-export interface ConditionEffectAdvantageAttributeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.ADVANTAGE_ATTRIBUTE;
-  attributeIds: string[]; // Only valid for attributes of type 'ability' or 'saving'
-  isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
+export type ConditionEffectDamageOverTimeOn = 
+| OnEventActionConfig
+| OnEventAttributeConfig
+| OnEventStatConfig
+| OnEventGotDamageConfig
+| OnEventGotHitConfig
+| OnEventEquipmentSlotConfig
+| OnEventPhaseConfig;
+export interface ConditionEffectDoDamageOverTimeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.DO_DAMAGE_OVER_TIME;
+  damageTypeId: string;
+  baseValue: FixedValue | DiceValue;
+  on: ConditionEffectDamageOverTimeOn;
+  formula?: string;
+}
+export type ConditionEffectRestoreOverTimeOn = 
+| OnEventActionConfig
+| OnEventAttributeConfig
+| OnEventStatConfig
+| OnEventGotDamageConfig
+| OnEventGotHitConfig
+| OnEventEquipmentSlotConfig
+| OnEventPhaseConfig;
+export interface ConditionEffectDoRestoreOverTimeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.DO_RESTORE_OVER_TIME;
+  attributeId: string;
+  baseValue: FixedValue | DiceValue;
+  on: ConditionEffectRestoreOverTimeOn;
+  formula?: string;
 }
 
 export type ConditionRemoveTickType = typeof CONDITION_TICK_TYPE[keyof typeof CONDITION_TICK_TYPE];
 export type ConditionRemoveTickConfig = 
-| ConditionRemoveTickDurationConfig
+| ConditionRemoveTickPhaseConfig
 | ConditionRemoveTickImmediateConfig
+| ConditionRemoveTickHitConfig
 | ConditionRemoveTickDamageConfig
 | ConditionRemoveTickConditionConfig;
-export interface ConditionRemoveTickDurationConfig {
-  type: typeof CONDITION_TICK_TYPE.START_TURN | typeof CONDITION_TICK_TYPE.END_TURN | typeof CONDITION_TICK_TYPE.START_ROUND | typeof CONDITION_TICK_TYPE.END_ROUND;
+export interface ConditionRemoveTickPhaseConfig {
+  type: typeof CONDITION_TICK_TYPE.PHASE;
+  on: OnEventPhaseConfig;
   duration: number;
-  versusSaving?: string; // attributeId of saving throw
   formula?: string;
+  saving?: {
+    attributeId: string;
+    formula: string;
+  };
 }
 export interface ConditionRemoveTickImmediateConfig {
   type: typeof CONDITION_TICK_TYPE.IMMEDIATE;
 }
+export interface ConditionRemoveTickHitConfig {
+  type: typeof CONDITION_TICK_TYPE.HIT;
+  on: OnEventGotHitConfig;
+  saving?: {
+    attributeId: string;
+    formula: string;
+  };
+}
 export interface ConditionRemoveTickDamageConfig {
   type: typeof CONDITION_TICK_TYPE.DAMAGE;
-  damageTypeId: string; // e.g. 'fire', 'piercing'
-  versusSaving?: string; // attributeId of saving throw
-  formula?: string;
+  on: OnEventGotDamageConfig;
+  saving?: {
+    attributeId: string;
+    formula: string;
+  };
 }
 export interface ConditionRemoveTickConditionConfig {
-  type: typeof CONDITION_TICK_TYPE.CONDITION;
-  conditions: string[]; // e.g.  ['attr(action-point) > 1', attr(hit-point).current > attr(hit-point).max / 2 ]
+  type: typeof CONDITION_TICK_TYPE.ATTRIBUTE;
+  ons: OnEventAttributeConfig[];
 }
 
+export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
 export interface ConditionConfig extends BaseConfig {
   icon?: string;
   tags?: string[]; // e.g., ["debuff", "control", "status"]
   
-  stack: StackConfig;
+  stack: {
+    id: string;
+    type: ConditionStackType;
+    priority?: number; // only used with 'overwrite'
+  };
   removeTicks?: ConditionRemoveTickConfig[]; 
 
   // Effects to apply during condition

@@ -25,5 +25,5 @@ export const ACTION_HIT_TYPE = {
 export const ACTION_USAGE_RESET = {
   SHORT_DOWNTIME: 'short-downtime',
   FULL_DOWNTIME: 'full-downtime',
-  TURN: 'turn'
+  PHASE: 'phase'
 } as const;

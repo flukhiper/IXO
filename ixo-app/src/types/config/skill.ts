@@ -1,118 +1,142 @@
-import { SKILL_EFFECT_TYPE } from '@/constants/config/skill';
-import type { BaseConfig, DiceValue, FixedValue, LocalizeText, StackConfig, StatThresholdRequirement } from './base';
+import { SKILL_EFFECT_TYPE, SKILL_STACK_TYPE } from '@/constants/config/skill';
+import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, LocalizeText, OnEventActionConfig, OnEventAdvantageConfig, OnEventAttributeConfig, OnEventConditionConfig, OnEventDisadvantageConfig, OnEventEquipmentSlotConfig, OnEventGotDamageConfig, OnEventGotHitConfig, OnEventResistenceConfig, OnEventStatConfig } from './base';
+
+export type SkillEffectGainOn = 
+| OnEventActionConfig
+| OnEventConditionConfig
+| OnEventAdvantageConfig
+| OnEventDisadvantageConfig
+| OnEventResistenceConfig
+| OnEventAttributeConfig
+| OnEventStatConfig
+| OnEventGotDamageConfig
+| OnEventGotHitConfig
+| OnEventEquipmentSlotConfig;
 
 export type SkillEffectType = typeof SKILL_EFFECT_TYPE[keyof typeof SKILL_EFFECT_TYPE];
 export type SkillEffectConfig =
-| SkillEffectStatModifyConfig
-| SkillEffectAttributeModifyConfig
+| SkillEffectModifyStatConfig
+| SkillEffectModifyAttributeConfig
 | SkillEffectRestrictActionConfig
 | SkillEffectRestrictEquipmentConfig
 | SkillEffectBlockConditionConfig
-| SkillEffectConditionalConditionConfig
-| SkillEffectActionConfig
-| SkillEffectResistenceConfig
-| SkillEffectAdvantageAttributeConfig
-| SkillEffectExtraDowntimeConfig
-| SkillEffectDowntimeConfig
-| SkillEffectExtraProficiencyConfig
-| SkillEffectEquipmentSlotConfig
+| SkillEffectGainConditionConfig
+| SkillEffectGainActionConfig
+| SkillEffectGainAdvantageConfig
+| SkillEffectGainResistenceConfig
+| SkillEffectAddDowntimeConfig
+| SkillEffectAddProficiencyPointsConfig
+| SkillEffectAddProficiencyLevelConfig
+| SkillEffectAddEquipmentSlotConfig
 | SkillEffectReduceDamageConfig
-| SkillEffectFlavorTextConfig
-| SkillEffectSelectableConfig;
+| SkillEffectShowFlavorTextConfig
+| SkillEffectSelectEffectConfig;
 // Passive stat adjustment (possible to be possitive and negetive)
-export interface SkillEffectStatModifyConfig {
-  type: typeof SKILL_EFFECT_TYPE.STAT_MODIFY;
+export interface SkillEffectModifyStatConfig {
+  type: typeof SKILL_EFFECT_TYPE.MODIFY_STAT;
   statId: string;
   formula: string; // e.g., "-2", "stat(strength) * 0.5"
 }
 // Passive attribute adjustment (possible to be possitive and negetive)
-export interface SkillEffectAttributeModifyConfig {
-  type: typeof SKILL_EFFECT_TYPE.ATTRIBUTE_MODIFY;
+export interface SkillEffectModifyAttributeConfig {
+  type: typeof SKILL_EFFECT_TYPE.MODIFY_ATTRIBUTE;
   attributeId: string;
   formula: string; // e.g., "-2", "stat(strength) * 0.5"
 }
 // Prevent usage of specific actions or action tags
 export interface SkillEffectRestrictActionConfig {
   type: typeof SKILL_EFFECT_TYPE.RESTRICT_ACTION;
-  tags?: string[]; // e.g., "melee", "magic"
+  tags: string[]; // e.g., "melee", "magic"
 }
 // Prevent equipment slot usage
 export interface SkillEffectRestrictEquipmentConfig {
   type: typeof SKILL_EFFECT_TYPE.RESTRICT_EQUIPMENT;
-  tags?: string[]; // e.g., "main-hand", "off-hand"
+  equipmentSlotId: string; // e.g., "main-hand", "off-hand"
+  tags: string[]; // e.g., "melee", "magic"
 }
 // Prevent condition
 export interface SkillEffectBlockConditionConfig {
   type: typeof SKILL_EFFECT_TYPE.BLOCK_CONDITION;
-  tags?: string[]; // e.g., ["frightened", "fatigue"]
+  tags: string[]; // e.g., ["frightened", "fatigue"]
 }
-export interface SkillEffectConditionalConditionConfig {
-  type: typeof SKILL_EFFECT_TYPE.CONDITIONAL_CONDITION;
+export interface SkillEffectGainConditionConfig {
+  type: typeof SKILL_EFFECT_TYPE.GAIN_CONDITION;
   conditionIds: string[];
-  requirements: string[]; // e.g., ["attr(hit-point).current < attr(hit-point).max / 2"]
+  ons: SkillEffectGainOn[]; // e.g., ["attr(hit-point).current < attr(hit-point).max / 2"]
 }
 // Action available to use when have skill
-export interface SkillEffectActionConfig {
-  type: typeof SKILL_EFFECT_TYPE.ACTION;
-  actionIds?: string[];
+export interface SkillEffectGainActionConfig {
+  type: typeof SKILL_EFFECT_TYPE.GAIN_ACTION;
+  actionIds: string[];
+  ons: SkillEffectGainOn[];
 }
-// Chanage character resistance
-export interface SkillEffectResistenceConfig {
-  type: typeof SKILL_EFFECT_TYPE.RESISTENCE;
-  damageTypeId: string;    // Reference to DamageTypeConfig id (e.g., 'fire', 'piercing')
-  damageScaleId: string;   // Reference to DamageScaleConfig id (e.g., 'resistant', 'vulnerable')
-}
-export interface SkillEffectAdvantageAttributeConfig {
-  type: typeof SKILL_EFFECT_TYPE.ADVANTAGE_ATTRIBUTE;
+export interface SkillEffectGainAdvantageConfig {
+  type: typeof SKILL_EFFECT_TYPE.GAIN_ADVANTAGE;
   attributeIds: string[]; // Only valid for attributes of type 'ability' or 'saving'
+  ons: SkillEffectGainOn[];
   isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
 }
-export interface SkillEffectExtraDowntimeConfig {
-  type: typeof SKILL_EFFECT_TYPE.EXTRA_DOWNTIME;
-  bonusActivities: number; // e.g., 1
+// Chanage character resistance
+export interface SkillEffectGainResistenceConfig {
+  type: typeof SKILL_EFFECT_TYPE.GAIN_RESISTENCE;
+  damageTypeId: string;    // Reference to DamageTypeConfig id (e.g., 'fire', 'piercing')
+  damageScaleId: string;   // Reference to DamageScaleConfig id (e.g., 'resistant', 'vulnerable')
+  ons: SkillEffectGainOn[];
 }
-export interface SkillEffectDowntimeConfig {
-  type: typeof SKILL_EFFECT_TYPE.DOWNTIME;
+export interface SkillEffectAddDowntimeConfig {
+  type: typeof SKILL_EFFECT_TYPE.ADD_DOWNTIME;
   downtimeId: string;   // e.g., 'repair', 'meditate'
-  intense?: string;  // e.g., 'full', 'half'
 }
-export interface SkillEffectExtraProficiencyConfig {
-  type: typeof SKILL_EFFECT_TYPE.EXTRA_PROFICIENCY;
+export interface SkillEffectAddProficiencyPointsConfig {
+  type: typeof SKILL_EFFECT_TYPE.ADD_PROFICIENCY_POINTS;
   points: number; // typically 1
 }
-export interface SkillEffectEquipmentSlotConfig {
-  type: typeof SKILL_EFFECT_TYPE.EQUIPMENT_SLOT;
-  slot: string;     // e.g., 'utility' or 'weapon'
+export interface SkillEffectAddProficiencyLevelConfig {
+  type: typeof SKILL_EFFECT_TYPE.ADD_PROFICIENCY_LEVEL;
+  proficiencyId: string;
+  points: number; // typically 1
+}
+export interface SkillEffectAddEquipmentSlotConfig {
+  type: typeof SKILL_EFFECT_TYPE.ADD_EQUIPMENT_SLOT;
+  equipmentSlotId: string;     // e.g., 'utility' or 'weapon'
   bonus: number;    // e.g., 1
 }
 // Reducing damage
 export interface SkillEffectReduceDamageConfig {
   type: typeof SKILL_EFFECT_TYPE.REDUCE_DAMAGE;
   damageTypeId: string;
-  value: FixedValue | DiceValue;
+  baseValue: FixedValue | DiceValue;
+  formula?: string;
 }
-export interface SkillEffectFlavorTextConfig {
-  type: typeof SKILL_EFFECT_TYPE.FLAVOR_TEXT;
+export interface SkillEffectShowFlavorTextConfig {
+  type: typeof SKILL_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
   name: LocalizeText;
   description?: LocalizeText;
 }
-export interface SkillEffectSelectableConfig {
-  type: typeof SKILL_EFFECT_TYPE.SELECTABLE;
-  effects: Array<SkillEffectConfig & {
-    name: LocalizeText;
-    description?: LocalizeText;
-  }>;
+export interface SkillEffectSelectEffectConfig {
+  type: typeof SKILL_EFFECT_TYPE.SELECT_EFFECT;
+  effects: SkillEffectConfig[];
 }
 
+export type SkillStackType = typeof SKILL_STACK_TYPE[keyof typeof SKILL_STACK_TYPE];
 export interface SkillConfig extends BaseConfig {
   icon?: string;
   tags?: string[];
 
-  stack: StackConfig;
+  stack: {
+    id: string;
+    type: SkillStackType;
+    priority?: number; // only used with 'overwrite'
+  };
 
-  pathId: string; // e.g., 'warrior', 'mage', or 'any' for no filter
-  requiredCharacterLevel?: number; // Needed level to see this skill in pool
-  requiredStatThresholds?: StatThresholdRequirement[];  // Used for pool filtering
+  pathId: string; // e.g., 'warrior', 'mage'
+  requiredCharacterLevel: number; // Needed level to see this skill in pool
+  requiredStats: {
+    statId: string;
+    conditionFormulas: ConditionFormula;
+  }[];  // Used for pool filtering
+  requiredSkillIds: string[];  // Used for pool filtering
+  requiredTraitIds: string[];  // Used for pool filtering
 
   effects?: SkillEffectConfig[];
 }

@@ -13,7 +13,7 @@ export interface CreatureConfig extends BaseConfig {
   // Allows overriding base attribute values for this specific creature.
   attributeOverrides?: {
     attributeId: string; // Reference to an AttributeConfig ID (e.g., 'hit-point', 'strength-ability')
-    value: FixedValue | DiceValue; // Fixed value for the attribute
+    baseValue: FixedValue | DiceValue; // Fixed value for the attribute
   }[];
 
   traitIds: string[];

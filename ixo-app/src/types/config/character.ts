@@ -11,43 +11,41 @@ export interface SkillPoolFilter {
 }
 
 export interface CharacterGainConfig {
-  actionIds?: string[]; // actions granted directly
-  skillIds?: string[];  // skills granted directly
+  actionIds: string[]; // actions granted directly
+  skillIds: string[];  // skills granted directly
 
-  actionGainFromPool?: number; // number of actions player can choose from the pool
-  skillGainFromPool?: number;  // number of skills player can choose from the pool
+  actionGainFromPoolNumber: number; // number of actions player can choose from the pool
+  skillGainFromPoolNumber: number;  // number of skills player can choose from the pool
 
   actionPoolFilter?: ActionPoolFilter;
   skillPoolFilter?: SkillPoolFilter;
 }
 
-export interface CharacterProgressionConfig {
-  gainPerLevel: Record<number, CharacterGainConfig>; // e.g., { 2: {...}, 3: {...} }
-}
-
-export interface CharacterEquipmentConfig {
-  slotLimits?: Record<string, number>;  // e.g., { "main-hand": 1, "off-hand": 1 }
-  defaultInventorySpace: InventorySpace;
-}
-
 export interface CharacterConfig {
-  startingActions?: string[];  // Action IDs granted at creation
-  startingItems?: string[];    // Item IDs granted at creation
-  startProficiencyPoint?: number; // Number of points player can assign to proficiencies at creation
-  startStatPoint?: number;
-  startStatLimit?: {
+  startingActions: string[];  // Action IDs granted at creation
+  startingItems: string[];    // Item IDs granted at creation
+  startProficiencyPoint: number; // Number of points player can assign to proficiencies at creation
+  startStatPoint: number;
+  startStatLimit: {
     min: number;
     max: number;
   };
 
-  equipmentRules?: CharacterEquipmentConfig;
-  progression?: CharacterProgressionConfig;
+  equipmentRules: {
+    slotLimits: {
+      slotType: string;
+      limit: number;
+      isSystemSlot: boolean; // true mean this slot is system slot, false mean this slot is user slot
+    }[];  // e.g., { "main-hand": 1, "off-hand": 1 }
+    defaultInventorySpace: InventorySpace;
+  };
+  progression: Record<number, CharacterGainConfig>;
   
-  halfDowntimeIds?: string[]; // DowntimeConfig ids allowed during half downtime
-  fullDowntimeIds?: string[]; // DowntimeConfig ids allowed during full downtime
+  shortDowntimeIds: string[]; // DowntimeConfig ids allowed during short downtime
+  fullDowntimeIds: string[]; // DowntimeConfig ids allowed during full downtime
   
-  defaultTraitSize?: number; // Number of traits allowed to choose during character creation
-  defaultDamageScales?: Record<string, string>; 
+  defaultTraitSize: number; // Number of traits allowed to choose during character creation
+  defaultDamageScales: Record<string, string>; 
 
   tags?: string[]; // optional groupings like "starter", "template"
 }
