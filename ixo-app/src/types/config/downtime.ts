@@ -5,23 +5,31 @@ export type DowntimeEffectType = typeof DOWNTIME_EFFECT_TYPE[keyof typeof DOWNTI
 export type DowntimeEffectTarget = typeof DOWNTIME_EFFECT_TARGET[keyof typeof DOWNTIME_EFFECT_TARGET];
 export type DowntimeEffectConfig =
 | DowntimeEffectPrepareActionConfig
-| DowntimeEffectPrepareSkillConfig
-| DowntimeEffectRestoreAttributeConfig
+| DowntimeEffectSwapActionConfig
+| DowntimeEffectSwapSkillConfig
 | DowntimeEffectRestoreItemUsageConfig
+| DowntimeEffectRestoreAttributeConfig
 | DowntimeEffectShowFlavorTextConfig;
 export interface DowntimeEffectPrepareActionConfig {
   type: typeof DOWNTIME_EFFECT_TYPE.PREPARE_ACTION;
+  numberOfActiveActions: number;
+}
+export interface DowntimeEffectSwapActionConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.SWAP_ACTION;
   numberOfSelectableActions: number;
   selectableActionIds: string[];
   removeActionIds: string[];
 }
-export interface DowntimeEffectPrepareSkillConfig {
-  type: typeof DOWNTIME_EFFECT_TYPE.PREPARE_SKILL;
+export interface DowntimeEffectSwapSkillConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.SWAP_SKILL;
   numberOfSelectableSkills: number;
   selectableSkillIds: string[];
   removeSkillIds: string[];
 }
-
+export interface DowntimeEffectRestoreItemUsageConfig {
+  type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ITEM_USAGE;
+  numberOfItems: number;
+}
 export type DowntimeEffectRestoreAttributeConfig =
 | DowntimeEffectRestoreSelfAttributeConfig
 | DowntimeEffectRestoreTargetAttributeConfig
@@ -40,10 +48,6 @@ export interface DowntimeEffectRestoreTargetAttributeConfig {
   attributeId: string;        // e.g., 'hit-point'
   baseValue: FixedValue | DiceValue;
   formula?: string;
-}
-export interface DowntimeEffectRestoreItemUsageConfig {
-  type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ITEM_USAGE;
-  numberOfItems: number;
 }
 export interface DowntimeEffectRestoreAnyAttributeConfig {
   type: typeof DOWNTIME_EFFECT_TYPE.RESTORE_ATTRIBUTE;

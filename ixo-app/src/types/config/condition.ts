@@ -1,103 +1,36 @@
-import {  CONDITION_EFFECT_TYPE, CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
-import type { BaseConfig, OnEventPhaseConfig, OnEventGotDamageConfig, OnEventAttributeConfig, OnEventActionConfig, OnEventStatConfig, OnEventEquipmentSlotConfig, OnEventGotHitConfig, DiceValue, FixedValue, LocalizeText } from './base';
+import { CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
+import { EFFECT_TYPE } from '@/constants/config/base';
+import type { BaseConfig, EffectActivateDoDamageOverTimeConfig, EffectActivateDoRestoreOverTimeConfig, EffectActivateReduceDamageConfig, EffectActivateShowFlavorTextConfig, EffectBlockConditionConfig, EffectGainActionConfig, EffectGainAdvantageConfig, EffectGainResistenceConfig, EffectModifyAttributeConfig, EffectModifyStatConfig, EffectRestrictActionConfig, EffectRestrictEquipmentConfig, EffectShowFlavorTextConfig, OnEventAttributeChangedConfig, OnEventGotDamageConfig, OnEventGotHitConfig, OnEventPhaseChangedConfig } from './base';
 
-export type ConditionEffectType = typeof CONDITION_EFFECT_TYPE[keyof typeof CONDITION_EFFECT_TYPE];
+export type ConditionEffectType = 
+| typeof EFFECT_TYPE.ACTIVATE_REDUCE_DAMAGE
+| typeof EFFECT_TYPE.ACTIVATE_DO_DAMAGE_OVER_TIME
+| typeof EFFECT_TYPE.ACTIVATE_DO_RESTORE_OVER_TIME
+| typeof EFFECT_TYPE.ACTIVATE_SHOW_FLAVOR_TEXT
+| typeof EFFECT_TYPE.MODIFY_STAT
+| typeof EFFECT_TYPE.MODIFY_ATTRIBUTE
+| typeof EFFECT_TYPE.RESTRICT_ACTION
+| typeof EFFECT_TYPE.RESTRICT_EQUIPMENT
+| typeof EFFECT_TYPE.BLOCK_CONDITION
+| typeof EFFECT_TYPE.GAIN_ACTION
+| typeof EFFECT_TYPE.GAIN_ADVANTAGE
+| typeof EFFECT_TYPE.GAIN_RESISTENCE
+| typeof EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+
 export type ConditionEffectConfig =
-| ConditionEffectModifyStatConfig
-| ConditionEffectModifyAttributeConfig
-| ConditionEffectRestrictActionConfig
-| ConditionEffectRestrictEquipmentConfig
-| ConditionEffectBlockConditionConfig
-| ConditionEffectGainActionConfig
-| ConditionEffectGainAdvantageConfig
-| ConditionEffectGainResistenceConfig
-| ConditionEffectReduceDamageConfig
-| ConditionEffectDoDamageOverTimeConfig
-| ConditionEffectDoRestoreOverTimeConfig
-| ConditionEffectForceActionConfig
-| ConditionEffectShowFlavorTextConfig;
-export interface ConditionEffectModifyStatConfig {
-  type: typeof CONDITION_EFFECT_TYPE.MODIFY_STAT;
-  statId: string;
-  formula: string; // e.g., "-2", "stat(strength) * 0.5"
-}
-export interface ConditionEffectModifyAttributeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE;
-  attributeId: string;
-  formula: string; // e.g., "-2", "stat(strength) * 0.5"
-}
-export interface ConditionEffectRestrictActionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_ACTION;
-  tags: string[]; // e.g., "melee", "magic"
-}
-export interface ConditionEffectRestrictEquipmentConfig {
-  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_EQUIPMENT;
-  equipmentSlotId: string; // e.g., "main-hand", "off-hand"
-  tags: string[]; // e.g., "melee", "magic"
-}
-export interface ConditionEffectBlockConditionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.BLOCK_CONDITION;
-  tags: string[]; // e.g., ["frightened", "fatigue"]
-}
-export interface ConditionEffectGainActionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.GAIN_ACTION;
-  actionIds: string[];
-}
-export interface ConditionEffectGainAdvantageConfig {
-  type: typeof CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE;
-  attributeIds: string[];
-  isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
-}
-export interface ConditionEffectGainResistenceConfig {
-  type: typeof CONDITION_EFFECT_TYPE.GAIN_RESISTENCE;
-  damageTypeId: string;
-  scaleId: string;
-}
-export interface ConditionEffectReduceDamageConfig {
-  type: typeof CONDITION_EFFECT_TYPE.REDUCE_DAMAGE;
-  damageTypeId: string;
-  baseValue: FixedValue | DiceValue;
-  formula?: string;
-}
-export interface ConditionEffectForceActionConfig {
-  type: typeof CONDITION_EFFECT_TYPE.FORCE_ACTION;
-  actionId: string;
-}
-export interface ConditionEffectShowFlavorTextConfig {
-  type: typeof CONDITION_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
-  name: LocalizeText;
-  description?: LocalizeText;
-}
-export type ConditionEffectDamageOverTimeOn = 
-| OnEventActionConfig
-| OnEventAttributeConfig
-| OnEventStatConfig
-| OnEventGotDamageConfig
-| OnEventGotHitConfig
-| OnEventEquipmentSlotConfig
-| OnEventPhaseConfig;
-export interface ConditionEffectDoDamageOverTimeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.DO_DAMAGE_OVER_TIME;
-  damageTypeId: string;
-  baseValue: FixedValue | DiceValue;
-  on: ConditionEffectDamageOverTimeOn;
-  formula?: string;
-}
-export type ConditionEffectRestoreOverTimeOn = 
-| OnEventActionConfig
-| OnEventAttributeConfig
-| OnEventStatConfig
-| OnEventGotDamageConfig
-| OnEventGotHitConfig
-| OnEventEquipmentSlotConfig
-| OnEventPhaseConfig;
-export interface ConditionEffectDoRestoreOverTimeConfig {
-  type: typeof CONDITION_EFFECT_TYPE.DO_RESTORE_OVER_TIME;
-  attributeId: string;
-  baseValue: FixedValue | DiceValue;
-  on: ConditionEffectRestoreOverTimeOn;
-  formula?: string;
-}
+| EffectActivateReduceDamageConfig
+| EffectActivateDoDamageOverTimeConfig
+| EffectActivateDoRestoreOverTimeConfig
+| EffectActivateShowFlavorTextConfig
+| EffectModifyStatConfig
+| EffectModifyAttributeConfig
+| EffectRestrictActionConfig
+| EffectRestrictEquipmentConfig
+| EffectBlockConditionConfig
+| EffectGainActionConfig
+| EffectGainAdvantageConfig
+| EffectGainResistenceConfig
+| EffectShowFlavorTextConfig;
 
 export type ConditionRemoveTickType = typeof CONDITION_TICK_TYPE[keyof typeof CONDITION_TICK_TYPE];
 export type ConditionRemoveTickConfig = 
@@ -108,7 +41,7 @@ export type ConditionRemoveTickConfig =
 | ConditionRemoveTickConditionConfig;
 export interface ConditionRemoveTickPhaseConfig {
   type: typeof CONDITION_TICK_TYPE.PHASE;
-  on: OnEventPhaseConfig;
+  on: OnEventPhaseChangedConfig;
   duration: number;
   formula?: string;
   saving?: {
@@ -137,7 +70,7 @@ export interface ConditionRemoveTickDamageConfig {
 }
 export interface ConditionRemoveTickConditionConfig {
   type: typeof CONDITION_TICK_TYPE.ATTRIBUTE;
-  ons: OnEventAttributeConfig[];
+  ons: OnEventAttributeChangedConfig[];
 }
 
 export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];

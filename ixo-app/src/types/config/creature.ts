@@ -16,7 +16,8 @@ export interface CreatureConfig extends BaseConfig {
     baseValue: FixedValue | DiceValue; // Fixed value for the attribute
   }[];
 
-  traitIds: string[];
+  archetypeIds?: string[];
+  traitIds?: string[];
   actionIds?: string[]; // References to ActionConfig IDs that this creature can perform.
   skillIds?: string[]; // References to SkillConfig IDs that this creature possesses.
   conditionIds?: string[]; // References to ConditionConfig IDs that this creature starts with.

@@ -21,9 +21,3 @@ export const ACTION_HIT_TYPE = {
   DIFFICULTY_CLASS: 'difficulty-class',
   ALWAYS_HIT: 'always-hit'
 } as const;
-
-export const ACTION_USAGE_RESET = {
-  SHORT_DOWNTIME: 'short-downtime',
-  FULL_DOWNTIME: 'full-downtime',
-  PHASE: 'phase'
-} as const;

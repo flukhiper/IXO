@@ -1,5 +1,5 @@
-import { ACTION_HIT_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE, ACTION_USAGE_RESET } from '@/constants/config/action';
-import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, OnEventPhaseConfig, RefValue } from './base';
+import { ACTION_HIT_TYPE, ACTION_TARGET_TYPE, ACTION_TYPE } from '@/constants/config/action';
+import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, OnEventPhaseChangedConfig, RefValue } from './base';
 
 export interface SummonConfig {
   creatureId: string;         // reference to summon creature
@@ -16,11 +16,10 @@ export interface DamageConfig {
   formula?: string; // optional scaling
 }
 
-export type ActionUsageReset = typeof ACTION_USAGE_RESET[keyof typeof ACTION_USAGE_RESET];
 export interface ActionUsageLimit {
   maxUse: number;
   cooldown: number;
-  on?: OnEventPhaseConfig;
+  resetOn?: OnEventPhaseChangedConfig;
 }
 
 export type ActionTargetType = typeof ACTION_TARGET_TYPE[keyof typeof ACTION_TARGET_TYPE];
@@ -35,25 +34,25 @@ export interface SelfTargetConfig {
 }
 export interface SelectTargetConfig {
   type: typeof ACTION_TARGET_TYPE.SELECT;
-  range: FixedValue | DiceValue;
+  range: FixedValue | DiceValue | RefValue;
   maxRange?: FixedValue | DiceValue; // if out of range, gain disadvantage
   targetCount: number;
 }
 export interface AreaTargetConfig {
   type: typeof ACTION_TARGET_TYPE.AREA;
-  range: FixedValue | DiceValue;
+  range: FixedValue | DiceValue | RefValue;
   radius: number;
   targetCount: number;
 }
 export interface ConeTargetConfig {
   type: typeof ACTION_TARGET_TYPE.CONE;
-  range: FixedValue | DiceValue;
+  range: FixedValue | DiceValue | RefValue;
   radius: number;
   targetCount: number;
 }
 export interface LineTargetConfig {
   type: typeof ACTION_TARGET_TYPE.LINE;
-  range: FixedValue | DiceValue;
+  range: FixedValue | DiceValue | RefValue;
   radius: number;
   targetCount: number;
 }
@@ -108,28 +107,13 @@ export interface ActionLevelConfig {
   restores?: RestoreConfig[];
   summons?: SummonConfig[]; // multiple summons allowed
   conditionIds?: string[]; // Applies to target when hit
+  removeConditionTags?: string[];   // Removes from target when hit
 
   selfEffect?: {
     damages?: DamageConfig[];
     restores?: RestoreConfig[];
     conditionIds?: string[];
   };
-}
-export interface ActionLevelAttackConfig {
-  costs?: ActionCost[]; // multiple attribute-based costs
-  hit?: HitCheckConfig;
-  damages?: DamageConfig[];
-  restores?: RestoreConfig[];
-
-  // Condition effects moved here for better clarity
-  conditionIds?: string[];         // Applies to target when hit
-  removeConditionIds?: string[];   // Removes from target when hit
-  
-  summons?: SummonConfig[]; // multiple summons allowed
-  target?: ActionTargetConfig;
-  usageLimit?: ActionUsageLimit;
-  restrictions?: ActionRestrictions;
-  selfConditionIds?: string[]; // references to ConditionConfig that will apply self when use
 }
 
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];

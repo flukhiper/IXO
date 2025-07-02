@@ -1,13 +1,13 @@
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import type { BaseConfig, DiceValue, FixedValue, RestorePhase } from './base';
+import type { BaseConfig, DiceValue, FixedValue, FullValue, HalfValue, OnEventPhaseChangedConfig } from './base';
 
 export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
 
 // Base interface for all attribute configs
 export interface BaseAttributeConfig extends BaseConfig {
+  tags?: string[];
   type: AttributeType;
   isSystem: boolean; // true = system attribute, false = player attribute
-  tags?: string[];
 }
 
 // 1. ResourceAttributeConfig: must be restorable (restores required), value can be FixedValue or DiceValue
@@ -15,8 +15,8 @@ export interface ResourceAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.RESOURCE;
   baseValue: FixedValue | DiceValue;
   restores: {
-    phase: RestorePhase;
-    baseValue: FixedValue | DiceValue;
+    on: OnEventPhaseChangedConfig;
+    baseValue: FixedValue | DiceValue | FullValue | HalfValue;
     formula?: string;
   }[];
   formula?: string;

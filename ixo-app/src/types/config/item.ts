@@ -1,5 +1,12 @@
-import { ITEM_WEIGHT, ITEM_BONUS_EFFECT_TYPE, ITEM_TYPE } from '@/constants/config/item';
-import type { BaseConfig, FixedValue, DiceValue, RefValue, InventorySpace, ConditionFormula, OnEventStatConfig, OnEventGotDamageConfig, OnEventGotHitConfig, OnEventAttributeConfig } from './base';
+import { ITEM_WEIGHT, ITEM_TYPE } from '@/constants/config/item';
+import { EFFECT_TYPE } from '@/constants/config/base';
+import type { BaseConfig, FixedValue, DiceValue, RefValue, InventorySpace, ConditionFormula, EffectRestrictActionConfig, EffectRestrictEquipmentConfig, EffectBlockConditionConfig, EffectGainConditionConfig, EffectGainActionConfig, EffectGainAdvantageConfig, EffectGainResistenceConfig, EffectAddDowntimeConfig, EffectShowFlavorTextConfig, EffectModifyAttributeConfig, EffectModifyStatConfig } from './base';
+
+export interface ItemUsageLimit {
+  isExpendable: boolean;
+  maxUses: number;
+  cooldownTurns: number;
+}
 
 export interface ItemDamageConfig {
   damageTypeId: string;
@@ -15,84 +22,39 @@ export interface ItemHitConfig {
   baseValue: FixedValue | DiceValue;
   formula?: string;
 }
-// Equipment Types
 
-export type ItemBonusEffectOn = 
-| OnEventAttributeConfig
-| OnEventStatConfig
-| OnEventGotDamageConfig
-| OnEventGotHitConfig;
 // Bonus Effects
-export type ItemBonusEffectType = typeof ITEM_BONUS_EFFECT_TYPE[keyof typeof ITEM_BONUS_EFFECT_TYPE];
-export type ItemBonusEffectConfig =
-| ItemBonusEffectModifyStatConfig
-| ItemBonusEffectModifyAttributeConfig
-| ItemBonusEffectRestrictActionConfig
-| ItemBonusEffectRestrictEquipmentConfig
-| ItemBonusEffectBlockConditionConfig
-| ItemBonusEffectGainConditionConfig
-| ItemBonusEffectGainActionConfig
-| ItemBonusEffectGainAdvantageConfig
-| ItemBonusEffectGainResistenceConfig
-| ItemBonusEffectAddDamageConfig
-| ItemBonusEffectReduceDamageConfig
-| ItemBonusEffectShowFlavorTextConfig;
+export type ItemBonusEffectType = 
+| typeof EFFECT_TYPE.MODIFY_STAT
+| typeof EFFECT_TYPE.MODIFY_ATTRIBUTE
+| typeof EFFECT_TYPE.RESTRICT_ACTION
+| typeof EFFECT_TYPE.RESTRICT_EQUIPMENT
+| typeof EFFECT_TYPE.BLOCK_CONDITION
+| typeof EFFECT_TYPE.GAIN_CONDITION
+| typeof EFFECT_TYPE.GAIN_ACTION
+| typeof EFFECT_TYPE.GAIN_ADVANTAGE
+| typeof EFFECT_TYPE.GAIN_RESISTENCE
+| typeof EFFECT_TYPE.ADD_DOWNTIME
+| typeof EFFECT_TYPE.SHOW_FLAVOR_TEXT
+| typeof EFFECT_TYPE.SELECT_EFFECT;
 
-export interface ItemBonusEffectModifyStatConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.MODIFY_STAT;
-  statId: string;
-  formula: string; // e.g., "-2", "stat(strength) * 0.5"
-}
-export interface ItemBonusEffectModifyAttributeConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.MODIFY_ATTRIBUTE;
-  attributeId: string;
-  formula: string; // e.g., "-2", "stat(strength) * 0.5"
-}
-export interface ItemBonusEffectRestrictActionConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.RESTRICT_ACTION;
-  tags: string[]; // e.g., "melee", "magic"
-}
-export interface ItemBonusEffectRestrictEquipmentConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.RESTRICT_EQUIPMENT;
-  equipmentSlotId: string; // e.g., "main-hand", "off-hand"
-  tags: string[]; // e.g., "melee", "magic"
-}
-export interface ItemBonusEffectBlockConditionConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.BLOCK_CONDITION;
-  tags: string[]; // e.g., ["frightened", "fatigue"]
-}
-export interface ItemBonusEffectGainConditionConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.GAIN_CONDITION;
-  conditionIds: string[];
-  ons: ItemBonusEffectOn[];
-}
-export interface ItemBonusEffectGainActionConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.GAIN_ACTION;
-  actionIds: string[];
-  ons: ItemBonusEffectOn[];
-}
-export interface ItemBonusEffectGainAdvantageConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.GAIN_ADVANTAGE;
-  attributeIds: string[];
-  isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
-}
-export interface ItemBonusEffectGainResistenceConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.GAIN_RESISTENCE;
-  damageTypeId: string;
-  damageScaleId: string;
-}
-export interface ItemBonusEffectAddDamageConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.ADD_DAMAGE;
-  additionalDamage: ItemDamageConfig;
-}
-export interface ItemBonusEffectReduceDamageConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.REDUCE_DAMAGE;
-  damageTypeId: string;
-  baseValue: FixedValue | DiceValue;
-  formula?: string;
-}
-export interface ItemBonusEffectShowFlavorTextConfig {
-  type: typeof ITEM_BONUS_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+export type ItemBonusEffectConfig =
+| EffectModifyStatConfig
+| EffectModifyAttributeConfig
+| EffectRestrictActionConfig
+| EffectRestrictEquipmentConfig
+| EffectBlockConditionConfig
+| EffectGainConditionConfig
+| EffectGainActionConfig
+| EffectGainAdvantageConfig
+| EffectGainResistenceConfig
+| EffectAddDowntimeConfig
+| EffectShowFlavorTextConfig
+| ItemBonusEffectSelectEffectConfig;
+
+export interface ItemBonusEffectSelectEffectConfig {
+  type: typeof EFFECT_TYPE.SELECT_EFFECT;
+  effects: Exclude<ItemBonusEffectConfig, ItemBonusEffectSelectEffectConfig>[];
 }
 
 // Final Union
@@ -131,26 +93,20 @@ export interface ItemBaseConfig extends BaseConfig {
 export type ItemWeight = typeof ITEM_WEIGHT[keyof typeof ITEM_WEIGHT];
 export interface WeaponPropertyConfig {
   weight: ItemWeight; // light mean Usable for off-hand dual wield, Medium mean nothing, Heavy mean require stat STR 2 give modify AGI -2 (not stack with armor) except have range properties
-  range?: { // mean this weapon is range weapon
-    range: FixedValue | DiceValue;
-    maxRange?: FixedValue | DiceValue; // if out of range, gain disadvantage
-  };
+  range?: FixedValue | DiceValue;
   finesse?: {
     newHit: ItemHitConfig;
-    newDamages: ItemDamageConfig[];
+    newDamage: ItemDamageConfig;
   };            // Use DEX instead of STR if higher
   thrown?: {
-    range: {
-      range: FixedValue | DiceValue;
-      maxRange?: FixedValue | DiceValue; // if out of range, gain disadvantage
-    };
+    range: FixedValue | DiceValue;
   };
   extraReach?: {
     newRange: FixedValue | DiceValue;
   };
   twoHanded?: boolean;          // Requires two hands to use and stat STR 2 and give modify AGI -2
   versatile?: {
-    newDamages: ItemDamageConfig[];
+    newDamages: ItemDamageConfig;
   };
   enhancement?: 1 | 2 | 3; // 💡 New: Magical/quality boost, max +3
   customize?: {
@@ -161,8 +117,8 @@ export interface ItemWeaponConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.WEAPON;
   weapon: {
     hit: ItemHitConfig;
-    damages: ItemDamageConfig[];
-    ranage: FixedValue | DiceValue;
+    damage: ItemDamageConfig;
+    range: FixedValue | DiceValue;
     
     property: WeaponPropertyConfig;
   };
@@ -177,8 +133,12 @@ export interface ShieldPropertyConfig {
 export interface ItemShieldConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.SHIELD;
   shield: {
-    armorClass: FixedValue | RefValue;
-    formula?: string;
+    armorClass: {
+      baseValue: FixedValue | RefValue;
+      formula?: string;
+    };
+
+    usageLimit: ItemUsageLimit;
 
     property: ShieldPropertyConfig;
   };
@@ -193,8 +153,12 @@ export interface ArmorPropertyConfig {
 export interface ItemArmorConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.ARMOR;
   armor: {
-    armorClass: FixedValue | RefValue;
-    formula?: string;
+    armorClass: {
+      baseValue: FixedValue | RefValue;
+      formula?: string;
+    };
+
+    usageLimit: ItemUsageLimit;
 
     property: ArmorPropertyConfig;
   };
@@ -202,25 +166,16 @@ export interface ItemArmorConfig extends ItemBaseConfig {
 export interface ItemAccessoryConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.ACCESSORY;
 }
-
-// Usage & Combat Config
-export interface ItemUsageLimit {
-  isExpendable: boolean;
-  maxUses: number;
-  cooldownTurns: number;
-}
-// Consumable
 export interface ItemConsumableConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.CONSUMABLE;
   consumable: {
-    damages?: ItemDamageConfig[];
-    restores?: ItemRestoreConfig[];
+    damages?: ItemDamageConfig;
+    restores?: ItemRestoreConfig;
     conditionIds?: string[];
-    removeConditionIds?: string[];
+    removeConditionTags?: string[];
     usageLimit?: ItemUsageLimit;
   };
 }
-// Utility
 export interface ItemUtilityConfig extends ItemBaseConfig {
   type: typeof ITEM_TYPE.UTILITY;
   utility: {

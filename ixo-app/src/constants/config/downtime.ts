@@ -1,9 +1,10 @@
 // Downtime effect types
 export const DOWNTIME_EFFECT_TYPE = {
   PREPARE_ACTION: 'prepare-action',
-  PREPARE_SKILL: 'prepare-skill',
-  RESTORE_ATTRIBUTE: 'restore-attribute',
+  SWAP_ACTION: 'swap-action',
+  SWAP_SKILL: 'swap-skill',
   RESTORE_ITEM_USAGE: 'restore-item-usage',
+  RESTORE_ATTRIBUTE: 'restore-attribute',
   SHOW_FLAVOR_TEXT: 'show-flavor-text'
 } as const;
 
