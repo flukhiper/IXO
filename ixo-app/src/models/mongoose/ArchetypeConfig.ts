@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
+import type { ArchetypeConfig } from '@/types/config/origin';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const ArchetypeConfigSchema = new mongoose.Schema({
+const ArchetypeConfigSchema = new mongoose.Schema<ArchetypeConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  tags: [ String ]
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const ArchetypeConfigModel = mongoose.models.ArchetypeConfig || mongoose.model('ArchetypeConfig', ArchetypeConfigSchema); 
+export const ArchetypeConfigModel = mongoose.models.ArchetypeConfig || mongoose.model<ArchetypeConfig>('ArchetypeConfig', ArchetypeConfigSchema);

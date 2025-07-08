@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
+import type { DowntimeConfig } from '@/types/config/downtime';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const DowntimeConfigSchema = new mongoose.Schema({
+const DowntimeConfigSchema = new mongoose.Schema<DowntimeConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  icon: String,
-  tags: [ String ],
-  effects: { type: Object }
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const DowntimeConfigModel = mongoose.models.DowntimeConfig || mongoose.model('DowntimeConfig', DowntimeConfigSchema); 
+export const DowntimeConfigModel = mongoose.models.DowntimeConfig || mongoose.model<DowntimeConfig>('DowntimeConfig', DowntimeConfigSchema);

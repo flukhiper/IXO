@@ -8,6 +8,8 @@ export const mockDamageScales: DamageScaleConfig[] = // --- Sample Damage Scale 
     name: { en: 'Normal', th: 'ปกติ' },
     multiplier: 1,
     tags: [ 'standard' ],
+    gameSystemId: 'system1',
+    ownerId: 'owner1',
     createdAt: '2023-01-01T00:00:00Z'
   },
   {
@@ -15,6 +17,8 @@ export const mockDamageScales: DamageScaleConfig[] = // --- Sample Damage Scale 
     name: { en: 'Resistant', th: 'ต้านทาน' },
     multiplier: 0.5,
     tags: [ 'resistance' ],
+    gameSystemId: 'system1',
+    ownerId: 'owner1',
     createdAt: '2023-01-01T00:00:00Z'
   },
   {
@@ -22,6 +26,8 @@ export const mockDamageScales: DamageScaleConfig[] = // --- Sample Damage Scale 
     name: { en: 'Vulnerable', th: 'อ่อนแอ' },
     multiplier: 2,
     tags: [ 'vulnerability' ],
+    gameSystemId: 'system1',
+    ownerId: 'owner1',
     createdAt: '2023-01-01T00:00:00Z'
   },
   {
@@ -29,6 +35,8 @@ export const mockDamageScales: DamageScaleConfig[] = // --- Sample Damage Scale 
     name: { en: 'Immune', th: 'ภูมิคุ้มกัน' },
     multiplier: 0,
     tags: [ 'immunity' ],
+    gameSystemId: 'system1',
+    ownerId: 'owner1',
     createdAt: '2023-01-01T00:00:00Z'
   }
 ];

@@ -1,19 +1,12 @@
 import mongoose from 'mongoose';
+import type { ItemConfig } from '@/types/config/item';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const ItemConfigSchema = new mongoose.Schema({
+const ItemConfigSchema = new mongoose.Schema<ItemConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  type: String,
-  icon: String,
-  tags: [ String ],
-  slotType: String,
-  proficiencyIds: [ String ],
-  requiredCharacterLevel: Number,
-  requiredStatThresholds: { type: [ Object ] },
-  bonusEffects: { type: [ Object ] }
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const ItemConfigModel = mongoose.models.ItemConfig || mongoose.model('ItemConfig', ItemConfigSchema); 
+export const ItemConfigModel = mongoose.models.ItemConfig || mongoose.model<ItemConfig>('ItemConfig', ItemConfigSchema);

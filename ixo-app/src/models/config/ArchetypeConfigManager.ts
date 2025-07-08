@@ -1,4 +1,4 @@
-import type { ArchetypeConfig } from '@/types/config/archetype';
+import type { ArchetypeConfig } from '@/types/config/origin';
 import { mockArchetypes } from '@/mocks/config/archetype';
 import { BaseConfigManager } from './BaseConfigManager';
 

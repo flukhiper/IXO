@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
+import type { StatConfig } from '@/types/config/stat';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const StatConfigSchema = new mongoose.Schema({
+const StatConfigSchema = new mongoose.Schema<StatConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  abbreviation: { type: String, required: true },
-  tags: [ String ]
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const StatConfigModel = mongoose.models.StatConfig || mongoose.model('StatConfig', StatConfigSchema); 
+export const StatConfigModel = mongoose.models.StatConfig || mongoose.model<StatConfig>('StatConfig', StatConfigSchema);

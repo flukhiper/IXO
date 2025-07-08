@@ -8,7 +8,11 @@ export interface CreatureConfig extends BaseConfig {
   icon?: string;
   thumbnail?: string;  // UI thumbnail (larger, for overview or preview)
   tags?: string[]; // e.g., ["humanoid", "beast", "elemental", "minion", "summon"]
-  level: number; // The creature's level, influencing its overall power and stats.
+  
+  threatLevel: number; // The creature's threat level, influencing its overall power and stats.
+  originId: string; // The creature's origin, influencing its overall power and stats.
+
+  statOverrides?: Record<string, number>; // e.g., { "strength": 10, "dexterity": 10, "constitution": 10, "intelligence": 10, "wisdom": 10, "charisma": 10 }
 
   // Allows overriding base attribute values for this specific creature.
   attributeOverrides?: {
@@ -16,17 +20,12 @@ export interface CreatureConfig extends BaseConfig {
     baseValue: FixedValue | DiceValue; // Fixed value for the attribute
   }[];
 
-  archetypeIds?: string[];
-  traitIds?: string[];
+  resistances?: Record<string, string>; // e.g., { "fire": "immunity", "piercing": "resistant", "bludgeoning": "resistant", "slashing": "resistant" }
   actionIds?: string[]; // References to ActionConfig IDs that this creature can perform.
   skillIds?: string[]; // References to SkillConfig IDs that this creature possesses.
+
   conditionIds?: string[]; // References to ConditionConfig IDs that this creature starts with.
   
-  equipment?: Record<string, string[]>; // Map of equipment slot ID to an array of ItemConfig IDs for that slot.
-
-  // Defines how the creature scales with different damage types by default.
-  // This can be overridden by specific skills or conditions.
-  defaultDamageScales: {
-    [damageTypeId: string]: string; // e.g., { "fire": "immunity", "piercing": "resistant" }
-  };
+  equipments?: Record<string, string>; // e.g., { "main-hand": "sword", "off-hand": "shield", "armor": "chainmail", "accessory": "ring", "backpack": "backpack", "utility": "potion" }
+  holdItems?: string[]; // e.g., ["ring", "potion"]
 }

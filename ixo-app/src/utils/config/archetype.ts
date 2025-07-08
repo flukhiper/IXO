@@ -1,4 +1,4 @@
-import type { ArchetypeConfig } from '@/types/config/archetype';
+import type { ArchetypeConfig } from '@/types/config/origin';
 import { generateId } from './helper';
 
 export function createArchetypeConfig (input: Omit<ArchetypeConfig, 'id' | 'createdAt'>): ArchetypeConfig {

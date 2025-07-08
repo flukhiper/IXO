@@ -1,8 +1,11 @@
 import { PathConfigRepository } from '@/repositories/PathConfigRepository';
 import type { PathConfig } from '@/types/config/path';
+import { BaseConfigService } from './BaseConfigService';
 
-export class PathConfigService {
-  private readonly repository = new PathConfigRepository();
+export class PathConfigService extends BaseConfigService<PathConfig, PathConfigRepository> {
+  constructor () {
+    super(new PathConfigRepository());
+  }
 
   async create (path: PathConfig) {
     // Add validation or transformation here if needed

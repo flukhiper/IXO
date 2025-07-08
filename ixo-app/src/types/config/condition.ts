@@ -1,36 +1,84 @@
-import { CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
-import { EFFECT_TYPE } from '@/constants/config/base';
-import type { BaseConfig, EffectActivateDoDamageOverTimeConfig, EffectActivateDoRestoreOverTimeConfig, EffectActivateReduceDamageConfig, EffectActivateShowFlavorTextConfig, EffectBlockConditionConfig, EffectGainActionConfig, EffectGainAdvantageConfig, EffectGainResistenceConfig, EffectModifyAttributeConfig, EffectModifyStatConfig, EffectRestrictActionConfig, EffectRestrictEquipmentConfig, EffectShowFlavorTextConfig, OnEventAttributeChangedConfig, OnEventGotDamageConfig, OnEventGotHitConfig, OnEventPhaseChangedConfig } from './base';
-
-export type ConditionEffectType = 
-| typeof EFFECT_TYPE.ACTIVATE_REDUCE_DAMAGE
-| typeof EFFECT_TYPE.ACTIVATE_DO_DAMAGE_OVER_TIME
-| typeof EFFECT_TYPE.ACTIVATE_DO_RESTORE_OVER_TIME
-| typeof EFFECT_TYPE.ACTIVATE_SHOW_FLAVOR_TEXT
-| typeof EFFECT_TYPE.MODIFY_STAT
-| typeof EFFECT_TYPE.MODIFY_ATTRIBUTE
-| typeof EFFECT_TYPE.RESTRICT_ACTION
-| typeof EFFECT_TYPE.RESTRICT_EQUIPMENT
-| typeof EFFECT_TYPE.BLOCK_CONDITION
-| typeof EFFECT_TYPE.GAIN_ACTION
-| typeof EFFECT_TYPE.GAIN_ADVANTAGE
-| typeof EFFECT_TYPE.GAIN_RESISTENCE
-| typeof EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+import { CONDITION_EFFECT_TYPE, CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
+import { PHASE_TYPE } from '@/constants/config/base';
+import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, FullValue, HalfValue, LocalizeText } from './base';
 
 export type ConditionEffectConfig =
-| EffectActivateReduceDamageConfig
-| EffectActivateDoDamageOverTimeConfig
-| EffectActivateDoRestoreOverTimeConfig
-| EffectActivateShowFlavorTextConfig
-| EffectModifyStatConfig
-| EffectModifyAttributeConfig
-| EffectRestrictActionConfig
-| EffectRestrictEquipmentConfig
-| EffectBlockConditionConfig
-| EffectGainActionConfig
-| EffectGainAdvantageConfig
-| EffectGainResistenceConfig
-| EffectShowFlavorTextConfig;
+| ConditionEffectReduceDamageConfig
+| ConditionEffectDoDamageOverTimeConfig
+| ConditionEffectDoRestoreOverTimeConfig
+| ConditionEffectShowFlavorTextConfig
+| ConditionEffectModifyStatConfig
+| ConditionEffectModifyAttributeConfig
+| ConditionEffectRestrictActionConfig
+| ConditionEffectRestrictEquipmentConfig
+| ConditionEffectBlockConditionConfig
+| ConditionEffectGainActionConfig
+| ConditionEffectGainAdvantageConfig
+| ConditionEffectGainResistenceConfig
+| ConditionEffectShowFlavorTextConfig;
+
+export interface ConditionEffectReduceDamageConfig {
+  type: typeof CONDITION_EFFECT_TYPE.REDUCE_DAMAGE;
+  damageTypeIds: string[];
+  baseValue: FixedValue | DiceValue;
+  numberOfUsages?: number; // if provided, the effect will be applied for the number of times specified.
+}
+export interface ConditionEffectDoDamageOverTimeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.DO_DAMAGE_OVER_TIME;
+  phase: typeof PHASE_TYPE;
+  when: 'start' | 'end';
+  damageTypeId: string;
+  baseValue: FixedValue | DiceValue;
+}
+export interface ConditionEffectDoRestoreOverTimeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.DO_RESTORE_OVER_TIME;
+  phase: typeof PHASE_TYPE;
+  when: 'start' | 'end';
+  attributeId: string;
+  baseValue: FixedValue | DiceValue | FullValue | HalfValue;
+}
+export interface ConditionEffectModifyStatConfig {
+  type: typeof CONDITION_EFFECT_TYPE.MODIFY_STAT;
+  statId: string;
+  baseValue: FixedValue | DiceValue; // e.g., "-2"
+}
+export interface ConditionEffectModifyAttributeConfig {
+  type: typeof CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE;
+  attributeId: string;
+  baseValue: FixedValue | DiceValue; // e.g., "-2"
+}
+export interface ConditionEffectRestrictActionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_ACTION;
+  actionTags: string[];
+}
+export interface ConditionEffectRestrictEquipmentConfig {
+  type: typeof CONDITION_EFFECT_TYPE.RESTRICT_EQUIPMENT;
+  equipmentSlotId: string;
+  itemTags: string[];
+}
+export interface ConditionEffectBlockConditionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.BLOCK_CONDITION;
+  conditionTags: string[]; // e.g., ["frightened", "fatigue"]
+}
+export interface ConditionEffectGainActionConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_ACTION;
+  actionId: string;
+}
+export interface ConditionEffectGainAdvantageConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE;
+  attributeId: string;
+  isDisadvantage?: boolean; // false (default) means advantage, true means disadvantage
+}
+export interface ConditionEffectGainResistenceConfig {
+  type: typeof CONDITION_EFFECT_TYPE.GAIN_RESISTENCE;
+  damageTypeId: string;
+  scaleId: string;
+}
+export interface ConditionEffectShowFlavorTextConfig {
+  type: typeof CONDITION_EFFECT_TYPE.SHOW_FLAVOR_TEXT;
+  name: LocalizeText;
+  description?: LocalizeText;
+}
 
 export type ConditionRemoveTickType = typeof CONDITION_TICK_TYPE[keyof typeof CONDITION_TICK_TYPE];
 export type ConditionRemoveTickConfig = 
@@ -41,36 +89,45 @@ export type ConditionRemoveTickConfig =
 | ConditionRemoveTickConditionConfig;
 export interface ConditionRemoveTickPhaseConfig {
   type: typeof CONDITION_TICK_TYPE.PHASE;
-  on: OnEventPhaseChangedConfig;
+  phase: typeof PHASE_TYPE;
+  when: 'start' | 'end';
   duration: number;
-  formula?: string;
   saving?: {
-    attributeId: string;
-    formula: string;
+    savingThrowId: string;
+    baseValue: FixedValue | DiceValue;
+    formula?: string;
   };
 }
 export interface ConditionRemoveTickImmediateConfig {
   type: typeof CONDITION_TICK_TYPE.IMMEDIATE;
+  saving?: { // if saving is provided, the condition will be removed if pass the saving throw. if not provided, the condition will be removed immediately.
+    savingThrowId: string;
+    baseValue: FixedValue | DiceValue;
+    formula?: string;
+  };
 }
 export interface ConditionRemoveTickHitConfig {
   type: typeof CONDITION_TICK_TYPE.HIT;
-  on: OnEventGotHitConfig;
-  saving?: {
-    attributeId: string;
-    formula: string;
+  saving?: { // if saving is provided, the condition will be removed if pass the saving throw. if not provided, the condition will be removed immediately.
+    savingThrowId: string;
+    baseValue: FixedValue | DiceValue;
+    formula?: string;
   };
 }
 export interface ConditionRemoveTickDamageConfig {
   type: typeof CONDITION_TICK_TYPE.DAMAGE;
-  on: OnEventGotDamageConfig;
-  saving?: {
-    attributeId: string;
-    formula: string;
+  damageTypeIds: string[];
+  conditionFormulas?: ConditionFormula;
+  saving?: { // if saving is provided, the condition will be removed if pass the saving throw. if not provided, the condition will be removed immediately.
+    savingThrowId: string;
+    baseValue: FixedValue | DiceValue;
+    formula?: string;
   };
 }
 export interface ConditionRemoveTickConditionConfig {
   type: typeof CONDITION_TICK_TYPE.ATTRIBUTE;
-  ons: OnEventAttributeChangedConfig[];
+  attributeId: string;
+  conditionFormulas?: ConditionFormula;
 }
 
 export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];

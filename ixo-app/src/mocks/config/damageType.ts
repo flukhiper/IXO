@@ -7,83 +7,107 @@ export const mockDamageTypes: DamageTypeConfig[] = [
     name: { en: 'Bludgeoning', th: 'ทุบตี' },
     isPhysical: true,
     tags: [ 'physical' ],
-    icon: 'https://placehold.co/32x32/8B4513/FFFFFF?text=🔨'
+    icon: '🔨',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'piercing',
     name: { en: 'Piercing', th: 'เจาะ' },
     isPhysical: true,
     tags: [ 'physical' ],
-    icon: 'https://placehold.co/32x32/6A5ACD/FFFFFF?text=🗡️'
+    icon: '🗡️',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'slashing',
     name: { en: 'Slashing', th: 'ฟัน' },
     isPhysical: true,
     tags: [ 'physical' ],
-    icon: 'https://placehold.co/32x32/708090/FFFFFF?text=🔪'
+    icon: '🔪',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'fire',
     name: { en: 'Fire', th: 'ไฟ' },
     isPhysical: false,
     tags: [ 'elemental', 'energy' ],
-    icon: 'https://placehold.co/32x32/FF4500/FFFFFF?text=🔥'
+    icon: '🔥',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'cold',
     name: { en: 'Cold', th: 'น้ำแข็ง' },
     isPhysical: false,
     tags: [ 'elemental', 'energy' ],
-    icon: 'https://placehold.co/32x32/ADD8E6/000000?text=❄️'
+    icon: '❄️',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'lightning',
     name: { en: 'Lightning', th: 'สายฟ้า' },
     isPhysical: false,
     tags: [ 'elemental', 'energy' ],
-    icon: 'https://placehold.co/32x32/FFD700/000000?text=⚡'
+    icon: '⚡',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'psychic',
     name: { en: 'Psychic', th: 'พลังจิต' },
     isPhysical: false,
     tags: [ 'mental', 'energy' ],
-    icon: 'https://placehold.co/32x32/9370DB/FFFFFF?text=🧠'
+    icon: '🧠',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'acid',
     name: { en: 'Acid', th: 'กรด' },
     isPhysical: false,
     tags: [ 'elemental', 'energy' ],
-    icon: 'https://placehold.co/32x32/7CFC00/000000?text=🧪'
+    icon: '🧪',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'poison',
     name: { en: 'Poison', th: 'พิษ' },
     isPhysical: false,
     tags: [ 'debuff', 'chemical' ],
-    icon: 'https://placehold.co/32x32/8B008B/FFFFFF?text=☠️'
+    icon: '☠️',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'divine',
     name: { en: 'Divine', th: 'ศักดิ์สิทธิ์' },
     isPhysical: false,
     tags: [ 'holy', 'energy' ],
-    icon: 'https://placehold.co/32x32/DAA520/FFFFFF?text=✨'
+    icon: '✨',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'necrotic',
     name: { en: 'Necrotic', th: 'ความเสียหายเนโครติก' },
     isPhysical: false,
     tags: [ 'unholy', 'energy' ],
-    icon: 'https://placehold.co/32x32/000000/FFFFFF?text=💀'
+    icon: '💀',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   },
   {
     id: 'force',
     name: { en: 'Force', th: 'พลังงาน' },
     isPhysical: false,
     tags: [ 'raw-energy' ],
-    icon: 'https://placehold.co/32x32/4682B4/FFFFFF?text=💥'
+    icon: '💥',
+    gameSystemId: 'system1',
+    ownerId: 'owner1'
   }
 ];

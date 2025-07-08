@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
+import type { PathConfig } from '@/types/config/path';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const PathConfigSchema = new mongoose.Schema({
+const PathConfigSchema = new mongoose.Schema<PathConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  tags: [ String ]
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const PathConfigModel = mongoose.models.PathConfig || mongoose.model('PathConfig', PathConfigSchema); 
+export const PathConfigModel = mongoose.models.PathConfig || mongoose.model<PathConfig>('PathConfig', PathConfigSchema);

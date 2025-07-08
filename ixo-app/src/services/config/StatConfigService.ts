@@ -1,8 +1,11 @@
 import { StatConfigRepository } from '@/repositories/StatConfigRepository';
 import type { StatConfig } from '@/types/config/stat';
+import { BaseConfigService } from './BaseConfigService';
 
-export class StatConfigService {
-  private readonly repository = new StatConfigRepository();
+export class StatConfigService extends BaseConfigService<StatConfig, StatConfigRepository> {
+  constructor () {
+    super(new StatConfigRepository());
+  }
 
   async create (stat: StatConfig) {
     // Add validation or transformation here if needed

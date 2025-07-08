@@ -1,67 +1,49 @@
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import type { BaseConfig, DiceValue, FixedValue, FullValue, HalfValue, OnEventPhaseChangedConfig } from './base';
+import { PHASE_TYPE } from '@/constants/config/base';
+import type { BaseConfig, DiceValue, FixedValue, FullValue, HalfValue } from './base';
 
 export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
 
-// Base interface for all attribute configs
+// Base interface for all non-stat attributes
 export interface BaseAttributeConfig extends BaseConfig {
+  type: AttributeType; // 'resource', 'combat', 'saving-throw', etc.
+  abbreviation?: string;
   tags?: string[];
-  type: AttributeType;
-  isSystem: boolean; // true = system attribute, false = player attribute
+  icon?: string;
+  isSystem: boolean; // true mean this attribute is system attribute, false mean this attribute is user attribute
+  isHidden: boolean; // true mean this attribute is hidden from the player
+  baseValue: FixedValue | DiceValue;
+  formula?: string; // Universal formula for derived values
 }
 
-// 1. ResourceAttributeConfig: must be restorable (restores required), value can be FixedValue or DiceValue
+// Resource attribute (HP, MP, Action Points, etc.)
 export interface ResourceAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.RESOURCE;
-  baseValue: FixedValue | DiceValue;
   restores: {
-    on: OnEventPhaseChangedConfig;
+    phase: typeof PHASE_TYPE.SHORT_DOWNTIME;
     baseValue: FixedValue | DiceValue | FullValue | HalfValue;
     formula?: string;
   }[];
-  formula?: string;
 }
 
-// 2. TurnOrderAttributeConfig: must use die
-export interface TurnOrderAttributeConfig extends BaseAttributeConfig {
-  type: typeof ATTRIBUTE_TYPE.TURN_ORDER;
-  baseValue: DiceValue;
-  formula?: string;
-}
-
-// 3. AbilityAttributeConfig: must use die
-export interface AbilityAttributeConfig extends BaseAttributeConfig {
-  type: typeof ATTRIBUTE_TYPE.ABILITY;
-  baseValue: DiceValue;
-  formula?: string;
-}
-
-// 4. SavingThrowAttributeConfig: must use die
-export interface SavingThrowAttributeConfig extends BaseAttributeConfig {
-  type: typeof ATTRIBUTE_TYPE.SAVING_THROW;
-  baseValue: DiceValue;
-  formula?: string;
-}
-
-// 5. ModifierAttributeConfig: must be fixed number
-export interface ModifierAttributeConfig extends BaseAttributeConfig {
-  type: typeof ATTRIBUTE_TYPE.MODIFIER;
-  baseValue: FixedValue;
-  formula?: string;
-}
-
-// 6. CombatAttributeConfig: can be die or fixed number
+// Combat attribute (Armor Class, Initiative, Attack Roll, etc.)
 export interface CombatAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.COMBAT;
-  baseValue: FixedValue | DiceValue;
-  formula?: string;
+}
+
+// Skill check attribute (Athletics, Sprint, Perception, etc.)
+export interface SkillCheckAttributeConfig extends BaseAttributeConfig {
+  type: typeof ATTRIBUTE_TYPE.SKILL_CHECK;
+}
+
+// Saving throw attribute (Fortitude, Reflex, Will, etc.)
+export interface SavingThrowAttributeConfig extends BaseAttributeConfig {
+  type: typeof ATTRIBUTE_TYPE.SAVING_THROW;
 }
 
 // Union type for all attribute configs
 export type AnyAttributeConfig =
   | ResourceAttributeConfig
-  | TurnOrderAttributeConfig
-  | AbilityAttributeConfig
-  | SavingThrowAttributeConfig
-  | ModifierAttributeConfig
-  | CombatAttributeConfig;
+  | CombatAttributeConfig
+  | SkillCheckAttributeConfig
+  | SavingThrowAttributeConfig;

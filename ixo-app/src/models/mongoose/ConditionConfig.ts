@@ -1,16 +1,12 @@
 import mongoose from 'mongoose';
+import type { ConditionConfig } from '@/types/config/condition';
+import { LocalizeTextSchema } from './common';
 
-const LocalizeTextSchema = new mongoose.Schema({}, { _id: false, strict: false });
-
-const ConditionConfigSchema = new mongoose.Schema({
+const ConditionConfigSchema = new mongoose.Schema<ConditionConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  icon: String,
-  tags: [ String ],
-  stack: { type: Object },
-  removeTicks: { type: [ Object ] },
-  effects: { type: [ Object ] }
+  tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 
-export const ConditionConfigModel = mongoose.models.ConditionConfig || mongoose.model('ConditionConfig', ConditionConfigSchema); 
+export const ConditionConfigModel = mongoose.models.ConditionConfig || mongoose.model<ConditionConfig>('ConditionConfig', ConditionConfigSchema);
