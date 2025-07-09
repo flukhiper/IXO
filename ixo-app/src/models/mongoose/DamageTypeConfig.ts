@@ -7,8 +7,10 @@ const DamageTypeConfigSchema = new mongoose.Schema<DamageTypeConfig>({
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
   isPhysical: { type: Boolean, required: true },
-  tags: { type: [ String ], default: [] },
-  icon: { type: String }
+  tags: { type: [ String ] },
+  icon: { type: String },
+  gameSystemId: { type: String, required: true },
+  ownerId: { type: String, required: true }
 }, { versionKey: false, timestamps: true });
 
 export const DamageTypeConfigModel = mongoose.models.DamageTypeConfig || mongoose.model<DamageTypeConfig>('DamageTypeConfig', DamageTypeConfigSchema); 

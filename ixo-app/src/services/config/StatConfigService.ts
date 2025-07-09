@@ -6,26 +6,4 @@ export class StatConfigService extends BaseConfigService<StatConfig, StatConfigR
   constructor () {
     super(new StatConfigRepository());
   }
-
-  async create (stat: StatConfig) {
-    // Add validation or transformation here if needed
-    await this.repository.saveOne(stat);
-  }
-
-  async getById (id: string): Promise<StatConfig | null> {
-    return this.repository.getById(id);
-  }
-
-  async getAll (): Promise<StatConfig[]> {
-    return this.repository.getAll();
-  }
-
-  async update (id: string, update: Partial<StatConfig>) {
-    // Add validation or transformation here if needed
-    await this.repository.updateOne(id, update);
-  }
-
-  async delete (id: string) {
-    await this.repository.deleteOne(id);
-  }
 } 

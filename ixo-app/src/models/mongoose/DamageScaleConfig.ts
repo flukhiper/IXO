@@ -6,7 +6,11 @@ const DamageScaleConfigSchema = new mongoose.Schema<DamageScaleConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  tags: { type: [ String ], default: [] }
+  multiplier: { type: Number, required: true },
+  tags: { type: [ String ] },
+  icon: { type: String },
+  gameSystemId: { type: String, required: true },
+  ownerId: { type: String, required: true }
 }, { versionKey: false, timestamps: true });
 
 export const DamageScaleConfigModel = mongoose.models.DamageScaleConfig || mongoose.model<DamageScaleConfig>('DamageScaleConfig', DamageScaleConfigSchema);

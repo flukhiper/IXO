@@ -7,3 +7,9 @@ export const LocalizeTextSchema = new mongoose.Schema<LocalizeText>({}, {
   strict: false, // Allow any locale key
   minimize: false // Keep empty objects
 }); 
+
+export const EffectConfigSchema = new mongoose.Schema({
+  name: { type: LocalizeTextSchema },
+  description: { type: LocalizeTextSchema },
+  keywords: { type: mongoose.Schema.Types.Mixed }
+}, { _id: false });

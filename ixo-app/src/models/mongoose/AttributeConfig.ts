@@ -3,15 +3,10 @@ import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
 import type { AnyAttributeConfig } from '@/types/config/attribute';
 import { LocalizeTextSchema } from './common';
 
-const OnEventPhaseChangedSchema = new mongoose.Schema({
-  phase: { type: String, required: true },
-  event: { type: String, required: true }
-}, { _id: false });
-
 const RestoreSchema = new mongoose.Schema({
-  on: { type: OnEventPhaseChangedSchema, required: true },
+  phase: { type: String, required: true },
   baseValue: mongoose.Schema.Types.Mixed,
-  formula: String
+  formula: { type: String }
 }, { _id: false });
 
 const AttributeConfigSchema = new mongoose.Schema<AnyAttributeConfig>({
@@ -19,11 +14,16 @@ const AttributeConfigSchema = new mongoose.Schema<AnyAttributeConfig>({
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
   type: { type: String, enum: Object.values(ATTRIBUTE_TYPE), required: true },
+  abbreviation: { type: String },
+  tags: { type: [ String ] },
+  icon: { type: String },
   isSystem: { type: Boolean, required: true },
-  tags: { type: [ String ], default: [] },
+  isHidden: { type: Boolean, required: true },
   baseValue: { type: mongoose.Schema.Types.Mixed, required: true },
+  formula: { type: String },
   restores: { type: [ RestoreSchema ] },
-  formula: { type: String }
+  gameSystemId: { type: String, required: true },
+  ownerId: { type: String, required: true }
 }, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
 
 export const AttributeConfigModel = mongoose.models.AttributeConfig || mongoose.model<AnyAttributeConfig>('AttributeConfig', AttributeConfigSchema); 
