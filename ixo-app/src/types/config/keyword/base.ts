@@ -1,7 +1,7 @@
 import { KEYWORD_TYPE } from '@/constants/config/base';
 import type { AttributeGiftedKeyword, SkillCheckGiftedKeyword, SavingThrowGiftedKeyword, AttributeLearnedKeyword, AttributeMasteryKeyword, SavingThrowLearnedKeyword, SavingThrowMasteryKeyword, SkillCheckLearnedKeyword, SkillCheckMasteryKeyword } from './permanent';
 import type { ConcentrationKeyword, ConditionKeyword } from './condition';
-import type { ConeKeyword, DamageKeyword, InvokedDamageKeyword, UsageKeyword, BoundDamageKeyword, SavingThrowKeyword, AttackRollKeyword, WeaponDamageKeyword, RestoreKeyword, ExpandKeyword, CommandRollKeyword, WeaponRollKeyword, UnarmedDamageKeyword, ReduceKeyword, TargetKeyword, LimitKeyword, ReactionKeyword, FullKeyword, CommandKeyword, StanceKeyword, FreeKeyword, StandardKeyword, CubeKeyword, RadiusKeyword } from './action';
+import type { ConeKeyword, DamageKeyword, UsageKeyword, BoundDamageKeyword, SavingThrowKeyword, AttackRollKeyword, RestoreKeyword, ExpandKeyword, CommandRollKeyword, WeaponRollKeyword, ReduceKeyword, TargetKeyword, LimitKeyword, ReactionKeyword, FullKeyword, CommandKeyword, StanceKeyword, FreeKeyword, StandardKeyword, CubeKeyword, RadiusKeyword } from './action';
 import type { ArmorPierceKeyword, BoostKeyword, CooldownKeyword, DoubleAttackKeyword, PreciseKeyword, SunderKeyword, TrueStrikeKeyword } from './combat';
 import type { AimKeyword, BlockKeyword, ReflexKeyword, SwiftKeyword, ToughKeyword } from './mechanical';
 import type { RepairKeyword } from './item';
@@ -55,9 +55,6 @@ export type Keyword =
   
   | DamageKeyword
   | BoundDamageKeyword
-  | InvokedDamageKeyword
-  | WeaponDamageKeyword
-  | UnarmedDamageKeyword
   
   | ExpandKeyword
   | RestoreKeyword

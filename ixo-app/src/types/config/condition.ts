@@ -1,6 +1,5 @@
 import { CONDITION_EFFECT_TYPE, CONDITION_STACK_TYPE, CONDITION_TICK_TYPE } from '@/constants/config/condition';
-import { PHASE_TYPE } from '@/constants/config/base';
-import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, FullValue, HalfValue, LocalizeText } from './base';
+import type { BaseConfig, ConditionFormula, DiceValue, FixedValue, FullValue, HalfValue, LocalizeText, PhaseType } from './base';
 
 export type ConditionEffectConfig =
 | ConditionEffectReduceDamageConfig
@@ -25,14 +24,14 @@ export interface ConditionEffectReduceDamageConfig {
 }
 export interface ConditionEffectDoDamageOverTimeConfig {
   type: typeof CONDITION_EFFECT_TYPE.DO_DAMAGE_OVER_TIME;
-  phase: typeof PHASE_TYPE;
+  phase: PhaseType;
   when: 'start' | 'end';
   damageTypeId: string;
   baseValue: FixedValue | DiceValue;
 }
 export interface ConditionEffectDoRestoreOverTimeConfig {
   type: typeof CONDITION_EFFECT_TYPE.DO_RESTORE_OVER_TIME;
-  phase: typeof PHASE_TYPE;
+  phase: PhaseType;
   when: 'start' | 'end';
   attributeId: string;
   baseValue: FixedValue | DiceValue | FullValue | HalfValue;
@@ -89,7 +88,7 @@ export type ConditionRemoveTickConfig =
 | ConditionRemoveTickConditionConfig;
 export interface ConditionRemoveTickPhaseConfig {
   type: typeof CONDITION_TICK_TYPE.PHASE;
-  phase: typeof PHASE_TYPE;
+  phase: PhaseType;
   when: 'start' | 'end';
   duration: number;
   saving?: {

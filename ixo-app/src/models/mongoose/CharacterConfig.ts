@@ -48,7 +48,6 @@ const CharacterConfigSchema = new mongoose.Schema<CharacterConfig>({
   startOriginChoice: { type: [ String ], required: true },
   startTraitChoice: { type: [ String ], required: true },
   startClassChoice: { type: [ String ], required: true },
-  startProficiencyPoint: { type: Number, required: true },
   startGold: { type: Number, required: true },
   equipmentRules: { type: EquipmentRulesSchema, required: true },
   progression: { type: Map, of: CharacterGainConfigSchema, required: true },

@@ -1,517 +1,642 @@
-import { EFFECT_TYPE } from '@/constants/config/base';
-import { TraitConfig } from '@/types/config/trait';
+import type { TraitConfig } from '@/types/config/trait';
+import { KEYWORD_TYPE, PHASE_TYPE, KEYWORD_VALUE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockTraits: TraitConfig[] = [
-  // --- Special Traits ---
+export const mockTraitConfigs: TraitConfig[] = [
+  // === FULL TRAITS ===
   {
-    id: 'dragonoid',
+    id: 'trait-dragonoid',
     name: { en: 'Dragonoid', th: 'ดราโกนอยด์' },
-    description: { en: 'Arrogant and resilient beings blessed with dragon scales and unwavering will.', th: 'สิ่งมีชีวิตที่เย่อหยิ่งและยืดหยุ่น ได้รับพรด้วยเกล็ดมังกรและเจตจำนงที่แน่วแน่' },
-    icon: '🐉',
-    tags: [ 'special', 'draconic' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    description: { en: 'A powerful, draconic form with elemental breath and intimidating presence.', th: 'ร่างแปลงมังกรทรงพลังพร้อมลมหายใจธาตุและความน่าเกรงขาม' },
+    icon: 'dragonoid-icon',
+    tags: [ 'full', 'draconic' ],
+    isFullTrait: true,
     effects: [
-      // Increases Armor Class by 2
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'armor-class' ],
-        baseValue: { type: 'fixed', value: 2 }
+        name: { en: 'Draconic Resilience', th: 'ความทนทานของมังกร' },
+        description: { en: 'You are exceptionally tough.', th: 'คุณมีความทนทานเป็นพิเศษ' },
+        keywords: [
+          { type: KEYWORD_TYPE.TOUGH, value: 2 }
+        ]
       },
-      // Immune to the Frightened condition twice per downtime
       {
-        type: EFFECT_TYPE.BLOCK_CONDITION,
-        tags: [ 'frightened' ]
+        name: { en: 'Draconic Presence', th: 'บารมีมังกร' },
+        description: { en: 'You are gifted at Intimidation.', th: 'คุณมีพรสวรรค์ด้านการข่มขู่' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'intimidation' }
+        ]
+      },
+      {
+        name: { en: 'Draconic Breath', th: 'ลมหายใจมังกร' },
+        description: { en: 'Once per Short Downtime, unleash a 5m cone of fire or lightning. Enemies must make an Agility Save vs your Command DC or take 2d6 damage.', th: 'หนึ่งครั้งต่อช่วงพักสั้น ปล่อยลมหายใจธาตุไฟหรือสายฟ้า ศัตรูในกรวย 5 ม. ต้องเช็คเซฟ Agility เทียบ Command DC ของคุณ มิฉะนั้นจะได้รับ 2d6 ดาเมจ' },
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.SHORT_DOWNTIME },
+          { type: KEYWORD_TYPE.CONE, radius: 5, range: 5, numberOfTargets: 1 },
+          { type: KEYWORD_TYPE.BOUND_DAMAGE, damageTypeIds: [ 'fire', 'lightning' ], baseValue: { type: VALUE_TYPE.DICE, formula: '2d6' } },
+          { type: KEYWORD_TYPE.SAVING_THROW, savingThrowType: 'attribute-agility-save' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'kijin',
+    id: 'trait-kijin',
     name: { en: 'Kijin', th: 'คิจิน' },
-    description: { en: 'Battle-driven beings that grow fiercer as they bleed.', th: 'สิ่งมีชีวิตที่ถูกขับเคลื่อนด้วยการต่อสู้ซึ่งเติบโตดุร้ายขึ้นเมื่อพวกมันเลือดออก' },
-    icon: '💀',
-    tags: [ 'special', 'berserker' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    description: { en: 'A mighty, ogre-like form with overwhelming strength and crushing blows.', th: 'ร่างแปลงยักษ์ทรงพลังพร้อมพลังโจมตีมหาศาล' },
+    icon: 'kijin-icon',
+    tags: [ 'full', 'ogre' ],
+    isFullTrait: true,
     effects: [
-      // When HP < 50%, crucial actions don't consume all Action Points (Show flavor text only)
       {
-        type: EFFECT_TYPE.SHOW_FLAVOR_TEXT,
-        name: { en: 'Fury Unleashed', th: 'ปลดปล่อยโทสะ' },
-        description: { en: 'When HP < 50%, crucial actions don\'t consume all Action Points.', th: 'เมื่อ HP < 50% การกระทำสำคัญไม่ใช้ Action Point ทั้งหมด' }
+        name: { en: 'Mighty Build', th: 'ร่างกายทรงพลัง' },
+        description: { en: 'Gifted at Athletics. You can wield two-handed melee weapons in one hand, but such attacks are Full.', th: 'พรสวรรค์ด้านกีฬา ใช้อาวุธสองมือด้วยมือเดียวได้ แต่โจมตีแบบ Full' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'athletics' },
+          { type: KEYWORD_TYPE.FULL }
+        ]
       },
-      // When HP < 0, restore Hit Points to 1 instead of gaining the Downed condition
       {
-        type: EFFECT_TYPE.ACTIVATE_DO_RESTORE,
-        attributeIds: [ 'hit-point' ],
-        baseValue: { type: 'fixed', value: 1 },
-        usageLimit: { maxUse: 1, cooldown: 0 },
-        ons: [
-          {
-            type: 'on-attribute-changed',
-            attributeId: 'hit-point',
-            priority: 1,
-            conditionFormulas: [
-              { operator: '<', formula: '0' }
-            ]
-          }
+        name: { en: 'Crushing Blow', th: 'หมัดบดขยี้' },
+        description: { en: 'Once per round, when you hit with a melee weapon, use your Reaction to deal one extra die of weapon damage.', th: 'หนึ่งครั้งต่อรอบ เมื่อโจมตีด้วยอาวุธประชิดสำเร็จ ใช้ปฏิกิริยาเพื่อเพิ่มดาเมจอาวุธอีก 1 ลูกเต๋า' },
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND },
+          // TODO: Specify correct id for weapon-damage if available in your system
+          { type: KEYWORD_TYPE.DAMAGE, damageTypeId: KEYWORD_VALUE_TYPE.SELECTED, baseValue: { type: 'ref', ref: 'weapon-damage', id: 'main-weapon' } }
         ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'mechina',
+    id: 'trait-mechina',
     name: { en: 'Mechina', th: 'เมคินา' },
-    description: { en: 'Construct-like beings with unmatched adaptability and relentless efficiency.', th: 'สิ่งมีชีวิตคล้ายโครงสร้างที่ปรับตัวได้ดีเยี่ยมและมีประสิทธิภาพไม่หยุดยั้ง' },
-    icon: '⚙️',
-    tags: [ 'special', 'construct' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    description: { en: 'A mechanical form with integrated systems and analytical prowess.', th: 'ร่างกลไกพร้อมระบบในตัวและความสามารถวิเคราะห์' },
+    icon: 'mechina-icon',
+    tags: [ 'full', 'mechanical' ],
+    isFullTrait: true,
     effects: [
-      // Increases the Augmented Slot +2 (one slot, bonus 2)
       {
-        type: EFFECT_TYPE.ADD_EQUIPMENT_SLOT,
-        equipmentSlotIds: [ 'augmented' ],
-        bonus: 2
+        name: { en: 'Integrated Systems', th: 'ระบบในตัว' },
+        description: { en: 'Gifted at Tinker and Operate.', th: 'พรสวรรค์ด้านซ่อมแซมและควบคุม' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'tinker' },
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'operate' }
+        ]
       },
-      // Gain the Power Recharge downtime and increase Downtime Points +1
       {
-        type: EFFECT_TYPE.ADD_DOWNTIME,
-        downtimeIds: [ 'power-recharge' ]
-      }
-    ]
-  },
-  {
-    id: 'werebeast',
-    name: { en: 'Werebeast', th: 'วายร้าย' },
-    description: { en: 'Driven by obsession and empowered by primal senses.', th: 'ถูกขับเคลื่อนด้วยความหลงใหลและได้รับพลังจากสัมผัสแห่งสัตว์ป่า' },
-    icon: '🐾',
-    tags: [ 'special', 'animalistic' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
-    effects: [
-      // Increase Carry Capacity 50%
-      {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'carry-capacity' ],
-        baseValue: { type: 'fixed', value: 0 },
-        formula: 'attribute(carry-capacity).max * 0.5'
+        name: { en: 'Damage Recalculation', th: 'คำนวณความเสียหายใหม่' },
+        description: { en: 'Once per combat, when you take damage, use your Reaction to gain Temp HP equal to your Technique Mod + Level.', th: 'หนึ่งครั้งต่อการต่อสู้ เมื่อได้รับดาเมจ ใช้ปฏิกิริยาเพื่อรับ Temp HP เท่ากับ Technique Mod + เลเวล' },
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT },
+          // TODO: Use formula-based value (TEC Mod + Level) when supported by system
+          { type: KEYWORD_TYPE.EXPAND, attributeId: 'attribute-temporary-hp', baseValue: { type: 'fixed', value: 0 } }
+        ]
       },
-      // Choose one of these effects
       {
-        type: EFFECT_TYPE.SELECT_EFFECT,
-        effects: [
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'strength-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          },
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'agility-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          },
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'dexterity-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          },
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'intelligence-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          },
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'sense-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          },
-          {
-            type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-            attributeIds: [ 'charisma-modifier' ],
-            baseValue: { type: 'fixed', value: 1 }
-          }
+        name: { en: 'Targeting Analysis', th: 'วิเคราะห์เป้าหมาย' },
+        description: { en: 'Standard action: Analyze a creature. Your next Attack Roll against it this turn gains +3.', th: 'ใช้แอคชั่นวิเคราะห์เป้าหมาย การโจมตีครั้งถัดไปในเทิร์นนี้ได้ +3' },
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.AIM, value: 3 }
         ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'fairy',
+    id: 'trait-werebeast',
+    name: { en: 'Werebeast', th: 'แวร์บีสต์' },
+    description: { en: 'A bestial form with heightened senses and furious strength.', th: 'ร่างสัตว์ป่าพร้อมประสาทสัมผัสเฉียบคมและพลังโกรธเกรี้ยว' },
+    icon: 'werebeast-icon',
+    tags: [ 'full', 'beast' ],
+    isFullTrait: true,
+    effects: [
+      {
+        name: { en: 'Heightened Senses', th: 'ประสาทสัมผัสเฉียบคม' },
+        description: { en: 'Gifted at Perception, Detection, and Initiative.', th: 'พรสวรรค์ด้านการรับรู้ การตรวจจับ และเริ่มต้น' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'perception' },
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'detection' },
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'attribute-initiative' }
+        ]
+      },
+      {
+        name: { en: 'Bestial Fury', th: 'ความเดือดดาลของสัตว์' },
+        description: { en: 'Full action, Double Attack, once per combat: Enter a furious state for rounds equal to Strength Mod. Unarmed strikes deal 1d8 damage.', th: 'ใช้แอคชั่นเต็ม โจมตีสองครั้ง หนึ่งครั้งต่อการต่อสู้: เข้าสู่สภาวะเดือดดาลตามจำนวนรอบเท่ากับ Strength Mod การโจมตีมือเปล่าได้ 1d8 ดาเมจ' },
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.DOUBLE_ATTACK },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT },
+          { type: KEYWORD_TYPE.DAMAGE, damageTypeId: 'bludgeoning', baseValue: { type: 'dice', formula: '1d8' } }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'trait-fairy',
     name: { en: 'Fairy', th: 'แฟรี่' },
-    description: { en: 'Graceful and ancient, the fairies thrive on timeless intuition.', th: 'สง่างามและเก่าแก่ เหล่าแฟรี่เจริญรุ่งเรืองด้วยสัญชาตญาณอันเป็นนิรันดร์' },
-    icon: '🌿',
-    tags: [ 'special', 'ancient' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    description: { en: 'A fey form with wings, charm, and soothing spores.', th: 'ร่างภูติพร้อมปีก เสน่ห์ และสปอร์ปลอบประโลม' },
+    icon: 'fairy-icon',
+    tags: [ 'full', 'fey' ],
+    isFullTrait: true,
     effects: [
-      // Gain the Fly action
       {
-        type: EFFECT_TYPE.GAIN_ACTION,
-        actionIds: [ 'fly' ]
+        name: { en: 'Fairy Wings', th: 'ปีกภูติ' },
+        description: { en: 'You can fly at your Movement Speed, but not in Heavy Armor.', th: 'บินได้เท่ากับ Movement Speed แต่บินไม่ได้เมื่อใส่เกราะหนัก' },
+        keywords: [
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'attribute-movement-speed' }
+        ]
       },
-      // Gain the Ancient Recall downtime
       {
-        type: EFFECT_TYPE.ADD_DOWNTIME,
-        downtimeIds: [ 'ancient-recall' ]
-      }
-    ]
-  },
-  {
-    id: 'demonia',
-    name: { en: 'Demonia', th: 'เดโมเนีย' },
-    description: { en: 'Mimics of others, born to outlast the harshest places.', th: 'ผู้เลียนแบบผู้อื่น เกิดมาเพื่ออยู่รอดในสถานที่ที่โหดร้ายที่สุด' },
-    icon: '😈',
-    tags: [ 'special', 'superior' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
-    effects: [
-      // Gain the Mimic action
-      {
-        type: EFFECT_TYPE.GAIN_ACTION,
-        actionIds: [ 'mimic' ]
+        name: { en: 'Otherworldly Charm', th: 'เสน่ห์เหนือโลก' },
+        description: { en: 'Gifted at Persuasion and Performance.', th: 'พรสวรรค์ด้านโน้มน้าวและการแสดง' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'persuasion' },
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'performance' }
+        ]
       },
-      // Choose one of these effects
       {
-        type: EFFECT_TYPE.SELECT_EFFECT,
-        effects: [
-          {
-            type: EFFECT_TYPE.GAIN_RESISTENCE,
-            damageTypeIds: [ 'fire' ],
-            scaleId: 'resist'
-          },
-          {
-            type: EFFECT_TYPE.GAIN_RESISTENCE,
-            damageTypeIds: [ 'cold' ],
-            scaleId: 'resist'
-          },
-          {
-            type: EFFECT_TYPE.GAIN_RESISTENCE,
-            damageTypeIds: [ 'lightning' ],
-            scaleId: 'resist'
-          },
-          {
-            type: EFFECT_TYPE.GAIN_RESISTENCE,
-            damageTypeIds: [ 'acid' ],
-            scaleId: 'resist'
-          },
-          {
-            type: EFFECT_TYPE.GAIN_RESISTENCE,
-            damageTypeIds: [ 'poison' ],
-            scaleId: 'resist'
-          }
+        name: { en: 'Soothing Spores', th: 'สปอร์ปลอบประโลม' },
+        description: { en: 'Standard, once per combat: An ally within 3m may reroll a Saving Check with +2 vs a debuff.', th: 'ใช้แอคชั่นปกติ หนึ่งครั้งต่อการต่อสู้: เพื่อนในระยะ 3 ม. เช็คเซฟใหม่ได้ +2 ต่อดีบัฟ' },
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT },
+          { type: KEYWORD_TYPE.TARGET, range: 3, numberOfTargets: 1 },
+          { type: KEYWORD_TYPE.SAVING_THROW, savingThrowType: KEYWORD_VALUE_TYPE.ANY }
         ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'siren',
+    id: 'trait-demonia',
+    name: { en: 'Demonia', th: 'ดีโมเนีย' },
+    description: { en: 'An infernal form with fire resistance, shadowy guile, and life siphoning.', th: 'ร่างปีศาจพร้อมต้านไฟ เจ้าเล่ห์ และดูดซับชีวิต' },
+    icon: 'demonia-icon',
+    tags: [ 'full', 'infernal' ],
+    isFullTrait: true,
+    effects: [
+      {
+        name: { en: 'Infernal Resistance', th: 'ต้านทานไฟ' },
+        description: { en: 'Gifted at Strength Save. Damage Reduction 3 vs fire.', th: 'พรสวรรค์ด้านเช็คเซฟ STR ลดดาเมจไฟ 3' },
+        keywords: [
+          { type: KEYWORD_TYPE.SAVING_THROW_GIFTED, savingThrowId: 'attribute-strength-save' },
+          { type: KEYWORD_TYPE.TOUGH, value: 3 }
+        ]
+      },
+      {
+        name: { en: 'Shadow\'s Guile', th: 'เล่ห์เหลี่ยมเงา' },
+        description: { en: 'Gifted at Deception and Stealth.', th: 'พรสวรรค์ด้านหลอกลวงและลอบเร้น' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'deception' },
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'stealth' }
+        ]
+      },
+      {
+        name: { en: 'Siphon Life', th: 'ดูดซับชีวิต' },
+        description: { en: 'Once per round, when you deal damage, gain Temp HP equal to half the damage.', th: 'หนึ่งครั้งต่อรอบ เมื่อสร้างดาเมจ รับ Temp HP เท่ากับครึ่งหนึ่งของดาเมจ' },
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND },
+          // TODO: Use formula-based value (half damage) when supported by system
+          { type: KEYWORD_TYPE.EXPAND, attributeId: 'attribute-temporary-hp', baseValue: { type: 'fixed', value: 0 } }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'trait-siren',
     name: { en: 'Siren', th: 'ไซเรน' },
-    description: { en: 'Charming voices and enchanting power, hard to resist.', th: 'เสียงอันไพเราะและพลังที่น่าหลงใหล ยากที่จะต้านทาน' },
-    icon: '🎶',
-    tags: [ 'special', 'alluring' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    description: { en: 'An aquatic form with a mesmerizing voice and magical song.', th: 'ร่างน้ำพร้อมเสียงสะกดและบทเพลงเวทมนตร์' },
+    icon: 'siren-icon',
+    tags: [ 'full', 'aquatic' ],
+    isFullTrait: true,
     effects: [
-      // Gain the Siren Lullaby action
       {
-        type: EFFECT_TYPE.GAIN_ACTION,
-        actionIds: [ 'siren-lullaby' ]
-      },
-      // Increase Persuasion +1 and Deception +1
-      {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'persuasion', 'deception' ],
-        baseValue: { type: 'fixed', value: 1 }
-      }
-    ]
-  },
-  {
-    id: 'aethel-unchanged',
-    name: { en: 'Aethel (Unchanged)', th: 'เอเธล (ไม่เปลี่ยนแปลง)' },
-    description: { en: 'Bound by purpose, yet holding great hidden potential.', th: 'ถูกผูกมัดด้วยจุดประสงค์ แต่ยังคงมีศักยภาพที่ซ่อนเร้นอันยิ่งใหญ่' },
-    icon: '💎',
-    tags: [ 'special', 'aethel', 'unchanged' ],
-    isSpecial: true,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
-    effects: [
-      // Choose two of these effects
-      {
-        type: EFFECT_TYPE.SELECT_EFFECT,
-        effects: [
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'athletics' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'sprint' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'acrobatics' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'sleight-of-hand' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'mechanical' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'stealth' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'recall' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'comprehend' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'analyze' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'perceive' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'insight' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'frac-point' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'persuasion' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'deception' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'intimidation' ], baseValue: { type: 'fixed', value: 1 } },
-          { type: EFFECT_TYPE.MODIFY_ATTRIBUTE, attributeIds: [ 'performance' ], baseValue: { type: 'fixed', value: 1 } }
+        name: { en: 'Aquatic Adaptation', th: 'ปรับตัวใต้น้ำ' },
+        description: { en: 'You can breathe underwater and swim at Movement Speed.', th: 'หายใจใต้น้ำและว่ายน้ำได้เท่ากับ Movement Speed' },
+        keywords: [
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'attribute-movement-speed' }
         ]
       },
-      // Can reroll any die twice per long downtime
       {
-        type: EFFECT_TYPE.ACTIVATE_SHOW_FLAVOR_TEXT,
-        name: { en: 'Reroll', th: 'ทอยใหม่' },
-        description: { en: 'Can reroll any die twice per long downtime.', th: 'สามารถทอยลูกเต๋าใหม่ได้สองครั้งต่อการพักผ่อนยาว' }
+        name: { en: 'Mesmerizing Voice', th: 'เสียงสะกด' },
+        description: { en: 'Learned at Command DC.', th: 'เรียนรู้ด้าน Command DC' },
+        keywords: [
+          { type: KEYWORD_TYPE.ATTRIBUTE_LEARNED, attributeId: 'attribute-command-dc' }
+        ]
+      },
+      {
+        name: { en: 'Siren\'s Song', th: 'บทเพลงไซเรน' },
+        description: { en: 'Full, once per Short Downtime: Enemies within 10m who can hear you must make a Sense Save vs your Command DC. On a failure, they cannot take Reactions and are Slowed for rounds equal to your Presence Mod.', th: 'ใช้แอคชั่นเต็ม หนึ่งครั้งต่อช่วงพักสั้น: ศัตรูในระยะ 10 ม. ที่ได้ยินคุณต้องเช็คเซฟ Sense เทียบ Command DC ของคุณ หากล้มเหลวจะไม่สามารถใช้ปฏิกิริยาและติดสถานะช้าเท่ากับ Presence Mod' },
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.SHORT_DOWNTIME },
+          { type: KEYWORD_TYPE.TARGET, range: 10, numberOfTargets: 99 },
+          { type: KEYWORD_TYPE.SAVING_THROW, savingThrowType: 'attribute-sense-save' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'trait-aethel',
+    name: { en: 'Aethel', th: 'เอเธล' },
+    description: { en: 'A form of perfect harmony and order, with universal saving throw gifts.', th: 'ร่างแห่งความกลมกลืนและระเบียบสมบูรณ์ พร้อมพรสวรรค์เช็คเซฟทุกประเภท' },
+    icon: 'aethel-icon',
+    tags: [ 'full', 'harmony' ],
+    isFullTrait: true,
+    effects: [
+      {
+        name: { en: 'Mark of Harmony', th: 'เครื่องหมายแห่งสมดุล' },
+        description: { en: 'Gifted at all Saving Checks.', th: 'พรสวรรค์เช็คเซฟทุกประเภท' },
+        keywords: [
+          { type: KEYWORD_TYPE.SAVING_THROW_GIFTED, savingThrowId: KEYWORD_VALUE_TYPE.ALL }
+        ]
+      },
+      {
+        name: { en: 'The Absolute\'s Law', th: 'กฎแห่งสัมบูรณ์' },
+        description: { en: 'Gifted at Insight. Cannot learn Void Commands.', th: 'พรสวรรค์ด้าน Insight ไม่สามารถเรียนรู้คำสั่ง Void' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'insight' }
+        ]
+      },
+      {
+        name: { en: 'Beacon of Order', th: 'แสงแห่งระเบียบ' },
+        description: { en: 'Standard, once per combat: Touch an ally to grant Temp HP equal to Presence Mod + Level (not self).', th: 'ใช้แอคชั่นปกติ หนึ่งครั้งต่อการต่อสู้: แตะเพื่อนเพื่อให้ Temp HP เท่ากับ Presence Mod + เลเวล (ใช้กับตัวเองไม่ได้)' },
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT },
+          // TODO: Use formula-based value (PRE Mod + Level) when supported by system
+          { type: KEYWORD_TYPE.EXPAND, attributeId: 'attribute-temporary-hp', baseValue: { type: 'fixed', value: 0 } }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
 
-  // --- Normal Traits ---
+  // === PART TRAITS ===
+  // Head
   {
-    id: 'dragonic-scales',
-    name: { en: 'Dragonic Scales', th: 'เกล็ดมังกร' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'armor-class' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-oni-horn',
+    name: { en: 'Oni Horn', th: 'เขาโอนิ' },
+    description: { en: 'A single horn that grants learned Intimidation.', th: 'เขาเดียวที่ให้ความรู้ด้านการข่มขู่' },
+    icon: 'oni-horn-icon',
+    tags: [ 'part', 'head' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'armor-class' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Oni Horn', th: 'เขาโอนิ' },
+        description: { en: 'Learned at Intimidation.', th: 'ความรู้ด้านการข่มขู่' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'intimidation' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'augmented-body',
-    name: { en: 'Augmented Body', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'equipment-slot-add', 'augmented-slot' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-lupine-ears',
+    name: { en: 'Lupine Ears', th: 'หูหมาป่า' },
+    description: { en: 'Wolf-like ears that grant learned Perception (hearing).', th: 'หูคล้ายหมาป่าที่ให้ความรู้ด้านการรับรู้ (การได้ยิน)' },
+    icon: 'lupine-ears-icon',
+    tags: [ 'part', 'head' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.ADD_EQUIPMENT_SLOT,
-        equipmentSlotIds: [ 'augmented' ],
-        bonus: 1
+        name: { en: 'Lupine Ears', th: 'หูหมาป่า' },
+        description: { en: 'Learned at Perception (hearing).', th: 'ความรู้ด้านการรับรู้ (การได้ยิน)' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'perception' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'wings',
-    name: { en: 'Wings', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'action-gain', 'fly' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-antennae',
+    name: { en: 'Antennae', th: 'หนวดรับสัมผัส' },
+    description: { en: 'Insect-like antennae that grant learned Detection (vibrations).', th: 'หนวดคล้ายแมลงที่ให้ความรู้ด้านการตรวจจับ (แรงสั่นสะเทือน)' },
+    icon: 'antennae-icon',
+    tags: [ 'part', 'head' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.GAIN_ACTION,
-        actionIds: [ 'fly' ]
+        name: { en: 'Antennae', th: 'หนวดรับสัมผัส' },
+        description: { en: 'Learned at Detection (vibrations).', th: 'ความรู้ด้านการตรวจจับ (แรงสั่นสะเทือน)' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'detection' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Eyes
+  {
+    id: 'trait-analytical-lenses',
+    name: { en: 'Analytical Lenses', th: 'เลนส์วิเคราะห์' },
+    description: { en: 'Lenses that grant gifted Analyze.', th: 'เลนส์ที่ให้พรสวรรค์ด้านวิเคราะห์' },
+    icon: 'analytical-lenses-icon',
+    tags: [ 'part', 'eyes' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Analytical Lenses', th: 'เลนส์วิเคราะห์' },
+        description: { en: 'Gifted at Analyze.', th: 'พรสวรรค์ด้านวิเคราะห์' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'analyze' }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-strength',
-    name: { en: 'Beastly Strength', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'hit-points' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-ember-glow',
+    name: { en: 'Ember-Glow', th: 'ตาเรืองแสง' },
+    description: { en: 'Eyes that grant Darkvision up to 20m.', th: 'ดวงตาที่ให้วิสัยทัศน์ในความมืด 20 ม.' },
+    icon: 'ember-glow-icon',
+    tags: [ 'part', 'eyes' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'hit-point' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Ember-Glow', th: 'ตาเรืองแสง' },
+        description: { en: 'You have Darkvision up to 20m.', th: 'มีวิสัยทัศน์ในความมืด 20 ม.' },
+        keywords: [
+          // TODO: Implement darkvision as a system keyword or condition
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-agility',
-    name: { en: 'Beastly Agility', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'speed', 'movement' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-predatory-gaze',
+    name: { en: 'Predatory Gaze', th: 'จ้องตาเหยื่อ' },
+    description: { en: 'Once per Short Downtime, make an Intimidation check with Advantage.', th: 'หนึ่งครั้งต่อช่วงพักสั้น เช็ค Intimidation ได้เปรียบ' },
+    icon: 'predatory-gaze-icon',
+    tags: [ 'part', 'eyes' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'speed', 'movement' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Predatory Gaze', th: 'จ้องตาเหยื่อ' },
+        description: { en: 'Once per Short Downtime, make an Intimidation check with Advantage.', th: 'หนึ่งครั้งต่อช่วงพักสั้น เช็ค Intimidation ได้เปรียบ' },
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.SHORT_DOWNTIME },
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'intimidation' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Arms
+  {
+    id: 'trait-feral-claws',
+    name: { en: 'Feral Claws', th: 'กรงเล็บสัตว์ป่า' },
+    description: { en: 'Unarmed strikes deal 1d6 slashing damage.', th: 'โจมตีมือเปล่าได้ 1d6 ดาเมจ slashing' },
+    icon: 'feral-claws-icon',
+    tags: [ 'part', 'arms' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Feral Claws', th: 'กรงเล็บสัตว์ป่า' },
+        description: { en: 'Unarmed strikes deal 1d6 slashing damage.', th: 'โจมตีมือเปล่าได้ 1d6 ดาเมจ slashing' },
+        keywords: [
+          { type: KEYWORD_TYPE.DAMAGE, damageTypeId: 'slashing', baseValue: { type: 'dice', formula: '1d6' } }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-dexterity',
-    name: { en: 'Beastly Dexterity', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'attack-roll' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-shielding-plates',
+    name: { en: 'Shielding Plates', th: 'เกราะแผ่น' },
+    description: { en: 'While not wielding a shield, gain +1 AC.', th: 'ไม่ได้ถือโล่ ได้รับ AC +1' },
+    icon: 'shielding-plates-icon',
+    tags: [ 'part', 'arms' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'attack-roll' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Shielding Plates', th: 'เกราะแผ่น' },
+        description: { en: 'While not wielding a shield, gain +1 AC.', th: 'ไม่ได้ถือโล่ ได้รับ AC +1' },
+        keywords: [
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'attribute-armor-class' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Legs
+  {
+    id: 'trait-digitigrade-stance',
+    name: { en: 'Digitigrade Stance', th: 'ท่ายืนปลายเท้า' },
+    description: { en: 'Gifted at Movement Speed.', th: 'พรสวรรค์ด้าน Movement Speed' },
+    icon: 'digitigrade-stance-icon',
+    tags: [ 'part', 'legs' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Digitigrade Stance', th: 'ท่ายืนปลายเท้า' },
+        description: { en: 'Gifted at Movement Speed.', th: 'พรสวรรค์ด้าน Movement Speed' },
+        keywords: [
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'attribute-movement-speed' }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-tail',
-    name: { en: 'Beastly Tail', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'action-slots' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-rooted-stance',
+    name: { en: 'Rooted Stance', th: 'ท่ายืนมั่นคง' },
+    description: { en: 'Gifted at Strength Save (vs. movement).', th: 'พรสวรรค์ด้าน STR Save (ต้านการเคลื่อนที่)' },
+    icon: 'rooted-stance-icon',
+    tags: [ 'part', 'legs' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'recall', 'analyze' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Rooted Stance', th: 'ท่ายืนมั่นคง' },
+        description: { en: 'Gifted at Strength Save (vs. movement).', th: 'พรสวรรค์ด้าน STR Save (ต้านการเคลื่อนที่)' },
+        keywords: [
+          { type: KEYWORD_TYPE.SAVING_THROW_GIFTED, savingThrowId: 'attribute-strength-save' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-ears',
-    name: { en: 'Beastly Ears', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'frac-points' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-gecko-grip',
+    name: { en: 'Gecko Grip', th: 'เกาะผนัง' },
+    description: { en: 'Climb difficult surfaces without an Athletics check.', th: 'ปีนผนังยากได้โดยไม่ต้องเช็ค Athletics' },
+    icon: 'gecko-grip-icon',
+    tags: [ 'part', 'legs' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'initiative' ],
-        baseValue: { type: 'fixed', value: 2 }
+        name: { en: 'Gecko Grip', th: 'เกาะผนัง' },
+        description: { en: 'Climb difficult surfaces without an Athletics check.', th: 'ปีนผนังยากได้โดยไม่ต้องเช็ค Athletics' },
+        keywords: [
+          // TODO: Implement climb-no-check as a system keyword or condition
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Skin
+  {
+    id: 'trait-draconic-scales',
+    name: { en: 'Draconic Scales', th: 'เกล็ดมังกร' },
+    description: { en: 'Tough skin grants extra resilience.', th: 'ผิวหนังแข็งแกร่งให้ความทนทานเพิ่ม' },
+    icon: 'draconic-scales-icon',
+    tags: [ 'part', 'skin' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Draconic Scales', th: 'เกล็ดมังกร' },
+        description: { en: 'Tough skin grants extra resilience.', th: 'ผิวหนังแข็งแกร่งให้ความทนทานเพิ่ม' },
+        keywords: [
+          { type: KEYWORD_TYPE.TOUGH, value: 1 }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'beastly-charm',
-    name: { en: 'Beastly Charm', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'attribute-modify', 'persuasion', 'intimidation' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-photosensitive-sheen',
+    name: { en: 'Photosensitive Sheen', th: 'ผิวสะท้อนแสง' },
+    description: { en: 'Gifted at Stealth in dim light or darkness.', th: 'พรสวรรค์ด้าน Stealth ในที่มืดหรือแสงน้อย' },
+    icon: 'photosensitive-sheen-icon',
+    tags: [ 'part', 'skin' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.MODIFY_ATTRIBUTE,
-        attributeIds: [ 'persuasion', 'intimidation' ],
-        baseValue: { type: 'fixed', value: 1 }
+        name: { en: 'Photosensitive Sheen', th: 'ผิวสะท้อนแสง' },
+        description: { en: 'Gifted at Stealth in dim light or darkness.', th: 'พรสวรรค์ด้าน Stealth ในที่มืดหรือแสงน้อย' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'stealth' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'fearless',
-    name: { en: 'Fearless', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'condition-block', 'frightened' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-ashen-epidermis',
+    name: { en: 'Ashen Epidermis', th: 'ผิวเถ้าถ่าน' },
+    description: { en: 'Tough 2 vs fire.', th: 'ทนทาน 2 ต่อไฟ' },
+    icon: 'ashen-epidermis-icon',
+    tags: [ 'part', 'skin' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.BLOCK_CONDITION,
-        tags: [ 'frightened' ]
+        name: { en: 'Ashen Epidermis', th: 'ผิวเถ้าถ่าน' },
+        description: { en: 'Tough 2 vs fire.', th: 'ทนทาน 2 ต่อไฟ' },
+        keywords: [
+          { type: KEYWORD_TYPE.TOUGH, value: 2 }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Back
+  {
+    id: 'trait-vestigial-wings',
+    name: { en: 'Vestigial Wings', th: 'ปีกฝ่อ' },
+    description: { en: 'No damage from first 6m of any fall.', th: 'ไม่รับดาเมจจากการตก 6 ม. แรก' },
+    icon: 'vestigial-wings-icon',
+    tags: [ 'part', 'back' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Vestigial Wings', th: 'ปีกฝ่อ' },
+        description: { en: 'No damage from first 6m of any fall.', th: 'ไม่รับดาเมจจากการตก 6 ม. แรก' },
+        keywords: [
+          // TODO: Implement no-fall-damage-6m as a system keyword or condition
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'relentless',
-    name: { en: 'Relentless', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'condition-gain', 'hit-point', 'strength-saving-throw', 'downed' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-barbed-spines',
+    name: { en: 'Barbed Spines', th: 'หนามแหลม' },
+    description: { en: 'When hit from behind, attacker takes 1d4 piercing damage.', th: 'ถูกตีจากด้านหลัง ศัตรูรับ 1d4 ดาเมจ piercing' },
+    icon: 'barbed-spines-icon',
+    tags: [ 'part', 'back' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.GAIN_CONDITION,
-        conditionIds: [ 'relentless' ]
+        name: { en: 'Barbed Spines', th: 'หนามแหลม' },
+        description: { en: 'When hit from behind, attacker takes 1d4 piercing damage.', th: 'ถูกตีจากด้านหลัง ศัตรูรับ 1d4 ดาเมจ piercing' },
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION },
+          { type: KEYWORD_TYPE.DAMAGE, damageTypeId: 'piercing', baseValue: { type: 'dice', formula: '1d4' } }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // Voice
+  {
+    id: 'trait-hypnotic-resonance',
+    name: { en: 'Hypnotic Resonance', th: 'เสียงสะกดจิต' },
+    description: { en: 'Learned at Performance and Persuasion.', th: 'ความรู้ด้านการแสดงและโน้มน้าว' },
+    icon: 'hypnotic-resonance-icon',
+    tags: [ 'part', 'voice' ],
+    isFullTrait: false,
+    effects: [
+      {
+        name: { en: 'Hypnotic Resonance', th: 'เสียงสะกดจิต' },
+        description: { en: 'Learned at Performance and Persuasion.', th: 'ความรู้ด้านการแสดงและโน้มน้าว' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'performance' },
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'persuasion' }
+        ]
+      }
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'power-nap',
-    name: { en: 'Power Nap', th: '' },
-    description: { en: '', th: '' },
-    icon: '',
-    tags: [ 'normal', 'downtime-add', 'attribute-modify', 'downtime-points' ],
-    isSpecial: false,
-    gameSystemId: 'system1',
-    ownerId: 'owner1',
-    createdAt: '',
-    updatedAt: '',
+    id: 'trait-vocal-mimicry',
+    name: { en: 'Vocal Mimicry', th: 'เลียนเสียง' },
+    description: { en: 'Gifted at Deception (mimicking sounds).', th: 'พรสวรรค์ด้านหลอกลวง (เลียนเสียง)' },
+    icon: 'vocal-mimicry-icon',
+    tags: [ 'part', 'voice' ],
+    isFullTrait: false,
     effects: [
       {
-        type: EFFECT_TYPE.ADD_DOWNTIME,
-        downtimeIds: [ 'power-nap' ]
+        name: { en: 'Vocal Mimicry', th: 'เลียนเสียง' },
+        description: { en: 'Gifted at Deception (mimicking sounds).', th: 'พรสวรรค์ด้านหลอกลวง (เลียนเสียง)' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_GIFTED, skillCheckAttributeId: 'deception' }
+        ]
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   }
-];
+]; 

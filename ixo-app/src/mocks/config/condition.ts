@@ -1,322 +1,419 @@
 import type { ConditionConfig } from '@/types/config/condition';
+import { CONDITION_STACK_TYPE, CONDITION_TICK_TYPE, CONDITION_EFFECT_TYPE } from '@/constants/config/condition';
+import { PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockConditions: ConditionConfig[] = // --- Updated Sample Condition Configurations ---
-[
+export const mockConditionConfigs: ConditionConfig[] = [
   {
     id: 'burned',
     name: { en: 'Burned', th: 'ติดไฟ' },
-    description: { en: 'The target is taking ongoing fire damage and is more susceptible to fire attacks.', th: 'เป้าหมายได้รับความเสียหายไฟอย่างต่อเนื่องและอ่อนไหวต่อการโจมตีด้วยไฟมากขึ้น' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Suffering ongoing fire damage and increased vulnerability to fire.', th: 'ได้รับความเสียหายไฟต่อเนื่องและอ่อนแอต่อไฟ' },
     icon: 'https://placehold.co/32x32/FF6347/FFFFFF?text=🔥',
     tags: [ 'debuff', 'damage-over-time', 'elemental' ],
-    stack: { id: 'burned-stack', type: 'stack' },
+    stack: { id: 'burned', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'start-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'start',
         duration: 3,
-        versusSaving: 'strength-saving-throw',
-        formula: 'stat(constitution)'
+        saving: {
+          savingThrowId: 'attribute-strength-save',
+          baseValue: { type: VALUE_TYPE.FIXED, value: 10 } // Placeholder for stat(constitution)
+        }
       }
     ],
     effects: [
       {
-        type: 'damage-over-time',
+        type: CONDITION_EFFECT_TYPE.DO_DAMAGE_OVER_TIME,
+        phase: PHASE_TYPE.ROUND,
+        when: 'start',
         damageTypeId: 'fire',
-        value: { type: 'dice', formula: '1d4' },
-        tick: 'start-turn'
+        baseValue: { type: VALUE_TYPE.DICE, formula: '1d4' }
       },
       {
-        type: 'resistence',
+        type: CONDITION_EFFECT_TYPE.GAIN_RESISTENCE,
         damageTypeId: 'fire',
-        damageScaleId: 'vulnerable'
+        scaleId: 'vulnerable'
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'stunned',
     name: { en: 'Stunned', th: 'มึนงง' },
-    description: { en: 'The target is incapacitated, unable to move or take actions.', th: 'เป้าหมายถูกทำให้หมดความสามารถ ไม่สามารถเคลื่อนไหวหรือกระทำใดๆ ได้' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Unable to act and easier to hit.', th: 'ไม่สามารถกระทำการและถูกโจมตีง่ายขึ้น' },
     icon: 'https://placehold.co/32x32/8A2BE2/FFFFFF?text=😵',
     tags: [ 'debuff', 'control', 'incapacitated' ],
-    stack: { id: 'stunned-overwrite', type: 'overwrite', priority: 10 },
+    stack: { id: 'stunned', type: CONDITION_STACK_TYPE.OVERWRITE, priority: 10 },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 1
       }
     ],
     effects: [
       {
-        type: 'restrict-action',
-        tags: [ 'common', 'attack', 'support', 'debuff', 'summon', 'special' ]
+        type: CONDITION_EFFECT_TYPE.RESTRICT_ACTION,
+        actionTags: [ 'common', 'attack', 'support', 'debuff', 'summon', 'special' ]
       },
       {
-        type: 'attribute-modify',
-        attributeId: 'armor-class',
-        formula: '-5'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-armor-class',
+        baseValue: { type: VALUE_TYPE.FIXED, value: -5 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'vulnerable',
     name: { en: 'Vulnerable', th: 'อ่อนแอ' },
-    description: { en: 'The target takes increased damage from all sources.', th: 'เป้าหมายได้รับความเสียหายเพิ่มขึ้นจากทุกแหล่ง' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Takes increased damage from all sources.', th: 'ได้รับความเสียหายเพิ่มจากทุกแหล่ง' },
     icon: 'https://placehold.co/32x32/FF0000/FFFFFF?text=❗',
     tags: [ 'debuff', 'damage' ],
-    stack: { id: 'vulnerable-stack', type: 'overwrite', priority: 5 },
+    stack: { id: 'vulnerable', type: CONDITION_STACK_TYPE.OVERWRITE, priority: 5 },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 1
       }
     ],
     effects: [
       {
-        type: 'resistence',
+        type: CONDITION_EFFECT_TYPE.GAIN_RESISTENCE,
         damageTypeId: 'all',
-        damageScaleId: 'vulnerable'
+        scaleId: 'vulnerable'
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'inspired',
     name: { en: 'Inspired', th: 'ได้รับแรงบันดาลใจ' },
-    description: { en: 'The target feels uplifted, gaining advantage on certain rolls and a bonus to energy points.', th: 'เป้าหมายรู้สึกมีกำลังใจ ได้รับความได้เปรียบในการทอยบางอย่างและโบนัสแต้มพลังงาน' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Bolstered morale and increased energy.', th: 'ขวัญกำลังใจสูงและพลังงานเพิ่มขึ้น' },
     icon: 'https://placehold.co/32x32/DAA520/000000?text=✨',
     tags: [ 'buff', 'morale', 'positive' ],
-    stack: { id: 'inspired-stack', type: 'stack' },
+    stack: { id: 'inspired', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-round',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.COMBAT,
+        when: 'end',
         duration: 2
       }
     ],
     effects: [
       {
-        type: 'advantage-attribute',
-        attributeIds: [ 'attack-roll', 'charisma-saving-throw' ],
-        isDisadvantage: false
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-attack-roll'
       },
       {
-        type: 'attribute-modify',
-        attributeId: 'energy-point',
-        formula: '2'
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-presence-save'
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-energy-point',
+        baseValue: { type: VALUE_TYPE.FIXED, value: 2 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'furious-rampage',
     name: { en: 'Furious Rampage', th: 'คลั่งระห่ำ' },
-    description: { en: 'A state of battle fury, increasing damage dealt but reducing defenses.', th: 'สภาวะคลั่งในการต่อสู้ เพิ่มความเสียหายที่ทำได้แต่ลดการป้องกัน' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Overwhelmed by rage, gaining strength but losing defense.', th: 'คลั่งด้วยความโกรธ ได้พลังแต่เสียการป้องกัน' },
     icon: 'https://placehold.co/32x32/B22222/FFFFFF?text=R',
     tags: [ 'buff', 'berserk', 'combat' ],
-    stack: { id: 'fury-stack', type: 'stack' },
+    stack: { id: 'furious-rampage', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 2,
-        versusSaving: 'sense-saving-throw',
-        formula: 'level'
+        saving: {
+          savingThrowId: 'attribute-sense-save',
+          baseValue: { type: VALUE_TYPE.FIXED, value: 10 } // Placeholder for level
+        }
       }
     ],
     effects: [
       {
-        type: 'attribute-modify',
-        attributeId: 'strength-ability',
-        formula: '4'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-strength-ability',
+        baseValue: { type: VALUE_TYPE.FIXED, value: 4 }
       },
       {
-        type: 'attribute-modify',
-        attributeId: 'armor-class',
-        formula: '-2'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-armor-class',
+        baseValue: { type: VALUE_TYPE.FIXED, value: -2 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'enhanced-precision',
     name: { en: 'Enhanced Precision', th: 'ความแม่นยำขั้นสูง' },
-    description: { en: 'Your attacks are incredibly precise, increasing your chance to hit a single target.', th: 'การโจมตีของคุณแม่นยำอย่างเหลือเชื่อ เพิ่มโอกาสในการโจมตีเป้าหมายเดียว' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Sharpened focus increases attack accuracy.', th: 'สมาธิที่เฉียบคมเพิ่มความแม่นยำในการโจมตี' },
     icon: 'https://placehold.co/32x32/006400/FFFFFF?text=🎯',
     tags: [ 'buff', 'precision', 'combat' ],
-    stack: { id: 'enhanced-precision-stack', type: 'stack' },
+    stack: { id: 'enhanced-precision', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 1
       }
     ],
     effects: [
       {
-        type: 'attribute-modify',
-        attributeId: 'attack-roll',
-        formula: '3'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-attack-roll',
+        baseValue: { type: VALUE_TYPE.FIXED, value: 3 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'charmed',
     name: { en: 'Charmed', th: 'หลงเสน่ห์' },
-    description: { en: 'The target is charmed and might be influenced by the charmer. It cannot attack the charmer.', th: 'เป้าหมายถูกทำให้หลงเสน่ห์และอาจถูกผู้ทำให้หลงเสน่ห์ชักจูง ไม่สามารถโจมตีผู้ทำให้หลงเสน่ห์ได้' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Magically beguiled and less able to resist influence.', th: 'ถูกสะกดจิตและต้านทานอิทธิพลได้น้อยลง' },
     icon: 'https://placehold.co/32x32/FFB6C1/000000?text=💖',
     tags: [ 'debuff', 'control', 'mental' ],
-    stack: { id: 'charmed-overwrite', type: 'overwrite', priority: 8 },
+    stack: { id: 'charmed', type: CONDITION_STACK_TYPE.OVERWRITE, priority: 8 },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 3,
-        versusSaving: 'sense-saving-throw',
-        formula: 'stat(sense)'
+        saving: {
+          savingThrowId: 'attribute-sense-save',
+          baseValue: { type: VALUE_TYPE.FIXED, value: 10 } // Placeholder for stat(sense)
+        }
       }
     ],
     effects: [
       {
-        type: 'restrict-action',
-        tags: [ 'attack' ]
+        type: CONDITION_EFFECT_TYPE.RESTRICT_ACTION,
+        actionTags: [ 'attack' ]
       },
       {
-        type: 'advantage-attribute',
-        attributeIds: [ 'charisma-saving-throw' ],
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-presence-save',
         isDisadvantage: true
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'sleep',
     name: { en: 'Sleep', th: 'หลับ' },
-    description: { en: 'The target is unconscious and falls prone. It awakens if it takes damage.', th: 'เป้าหมายหมดสติและล้มลง จะตื่นขึ้นหากได้รับความเสียหาย' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Magically forced into slumber.', th: 'ถูกเวทมนตร์ทำให้หลับ' },
     icon: 'https://placehold.co/32x32/ADD8E6/000000?text=💤',
     tags: [ 'debuff', 'control', 'incapacitated' ],
-    stack: { id: 'sleep-overwrite', type: 'overwrite', priority: 9 },
+    stack: { id: 'sleep', type: CONDITION_STACK_TYPE.OVERWRITE, priority: 9 },
     removeTicks: [
       {
-        type: 'damage',
-        damageTypeId: 'any'
+        type: CONDITION_TICK_TYPE.DAMAGE,
+        damageTypeIds: [ 'all' ]
       },
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 5
       }
     ],
     effects: [
       {
-        type: 'restrict-action',
-        tags: [ 'common', 'attack', 'support', 'debuff', 'summon', 'special' ]
+        type: CONDITION_EFFECT_TYPE.RESTRICT_ACTION,
+        actionTags: [ 'common', 'attack', 'support', 'debuff', 'summon', 'special' ]
       },
       {
-        type: 'attribute-modify',
-        attributeId: 'armor-class',
-        formula: '-10'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-armor-class',
+        baseValue: { type: VALUE_TYPE.FIXED, value: -10 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'frightened',
     name: { en: 'Frightened', th: 'หวาดกลัว' },
-    description: { en: 'The target has disadvantage on attack rolls and ability checks while the source of its fear is within line of sight.', th: 'เป้าหมายเสียเปรียบในการทอยโจมตีและการตรวจสอบความสามารถขณะที่แหล่งที่มาของความกลัวอยู่ในสายตา' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Overcome by fear, less able to fight or act.', th: 'ถูกความกลัวครอบงำ ทำให้ต่อสู้หรือกระทำการได้แย่ลง' },
     icon: 'https://placehold.co/32x32/8B0000/FFFFFF?text=😨',
     tags: [ 'debuff', 'mental', 'control' ],
-    stack: { id: 'frightened-stack', type: 'stack' },
+    stack: { id: 'frightened', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 2,
-        versusSaving: 'sense-saving-throw',
-        formula: 'stat(sense)'
+        saving: {
+          savingThrowId: 'attribute-sense-save',
+          baseValue: { type: VALUE_TYPE.FIXED, value: 10 } // Placeholder for stat(sense)
+        }
       }
     ],
     effects: [
       {
-        type: 'advantage-attribute',
-        attributeIds: [ 'attack-roll', 'strength-ability', 'dexterity-ability', 'intelligence-ability', 'sense-ability', 'charisma-ability' ],
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-attack-roll',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-strength-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-agility-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-intelligence-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-sense-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-presence-ability',
         isDisadvantage: true
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'fury',
     name: { en: 'Fury', th: 'ความโกรธ' },
-    description: { en: 'A state of battle fury, increasing damage dealt but reducing defenses.', th: 'สภาวะคลั่งในการต่อสู้ เพิ่มความเสียหายที่ทำได้แต่ลดการป้องกัน' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Overwhelmed by rage, gaining strength but losing defense.', th: 'คลั่งด้วยความโกรธ ได้พลังแต่เสียการป้องกัน' },
     icon: 'https://placehold.co/32x32/B22222/FFFFFF?text=R',
     tags: [ 'buff', 'berserk', 'combat' ],
-    stack: { id: 'fury-stack', type: 'stack' },
+    stack: { id: 'fury', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 2,
-        versusSaving: 'sense-saving-throw',
-        formula: 'level'
+        saving: {
+          savingThrowId: 'attribute-sense-save',
+          baseValue: { type: VALUE_TYPE.FIXED, value: 10 } // Placeholder for level
+        }
       }
     ],
     effects: [
       {
-        type: 'attribute-modify',
-        attributeId: 'strength-ability',
-        formula: '4'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-strength-ability',
+        baseValue: { type: VALUE_TYPE.FIXED, value: 4 }
       },
       {
-        type: 'attribute-modify',
-        attributeId: 'armor-class',
-        formula: '-2'
+        type: CONDITION_EFFECT_TYPE.MODIFY_ATTRIBUTE,
+        attributeId: 'attribute-armor-class',
+        baseValue: { type: VALUE_TYPE.FIXED, value: -2 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'relentless',
     name: { en: 'Relentless', th: 'ไม่หยุดยั้ง' },
-    description: { en: 'You defy death, capable of continuing to fight even when critically wounded.', th: 'คุณท้าทายความตาย สามารถต่อสู้ต่อไปได้แม้จะบาดเจ็บสาหัส' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Defies death and recovers quickly.', th: 'ท้าทายความตายและฟื้นตัวอย่างรวดเร็ว' },
     icon: 'https://placehold.co/32x32/4B0082/FFFFFF?text=☠️',
     tags: [ 'buff', 'survival', 'death-defiance' ],
-    stack: { id: 'relentless-overwrite', type: 'overwrite', priority: 15 },
+    stack: { id: 'relentless', type: CONDITION_STACK_TYPE.OVERWRITE, priority: 15 },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 1
       }
     ],
     effects: [
       {
-        type: 'restore-over-time',
-        attributeId: 'hit-point',
-        value: { type: 'fixed', value: 1 },
-        tick: 'immediate'
+        type: CONDITION_EFFECT_TYPE.DO_RESTORE_OVER_TIME,
+        phase: PHASE_TYPE.ROUND,
+        when: 'start',
+        attributeId: 'attribute-hit-points',
+        baseValue: { type: VALUE_TYPE.FIXED, value: 1 }
       },
       {
-        type: 'reduce-damage',
-        damageTypeId: 'all',
-        value: { type: 'fixed', value: 5 }
+        type: CONDITION_EFFECT_TYPE.REDUCE_DAMAGE,
+        damageTypeIds: [ 'all' ],
+        baseValue: { type: VALUE_TYPE.FIXED, value: 5 }
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
     id: 'dazed',
     name: { en: 'Dazed', th: 'มึนงง' },
-    description: { en: 'The target has disadvantage on ability checks and cannot take reactions.', th: 'เป้าหมายเสียเปรียบในการตรวจสอบความสามารถและไม่สามารถตอบโต้ได้' },
-    createdAt: '2023-01-01T00:00:00Z',
+    description: { en: 'Mentally impaired and less able to act.', th: 'สติปัญญาลดลงและกระทำการได้แย่ลง' },
     icon: 'https://placehold.co/32x32/FFD700/000000?text=暈',
     tags: [ 'debuff', 'control', 'mental' ],
-    stack: { id: 'dazed-stack', type: 'stack' },
+    stack: { id: 'dazed', type: CONDITION_STACK_TYPE.STACK },
     removeTicks: [
       {
-        type: 'end-turn',
+        type: CONDITION_TICK_TYPE.PHASE,
+        phase: PHASE_TYPE.ROUND,
+        when: 'end',
         duration: 1
       }
     ],
     effects: [
       {
-        type: 'advantage-attribute',
-        attributeIds: [ 'strength-ability', 'agility-ability', 'dexterity-ability', 'intelligence-ability', 'sense-ability', 'charisma-ability' ],
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-strength-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-agility-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-intelligence-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-sense-ability',
+        isDisadvantage: true
+      },
+      {
+        type: CONDITION_EFFECT_TYPE.GAIN_ADVANTAGE,
+        attributeId: 'attribute-presence-ability',
         isDisadvantage: true
       }
-    ]
+    ],
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   }
-];
+]; 

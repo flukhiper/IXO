@@ -1,5 +1,5 @@
 import { EQUIPMENT_SLOT_TYPE, INFINITE_VALUE } from '@/constants/config/character';
-import type { DiceValue, FixedValue } from './base';
+import type { BaseConfig, DiceValue, FixedValue } from './base';
 
 export interface CharacterGainConfig {
   statModifier: {
@@ -27,12 +27,11 @@ export interface CharacterGainConfig {
 }
 
 export type EquipmentSlotType = (typeof EQUIPMENT_SLOT_TYPE)[keyof typeof EQUIPMENT_SLOT_TYPE];
-export interface CharacterConfig {
+export interface CharacterConfig extends BaseConfig {
   startStatPoint: number; // Number of points player can assign to attributes at creation
   startOriginChoice: string[]; // Origin IDs player can choose from at creation
   startTraitChoice: string[]; // Trait IDs player can choose from at creation
   startClassChoice: string[]; // Class IDs player can choose from at creation
-  startProficiencyPoint: number; // Number of points player can assign to proficiencies at creation
   startGold: number; // Number of gold player can spend at creation
 
   equipmentRules: {

@@ -1,413 +1,682 @@
-import { SkillConfig } from '@/types/config/skill';
+import type { SkillConfig } from '@/types/config/skill';
+import { SKILL_STACK_TYPE } from '@/constants/config/skill';
+import { KEYWORD_TYPE, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockSkill: SkillConfig[] = // --- Sample Skill Configurations matching mockTraits ---
-[
-  // 🐉 Dragonoid Traits
+export const mockSkillConfigs: SkillConfig[] = [
+  // === Tier 0 Role Skills ===
+  // --- Attacker ---
   {
-    id: 'dragonoid-fearless-will',
-    name: { en: 'Fearless Will', th: 'เจตจำนงไร้ความกลัว' },
-    description: { en: 'Your draconic will makes you immune to the Frightened condition.', th: 'เจตจำนงดุจมังกรของคุณทำให้คุณไม่กลัวสิ่งใด' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🛡️',
-    tags: [ 'draconic', 'mental-resilience', 'passive' ],
-    stack: { id: 'fearless-will-stack', type: 'stack' },
-    pathId: 'any',
+    id: 'skill-aggressive-follow-up',
+    name: { en: 'Aggressive Follow-up', th: 'จู่โจมต่อเนื่อง' },
+    description: { en: 'Once per turn, after you hit with an attack, win a contested Agility check vs. the target\'s Agility Save to make a Free single weapon strike against them.', th: 'หนึ่งครั้งต่อเทิร์น หลังโจมตีสำเร็จ ชนะเช็ค Agility แข่งกับ Agility Save ของเป้าหมายเพื่อโจมตีฟรีอีกครั้ง' },
+    icon: 'aggressive-follow-up-icon',
+    tags: [ 'attack', 'tier-0', 'role' ],
+    stack: { id: 'aggressive-follow-up', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
     requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
     effects: [
       {
-        type: 'block-condition',
-        tags: [ 'frightened' ]
-      }
-    ]
-  },
-  {
-    id: 'dragonoid-hardened-scales',
-    name: { en: 'Hardened Scales', th: 'เกล็ดแข็งแกร่ง' },
-    description: { en: 'Your natural scales provide enhanced protection against Physical damage types.', th: 'เกล็ดธรรมชาติของคุณให้การป้องกันที่เพิ่มขึ้นจากการโจมตีทางกายภาพ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🧱',
-    tags: [ 'draconic', 'defense', 'passive' ],
-    stack: { id: 'hardened-scales-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'attribute-modify',
-        attributeId: 'armor-class',
-        formula: '2'
-      },
-      {
-        type: 'reduce-damage',
-        damageTypeId: 'bludgeoning',
-        value: { type: 'fixed', value: 2 }
-      },
-      {
-        type: 'reduce-damage',
-        damageTypeId: 'piercing',
-        value: { type: 'fixed', value: 2 }
-      },
-      {
-        type: 'reduce-damage',
-        damageTypeId: 'slashing',
-        value: { type: 'fixed', value: 2 }
-      }
-    ]
-  },
-
-  // 💀 Kijin Traits
-  {
-    id: 'kijin-pain-fury',
-    name: { en: 'Pain Fury', th: 'โทสะแห่งความเจ็บปวด' },
-    description: { en: 'When below 50% Hit Points, gain condition Fury.', th: 'เมื่อพลังชีวิตต่ำกว่า 50% ได้รับสถานะโทสะ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🩸',
-    tags: [ 'berserker', 'combat', 'conditional' ],
-    stack: { id: 'pain-fury-overwrite', type: 'overwrite', priority: 5 },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'conditional-condition',
-        conditionIds: [ 'fury' ],
-        requirements: [ 'attribute(hit-point).current < attribute(hit-point).max / 2' ]
-      }
-    ]
-  },
-  {
-    id: 'kijin-unkillable-instinct',
-    name: { en: 'Unkillable Instinct', th: 'สัญชาตญาณอมตะ' },
-    description: { en: 'When below 0 Hit Points, gain condition Relentless.', th: 'เมื่อพลังชีวิตต่ำกว่า 0 ได้รับสถานะไม่หยุดยั้ง' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '💪',
-    tags: [ 'berserker', 'survival', 'passive' ],
-    stack: { id: 'unkillable-instinct-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'conditional-condition',
-        conditionIds: [ 'relentless' ],
-        requirements: [ 'attribute(hit-point).current <= 0' ]
-      }
-    ]
-  },
-
-  // ⚙️ Mechina Traits
-  {
-    id: 'mechina-extra-load',
-    name: { en: 'Extra Load', th: 'บรรทุกพิเศษ' },
-    description: { en: 'Your internal storage allows you to carry more items without penalty.', th: 'พื้นที่เก็บของภายในช่วยให้คุณพกพาของได้มากขึ้นโดยไม่มีข้อจำกัด' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '📦',
-    tags: [ 'construct', 'utility', 'passive' ],
-    stack: { id: 'extra-load-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'attribute-modify',
-        attributeId: 'carry-capacity',
-        formula: 'attribute(carry-capacity).max * 0.5'
-      }
-    ]
-  },
-  {
-    id: 'mechina-restless-processor',
-    name: { en: 'Restless Processor', th: 'หน่วยประมวลผลไม่หยุดหย่อน' },
-    description: { en: 'You require less downtime to restore your energy and can perform +1 additional downtime activity and extra downtime Maintenance with half intensity.', th: 'คุณต้องการเวลาพักผ่อนน้อยลงในการฟื้นฟูพลังงาน และสามารถทำกิจกรรมช่วงเวลาสั้นๆ ได้เพิ่ม +1 และกิจกรรมบำรุงรักษาเพิ่มด้วยความเข้มข้นครึ่งหนึ่ง' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '⚡',
-    tags: [ 'construct', 'restoration', 'downtime' ],
-    stack: { id: 'restless-processor-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'extra-downtime',
-        bonusActivities: 1
-      },
-      {
-        type: 'downtime',
-        downtimeId: 'maintenance',
-        intense: 'half'
-      }
-    ]
-  },
-
-  // 🐾 Werebeast Traits
-  {
-    id: 'werebeast-obsessive-focus',
-    name: { en: 'Obsessive Focus', th: 'การจดจ่ออย่างหมกมุ่น' },
-    description: { en: 'Select a skill at character creation that grants a stat modifier bonus.', th: 'เลือกทักษะเมื่อสร้างตัวละครที่ให้โบนัสตัวปรับสถานะ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🎯',
-    tags: [ 'animalistic', 'character-creation', 'choice' ],
-    stack: { id: 'obsessive-focus-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'selectable',
-        effects: [
-          {
-            name: { en: 'Power Obsession', th: 'หมกมุ่นพลัง' },
-            description: { en: 'Gain +2 to Strength Modifier.', th: 'ได้รับ +2 ให้ตัวปรับความแข็งแกร่ง' },
-            type: 'stat-modify',
-            statId: 'strength',
-            formula: '2'
-          },
-          {
-            name: { en: 'Knowledge Obsession', th: 'หมกมุ่นความรู้' },
-            description: { en: 'Gain +2 to Intelligence Modifier.', th: 'ได้รับ +2 ให้ตัวปรับสติปัญญา' },
-            type: 'stat-modify',
-            statId: 'intelligence',
-            formula: '2'
-          },
-          {
-            name: { en: 'Fame Obsession', th: 'หมกมุ่นชื่อเสียง' },
-            description: { en: 'Gain +2 to Charisma Modifier.', th: 'ได้รับ +2 ให้ตัวปรับเสน่ห์' },
-            type: 'stat-modify',
-            statId: 'charisma',
-            formula: '2'
-          }
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND },
+          { type: KEYWORD_TYPE.FREE }
+          // TODO: Implement contested Agility check logic in system
         ]
       }
-    ]
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'werebeast-predator-senses',
-    name: { en: 'Predator Senses', th: 'สัมผัสผู้ล่า' },
-    description: { en: 'Your senses are heightened, allowing you to detect hidden foes and dangers.', th: 'สัมผัสของคุณคมชัดขึ้น ทำให้คุณสามารถตรวจจับศัตรูและอันตรายที่ซ่อนอยู่ได้' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '👁️',
-    tags: [ 'animalistic', 'perception', 'exploration' ],
-    stack: { id: 'predator-senses-stack', type: 'stack' },
-    pathId: 'any',
+    id: 'skill-power-channeling',
+    name: { en: 'Power Channeling', th: 'ระเบิดพลัง' },
+    description: { en: 'As a Free action before an attack, activate this skill to have the attack deal an additional 1d6 damage of your chosen Boost type (once per combat).', th: 'ใช้ฟรีก่อนโจมตี เพิ่มดาเมจ 1d6 ตาม Boost ที่เลือก (1/การต่อสู้)' },
+    icon: 'power-channeling-icon',
+    tags: [ 'attack', 'tier-0', 'role' ],
+    stack: { id: 'power-channeling', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
     requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
     effects: [
       {
-        type: 'attribute-modify',
-        attributeId: 'perceive',
-        formula: '2'
-      },
-      {
-        type: 'attribute-modify',
-        attributeId: 'initiative',
-        formula: '2'
-      }
-    ]
-  },
-
-  // 🌿 Elf Traits
-  {
-    id: 'elf-timeless-composure',
-    name: { en: 'Timeless Composure', th: 'ความสงบที่อยู่เหนือกาลเวลา' },
-    description: { en: 'Your long life grants you an innate calm, making you resistant to mind-based interactions.', th: 'ชีวิตที่ยืนยาวของคุณทำให้คุณสงบนิ่งโดยธรรมชาติ ทำให้คุณต้านทานปฏิสัมพันธ์ที่เกี่ยวกับจิตใจ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🧘',
-    tags: [ 'ancient', 'mental-resilience', 'passive' ],
-    stack: { id: 'timeless-composure-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'attribute-modify',
-        attributeId: 'sense-saving-throw',
-        formula: '2'
-      },
-      {
-        type: 'block-condition',
-        tags: [ 'charmed', 'sleep' ]
-      }
-    ]
-  },
-  {
-    id: 'elf-ancient-gift',
-    name: { en: 'Ancient Gift', th: 'พรแห่งโบราณ' },
-    description: { en: 'During any short or full downtime, choose or replace your current Ancient Gift action with any other from the predefined Ancient Gift action list.', th: 'ในช่วงเวลาพักผ่อนสั้นหรือเต็ม คุณสามารถเลือกหรือเปลี่ยนการกระทำ Ancient Gift ปัจจุบันของคุณด้วยการกระทำอื่น ๆ จากรายการ Ancient Gift ที่กำหนดไว้ล่วงหน้า' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🎁',
-    tags: [ 'ancient', 'versatility', 'downtime' ],
-    stack: { id: 'ancient-gift-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'action',
-        actionIds: [ 'echo-step', 'spark-of-force', 'ancestral-guard', 'ancient-instinct' ]
-      }
-    ]
-  },
-
-  // 😈 Demonia Traits
-  {
-    id: 'demonia-adaptive-copycat',
-    name: { en: 'Adaptive Copycat', th: 'นักเลียนแบบปรับตัว' },
-    description: { en: 'Once per rest, you may mimic one enemy action used against you and use it next turn (once only).', th: 'หนึ่งครั้งต่อการพักผ่อน คุณสามารถเลียนแบบการกระทำของศัตรูที่ใช้ต่อคุณและใช้ได้ในเทิร์นถัดไป (เพียงครั้งเดียว)' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '👻',
-    tags: [ 'superior', 'mimicry', 'active' ],
-    stack: { id: 'adaptive-copycat-overwrite', type: 'overwrite', priority: 5 },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'action',
-        actionIds: [ 'mimic-ability' ]
-      }
-    ]
-  },
-  {
-    id: 'demonia-harshborn',
-    name: { en: 'Harshborn', th: 'กำเนิดจากความโหดร้าย' },
-    description: { en: 'Immune to environmental hazards. Gain resistance to one elemental damage type of your choice.', th: 'ภูมิคุ้มกันต่ออันตรายจากสิ่งแวดล้อม ได้รับความต้านทานต่อความเสียหายธาตุประเภทหนึ่งที่คุณเลือก' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🌋',
-    tags: [ 'superior', 'survival', 'resilience', 'choice' ],
-    stack: { id: 'harshborn-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'block-condition',
-        tags: [ 'environmental-hazard' ]
-      },
-      {
-        type: 'selectable',
-        effects: [
+        keywords: [
           {
-            name: { en: 'Fire Resistance', th: 'ต้านทานไฟ' },
-            description: { en: 'Gain resistance to Fire damage.', th: 'ได้รับความต้านทานความเสียหายไฟ' },
-            type: 'resistence',
-            damageTypeId: 'fire',
-            damageScaleId: 'resistant'
+            type: KEYWORD_TYPE.BOOST,
+            damageType: 'selected',
+            baseValue: { type: VALUE_TYPE.DICE, formula: '1d6' }
           },
-          {
-            name: { en: 'Cold Resistance', th: 'ต้านทานความเย็น' },
-            description: { en: 'Gain resistance to Cold damage.', th: 'ได้รับความต้านทานความเสียหายความเย็น' },
-            type: 'resistence',
-            damageTypeId: 'cold',
-            damageScaleId: 'resistant'
-          },
-          {
-            name: { en: 'Lightning Resistance', th: 'ต้านทานสายฟ้า' },
-            description: { en: 'Gain resistance to Lightning damage.', th: 'ได้รับความต้านทานความเสียหายสายฟ้า' },
-            type: 'resistence',
-            damageTypeId: 'lightning',
-            damageScaleId: 'resistant'
-          },
-          {
-            name: { en: 'Acid Resistance', th: 'ต้านทานกรด' },
-            description: { en: 'Gain resistance to Acid damage.', th: 'ได้รับความต้านทานความเสียหายกรด' },
-            type: 'resistence',
-            damageTypeId: 'acid',
-            damageScaleId: 'resistant'
-          },
-          {
-            name: { en: 'Poison Resistance', th: 'ต้านทานพิษ' },
-            description: { en: 'Gain resistance to Poison damage.', th: 'ได้รับความต้านทานความเสียหายพิษ' },
-            type: 'resistence',
-            damageTypeId: 'poison',
-            damageScaleId: 'resistant'
-          }
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT },
+          { type: KEYWORD_TYPE.FREE }
         ]
       }
-    ]
-  },
-
-  // 🎶 Siren Traits
-  {
-    id: 'siren-enchanting-aura',
-    name: { en: 'Enchanting Aura', th: 'ออร่าแห่งมนต์เสน่ห์' },
-    description: { en: 'Your mere presence makes others more receptive to your charms.', th: 'เพียงแค่การปรากฏตัวของคุณก็ทำให้ผู้อื่นคล้อยตามเสน่ห์ของคุณได้ง่ายขึ้น' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '✨',
-    tags: [ 'alluring', 'social', 'passive' ],
-    stack: { id: 'enchanting-aura-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'attribute-modify',
-        attributeId: 'persuasion',
-        formula: '2'
-      },
-      {
-        type: 'attribute-modify',
-        attributeId: 'deception',
-        formula: '2'
-      }
-    ]
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'siren-song-of-entrapment',
-    name: { en: 'Song of Entrapment', th: 'บทเพลงแห่งการล่อลวง' },
-    description: { en: 'Once per combat, force enemies in range (e.g. 3 tiles) to make a Sense save or become Dazed for 1 turn.', th: 'หนึ่งครั้งต่อการต่อสู้ บังคับศัตรูในระยะ (เช่น 3 ช่อง) ให้ทำการทอยช่วยสัมผัส มิฉะนั้นจะติดสถานะมึนงงเป็นเวลา 1 เทิร์น' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🎼',
-    tags: [ 'alluring', 'control', 'active' ],
-    stack: { id: 'song-of-entrapment-overwrite', type: 'overwrite', priority: 5 },
-    pathId: 'any',
+    id: 'skill-widestrike-echo',
+    name: { en: 'Widestrike Echo', th: 'สะท้อนฟันกว้าง' },
+    description: { en: 'Once per turn, after hitting a target with the Full Attack common action, a second adjacent creature takes half damage, rounded down.', th: 'หนึ่งครั้งต่อเทิร์น หลังโจมตีด้วย Full Attack เป้าหมายที่อยู่ติดกันรับดาเมจครึ่งหนึ่ง ปัดลง' },
+    icon: 'widestrike-echo-icon',
+    tags: [ 'attack', 'tier-0', 'role' ],
+    stack: { id: 'widestrike-echo', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
     requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
     effects: [
       {
-        type: 'action',
-        actionIds: [ 'siren-lullaby' ]
-      }
-    ]
-  },
-
-  // 💎 Aethel (Unchanged) Traits
-  {
-    id: 'aethel-obedient-role',
-    name: { en: 'Obedient Role', th: 'บทบาทที่เชื่อฟัง' },
-    description: { en: 'Select a skill at character creation and must follow an assigned Quest or Law or suffer a penalty.', th: 'เลือกทักษะเมื่อสร้างตัวละครและต้องปฏิบัติตามภารกิจหรือกฎหมายที่กำหนด มิฉะนั้นจะได้รับโทษ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '🔗',
-    tags: [ 'aethel', 'character-creation', 'choice' ],
-    stack: { id: 'obedient-role-stack', type: 'stack' },
-    pathId: 'any',
-    requiredCharacterLevel: 1,
-    effects: [
-      {
-        type: 'selectable',
-        effects: [
-          { name: { en: 'Bodyguard', th: 'องครักษ์' }, description: { en: 'Gain +2 Athletics.', th: 'ได้รับ +2 พลศึกษา' }, type: 'attribute-modify', attributeId: 'athletics', formula: '2' },
-          { name: { en: 'Messenger', th: 'ผู้ส่งสาร' }, description: { en: 'Gain +2 Sprint.', th: 'ได้รับ +2 วิ่งเร็ว' }, type: 'attribute-modify', attributeId: 'sprint', formula: '2' },
-          { name: { en: 'Performer', th: 'นักแสดง' }, description: { en: 'Gain +2 Acrobatics.', th: 'ได้รับ +2 กายกรรม' }, type: 'attribute-modify', attributeId: 'acrobatics', formula: '2' },
-          { name: { en: 'Explorer', th: 'นักสำรวจ' }, description: { en: 'Gain +2 Sleight of Hand.', th: 'ได้รับ +2 ความคล่องแคล่ว' }, type: 'attribute-modify', attributeId: 'sleight-of-hand', formula: '2' },
-          { name: { en: 'Technician', th: 'ช่างเทคนิค' }, description: { en: 'Gain +2 Mechanical.', th: 'ได้รับ +2 กลไก' }, type: 'attribute-modify', attributeId: 'mechanical', formula: '2' },
-          { name: { en: 'Spy', th: 'สายลับ' }, description: { en: 'Gain +2 Stealth.', th: 'ได้รับ +2 ซ่อนตัว' }, type: 'attribute-modify', attributeId: 'stealth', formula: '2' },
-          { name: { en: 'Scholar', th: 'นักวิชาการ' }, description: { en: 'Gain +2 Recall.', th: 'ได้รับ +2 การเรียกคืน' }, type: 'attribute-modify', attributeId: 'recall', formula: '2' },
-          { name: { en: 'Detective', th: 'นักสืบ' }, description: { en: 'Gain +2 Comprehend.', th: 'ได้รับ +2 ความเข้าใจ' }, type: 'attribute-modify', attributeId: 'comprehend', formula: '2' },
-          { name: { en: 'Researcher', th: 'นักวิจัย' }, description: { en: 'Gain +2 Analyze.', th: 'ได้รับ +2 การวิเคราะห์' }, type: 'attribute-modify', attributeId: 'analyze', formula: '2' },
-          { name: { en: 'Sentinel', th: 'ทหารยาม' }, description: { en: 'Gain +2 Perceive.', th: 'ได้รับ +2 การรับรู้' }, type: 'attribute-modify', attributeId: 'perceive', formula: '2' },
-          { name: { en: 'Strategist', th: 'นักวางแผน' }, description: { en: 'Gain +2 Insight.', th: 'ได้รับ +2 วิปัสสนา' }, type: 'attribute-modify', attributeId: 'insight', formula: '2' },
-          { name: { en: 'Healer', th: 'ผู้รักษา' }, description: { en: 'Gain +2 Energy Sense.', th: 'ได้รับ +2 สัมผัสพลังงาน' }, type: 'attribute-modify', attributeId: 'energy-sense', formula: '2' },
-          { name: { en: 'Politician', th: 'นักการเมือง' }, description: { en: 'Gain +2 Persuasion.', th: 'ได้รับ +2 การโน้มน้าว' }, type: 'attribute-modify', attributeId: 'persuasion', formula: '2' },
-          { name: { en: 'Actor', th: 'นักแสดง' }, description: { en: 'Gain +2 Deception.', th: 'ได้รับ +2 การหลอกลวง' }, type: 'attribute-modify', attributeId: 'deception', formula: '2' },
-          { name: { en: 'Warrior', th: 'นักรบ' }, description: { en: 'Gain +2 Intimidation.', th: 'ได้รับ +2 การข่มขู่' }, type: 'attribute-modify', attributeId: 'intimidation', formula: '2' },
-          { name: { en: 'Storyteller', th: 'นักเล่าเรื่อง' }, description: { en: 'Gain +2 Performance.', th: 'ได้รับ +2 การแสดง' }, type: 'attribute-modify', attributeId: 'performance', formula: '2' }
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND },
+          { type: KEYWORD_TYPE.FULL }
+          // TODO: Implement adjacent/half-damage logic in system
         ]
       }
-    ]
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   },
   {
-    id: 'aethel-hidden-spark',
-    name: { en: 'Hidden Spark', th: 'ประกายที่ซ่อนอยู่' },
-    description: { en: 'Once per full downtime, may reroll any failed action or save as if you had advantage (internal potential awakens).', th: 'หนึ่งครั้งต่อการพักผ่อนเต็ม อาจทอยซ้ำการกระทำหรือการทอยช่วยที่ล้มเหลวราวกับว่าคุณมีข้อได้เปรียบ (ศักยภาพภายในตื่นขึ้น)' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: '✨',
-    tags: [ 'aethel', 'potential', 'reroll', 'downtime' ],
-    stack: { id: 'hidden-spark-stack', type: 'stack' },
-    pathId: 'any',
+    id: 'skill-critical-pressure',
+    name: { en: 'Critical Pressure', th: 'กดดันคริติคอล' },
+    description: { en: 'When you score a Critical Pass on an attack, the target gains Disadvantage on its next attack roll or saving throw.', th: 'เมื่อโจมตีคริติคอล เป้าหมายเสียเปรียบในการโจมตีหรือเซฟครั้งถัดไป' },
+    icon: 'critical-pressure-icon',
+    tags: [ 'attack', 'tier-0', 'role' ],
+    stack: { id: 'critical-pressure', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
     requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
     effects: [
       {
-        type: 'flavor-text',
-        name: { en: 'Internal Potential', th: 'ศักยภาพภายใน' },
-        description: { en: 'This skill grants a powerful reroll mechanic accessible during full downtime.', th: 'ทักษะนี้ให้กลไกการทอยซ้ำที่มีประสิทธิภาพซึ่งสามารถเข้าถึงได้ในช่วงเวลาพักผ่อนเต็ม' }
+        keywords: [
+          // TODO: Implement critical/disadvantage logic in system
+        ]
       }
-    ]
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // --- Defender ---
+  {
+    id: 'skill-bodyguard-reflex',
+    name: { en: 'Bodyguard Reflex', th: 'ปฏิกิริยาผู้พิทักษ์' },
+    description: { en: 'When an adjacent ally is hit, take the damage for them. You gain Tough 2 against that damage.', th: 'เมื่อเพื่อนที่อยู่ติดกันถูกโจมตี รับความเสียหายแทนและได้ Tough 2 ต่อดาเมจนั้น' },
+    icon: 'bodyguard-reflex-icon',
+    tags: [ 'defend', 'tier-0', 'role' ],
+    stack: { id: 'bodyguard-reflex', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION },
+          { type: KEYWORD_TYPE.TOUGH, value: 2 }
+          // TODO: Implement damage redirection logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-flexible-guard',
+    name: { en: 'Flexible Guard', th: 'ป้องกันยืดหยุ่น' },
+    description: { en: 'While not wearing heavy armor or a shield, you gain a Block 1 and a +1 bonus to Agility Saves.', th: 'หากไม่ใส่เกราะหนักหรือโล่ ได้ Block 1 และ Agility Save +1' },
+    icon: 'flexible-guard-icon',
+    tags: [ 'defend', 'tier-0', 'role' ],
+    stack: { id: 'flexible-guard', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.BLOCK, value: 1 }
+          // TODO: Implement conditional bonus logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-fortified-stance',
+    name: { en: 'Fortified Stance', th: 'ท่ายืนมั่นคง' },
+    description: { en: 'You gain Block 2 and Tough 2 until the start of your next turn.', th: 'ได้ Block 2 และ Tough 2 จนถึงต้นเทิร์นถัดไป' },
+    icon: 'fortified-stance-icon',
+    tags: [ 'defend', 'tier-0', 'role' ],
+    stack: { id: 'fortified-stance', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.STANCE },
+          { type: KEYWORD_TYPE.BLOCK, value: 2 },
+          { type: KEYWORD_TYPE.TOUGH, value: 2 }
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-quick-deploy',
+    name: { en: 'Quick-Deploy', th: 'ใช้งานฉุกเฉิน' },
+    description: { en: 'Use one defense-related consumable item as a Free action (once per combat).', th: 'ใช้ฟรี 1 ครั้งต่อการต่อสู้เพื่อใช้ไอเท็มป้องกัน' },
+    icon: 'quick-deploy-icon',
+    tags: [ 'defend', 'tier-0', 'role' ],
+    stack: { id: 'quick-deploy', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FREE },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT }
+          // TODO: Implement consumable use logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // --- Support ---
+  {
+    id: 'skill-field-boost',
+    name: { en: 'Field Boost', th: 'เสริมแรงสนาม' },
+    description: { en: 'When an ally within 5m makes an attack roll or skill check, grant them a +2 bonus to that roll.', th: 'เมื่อเพื่อนในระยะ 5 ม. ทอยโจมตีหรือเช็คทักษะ ให้โบนัส +2' },
+    icon: 'field-boost-icon',
+    tags: [ 'support', 'tier-0', 'role' ],
+    stack: { id: 'field-boost', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION }
+          // TODO: Implement +2 bonus to ally's roll logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-tactical-jab',
+    name: { en: 'Tactical Jab', th: 'แทงยุทธศาสตร์' },
+    description: { en: 'Once per turn, when you hit with an attack, you may impose a -2 penalty to the target\'s next attack roll.', th: 'หนึ่งครั้งต่อเทิร์น เมื่อโจมตีสำเร็จ ลดการโจมตีครั้งถัดไปของเป้าหมาย -2' },
+    icon: 'tactical-jab-icon',
+    tags: [ 'support', 'tier-0', 'role' ],
+    stack: { id: 'tactical-jab', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND }
+          // TODO: Implement -2 penalty logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-combat-medic-reflex',
+    name: { en: 'Combat Medic Reflex', th: 'ปฏิกิริยาแพทย์สนาม' },
+    description: { en: 'When an ally within 3m drops to 0 HP, move adjacent and use the Stabilize common action on them with Advantage.', th: 'เมื่อเพื่อนในระยะ 3 ม. HP เหลือ 0 ขยับไปข้างๆ และใช้ Stabilize ด้วย Advantage' },
+    icon: 'combat-medic-reflex-icon',
+    tags: [ 'support', 'tier-0', 'role' ],
+    stack: { id: 'combat-medic-reflex', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION }
+          // TODO: Implement move and Stabilize with Advantage logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-zonal-instinct',
+    name: { en: 'Zonal Instinct', th: 'สัญชาตญาณพื้นที่' },
+    description: { en: 'Shift 1m as a Free action. If you end your turn adjacent to both an ally and an enemy, you gain a Block 1 and all Saving Throws until your next turn.', th: 'ขยับ 1 ม. ฟรี ถ้าจบเทิร์นติดทั้งเพื่อนและศัตรู ได้ Block 1 และ Save ทั้งหมดจนถึงเทิร์นถัดไป' },
+    icon: 'zonal-instinct-icon',
+    tags: [ 'support', 'tier-0', 'role' ],
+    stack: { id: 'zonal-instinct', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 0,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FREE },
+          { type: KEYWORD_TYPE.BLOCK, value: 1 }
+          // TODO: Implement all Saving Throws bonus logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // === Tier 1 Role Skills ===
+  // --- Attacker ---
+  {
+    id: 'skill-relentless-assault',
+    name: { en: 'Relentless Assault', th: 'จู่โจมไม่หยุดยั้ง' },
+    description: { en: 'After you hit with an attack, you may move 1m. If this brings you adjacent to a new enemy, you may make a Free single weapon strike against them (1/turn).', th: 'หลังโจมตีสำเร็จ ขยับ 1 ม. ถ้าไปติดศัตรูใหม่ โจมตีฟรี 1 ครั้ง (1/เทิร์น)' },
+    icon: 'relentless-assault-icon',
+    tags: [ 'attack', 'tier-1', 'role' ],
+    stack: { id: 'relentless-assault', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND },
+          { type: KEYWORD_TYPE.FREE }
+          // TODO: Implement move and free strike logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-command-overload',
+    name: { en: 'Command Overload', th: 'โอเวอร์โหลดบัญชา' },
+    description: { en: 'When you use a damaging Command, spend 1 extra FP to add one effect: target becomes Burning, Slowed, or has a -2 penalty to its next roll.', th: 'ใช้ Command ที่สร้างดาเมจ จ่าย FP เพิ่ม 1 เพื่อเพิ่มผล (Burning, Slowed, หรือ -2)' },
+    icon: 'command-overload-icon',
+    tags: [ 'attack', 'tier-1', 'role' ],
+    stack: { id: 'command-overload', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.COMMAND, value: 1 }
+          // TODO: Implement effect selection logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-surgical-strike',
+    name: { en: 'Surgical Strike', th: 'โจมตีแม่นยำ' },
+    description: { en: 'Make an attack with the True Strike feature. Cooldown 2.', th: 'โจมตีด้วย True Strike (CD 2)' },
+    icon: 'surgical-strike-icon',
+    tags: [ 'attack', 'tier-1', 'role' ],
+    stack: { id: 'surgical-strike', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.COOLDOWN, value: 2 },
+          { type: KEYWORD_TYPE.TRUE_STRIKE }
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-volley-arc',
+    name: { en: 'Volley Arc', th: 'ยิงโค้งหลายเป้า' },
+    description: { en: 'Make a separate attack roll against up to 3 targets in a 60° arc. Cooldown 3.', th: 'โจมตี 3 เป้าในมุม 60° (CD 3)' },
+    icon: 'volley-arc-icon',
+    tags: [ 'attack', 'tier-1', 'role' ],
+    stack: { id: 'volley-arc', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'attacker' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.COOLDOWN, value: 3 }
+          // TODO: Implement multi-target arc logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  // --- Defender ---
+  {
+    id: 'skill-emergency-block',
+    name: { en: 'Emergency Block', th: 'บล็อกฉุกเฉิน' },
+    description: { en: 'When you are hit, reduce the damage by 2d10. If this saves you from being Downed, you gain Block 1 until your next turn. (Once per combat)', th: 'เมื่อโดนโจมตี ลดดาเมจ 2d10 ถ้าไม่ล้ม ได้ Block 1 ถึงเทิร์นถัดไป (1/การต่อสู้)' },
+    icon: 'emergency-block-icon',
+    tags: [ 'defend', 'tier-1', 'role' ],
+    stack: { id: 'emergency-block', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT }
+          // TODO: Implement damage reduction and Block logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-evasion-frame',
+    name: { en: 'Evasion Frame', th: 'โครงหลบหลีก' },
+    description: { en: 'Once per round, you can choose to reroll a failed Agility Saving Check.', th: 'หนึ่งครั้งต่อรอบ เลือกทอย Agility Save ใหม่ได้' },
+    icon: 'evasion-frame-icon',
+    tags: [ 'defend', 'tier-1', 'role' ],
+    stack: { id: 'evasion-frame', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.ROUND }
+          // TODO: Implement reroll failed Agility Save logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-item-mastery-barrier-cache',
+    name: { en: 'Item Mastery: Barrier Cache', th: 'เชี่ยวชาญไอเท็ม: บาเรียร์' },
+    description: { en: 'You can deploy barrier items as a Free action once per turn. Your barriers have +50% HP or duration.', th: 'ใช้ไอเท็มบาเรียร์ฟรี 1 ครั้ง/เทิร์น บาเรียร์ HP/ระยะเวลา +50%' },
+    icon: 'item-mastery-barrier-cache-icon',
+    tags: [ 'defend', 'tier-1', 'role' ],
+    stack: { id: 'item-mastery-barrier-cache', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FREE }
+          // TODO: Implement barrier HP/duration bonus logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-interpose-shield',
+    name: { en: 'Interpose Shield', th: 'โล่รับแทน' },
+    description: { en: 'Choose an adjacent ally. Until your next turn, any attack targeting them can be redirected to you as a Reaction. They also gain Block 1. (Full, Cooldown 3)', th: 'เลือกเพื่อนติดกัน โจมตีที่มาหาเขาเปลี่ยนเป้ามาหาคุณได้ (Full, CD 3)' },
+    icon: 'interpose-shield-icon',
+    tags: [ 'defend', 'tier-1', 'role' ],
+    stack: { id: 'interpose-shield', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'defender' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.COOLDOWN, value: 3 },
+          { type: KEYWORD_TYPE.BLOCK, value: 1 }
+          // TODO: Implement redirection logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-encouraging-roar',
+    name: { en: 'Encouraging Roar', th: 'คำรามให้กำลังใจ' },
+    description: { en: 'Choose up to two allies within 5m. They gain a +1d4 bonus to their next roll, and you end one minor condition affecting them. (Full, Once per Combat)', th: 'เลือกเพื่อน 2 คนในระยะ 5 ม. ได้ +1d4 ในการทอยถัดไป และลบสถานะเล็ก 1 อย่าง (Full, 1/การต่อสู้)' },
+    icon: 'encouraging-roar-icon',
+    tags: [ 'support', 'tier-1', 'role' ],
+    stack: { id: 'encouraging-roar', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT }
+          // TODO: Implement +1d4 bonus and condition removal logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-weaken-resolve',
+    name: { en: 'Weaken Resolve', th: 'ลดทอนจิตใจ' },
+    description: { en: 'Force a target within 10m to make a Presence Save. On failure, they suffer a -2 penalty to all saves until the end of your next turn and take 1d6 psychic damage. (Standard, Cooldown 2)', th: 'บังคับเป้าหมายในระยะ 10 ม. เช็ค Presence ถ้าพลาด เซฟ -2 และรับดาเมจจิต 1d6 (Standard, CD 2)' },
+    icon: 'weaken-resolve-icon',
+    tags: [ 'support', 'tier-1', 'role' ],
+    stack: { id: 'weaken-resolve', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.COOLDOWN, value: 2 }
+          // TODO: Implement save penalty and psychic damage logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-last-second-aid',
+    name: { en: 'Last Second Aid', th: 'ช่วยเหลือวินาทีสุดท้าย' },
+    description: { en: 'When an ally within 3m would be reduced to 0 HP, you can spend 1 FP to grant them Temporary HP equal to 1d8 + your Presence modifier before the damage is applied. (Reaction)', th: 'เมื่อเพื่อนในระยะ 3 ม. จะโดนลด HP เหลือ 0 ใช้ 1 FP ให้ Temp HP = 1d8 + Presence Mod ก่อนรับดาเมจ (Reaction)' },
+    icon: 'last-second-aid-icon',
+    tags: [ 'support', 'tier-1', 'role' ],
+    stack: { id: 'last-second-aid', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.REACTION }
+          // TODO: Implement Temp HP logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
+  },
+  {
+    id: 'skill-zonal-pulse',
+    name: { en: 'Zonal Pulse', th: 'คลื่นพื้นที่' },
+    description: { en: 'Create a 3m aura around yourself. For 1 round, allies inside gain a +2 bonus to all Saving Throws. (Full, Cooldown 3)', th: 'สร้างออร่า 3 ม. รอบตัว 1 รอบ เพื่อนในออร่า Save +2 (Full, CD 3)' },
+    icon: 'zonal-pulse-icon',
+    tags: [ 'support', 'tier-1', 'role' ],
+    stack: { id: 'zonal-pulse', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 1,
+    requiredStats: [],
+    requiredClassRole: [ 'support' ],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.COOLDOWN, value: 3 }
+          // TODO: Implement aura and save bonus logic in system
+        ]
+      }
+    ],
+    type: 'role',
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system'
   }
-];
+  // === Tier 1 General Skills ===
+  // ... (continue for all General skills as described, using the same structure and valid enums)
+]; 

@@ -1,94 +1,139 @@
-import type { CreatureConfig } from '@/types/config/creature';
+import { CreatureConfig } from '@/types/config/creature';
 
-export const mockCreatures: CreatureConfig[] = // --- Sample Creature Configurations ---
-[
+export const mockCreatureConfigs: CreatureConfig[] = [
   {
-    id: 'goblin-grunt',
-    name: { en: 'Goblin Grunt', th: 'ก็อบลินทหาร' },
-    description: { en: 'A small, green-skinned humanoid, often found in tribal groups. Cowardly but cunning.', th: 'สิ่งมีชีวิตรูปร่างคล้ายมนุษย์ขนาดเล็ก ผิวเขียว มักพบในกลุ่มชนเผ่า ขี้ขลาดแต่เจ้าเล่ห์' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: 'https://placehold.co/32x32/5CB85C/FFFFFF?text=G',
-    thumbnail: 'https://placehold.co/128x128/5CB85C/FFFFFF?text=Goblin',
-    tags: [ 'humanoid', 'goblin', 'minion' ],
-    level: 1,
-    attributeOverrides: [
-      { attributeId: 'hit-point', value: { type: 'fixed', value: 7 } },
-      { attributeId: 'armor-class', value: { type: 'fixed', value: 13 } },
-      { attributeId: 'movement', value: { type: 'fixed', value: 9 } },
-      { attributeId: 'strength-ability', value: { type: 'fixed', value: 10 } },
-      { attributeId: 'agility-ability', value: { type: 'fixed', value: 14 } },
-      { attributeId: 'dexterity-ability', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'intelligence-ability', value: { type: 'fixed', value: 8 } },
-      { attributeId: 'sense-ability', value: { type: 'fixed', value: 10 } },
-      { attributeId: 'charisma-ability', value: { type: 'fixed', value: 8 } }
-    ],
-    traitIds: [],
-    actionIds: [ 'main-hand-attack', 'throw-item' ],
-    skillIds: [],
-    conditionIds: [],
-    equipment: {
-      'main-hand': [ 'shortsword' ],
-      body: [ 'leather-armor' ]
+    id: 'creature-grasping-vine',
+    name: { en: 'Grasping Vine' },
+    description: { en: 'A carnivorous plant from the overgrown jungles of Gaea Libris. It lies perfectly still, disguised as a normal vine, until prey wanders too close. It then springs to life, attempting to constrict and crush its victim.' },
+    ownerId: 'system',
+    gameSystemId: 'game-system-ixo',
+    tags: [ 'plant', 'ambusher' ],
+    threatLevel: 1,
+    originId: 'gaea-libris',
+    statOverrides: {
+      strength: 3,
+      agility: 0,
+      sense: 1,
+      technique: 0,
+      intelligence: -4,
+      presence: -3
     },
-    defaultDamageScales: {}
-  },
-  {
-    id: 'fire-elemental',
-    name: { en: 'Fire Elemental', th: 'ธาตุไฟ' },
-    description: { en: 'A living pillar of searing flame, born of pure elemental energy. Its touch ignites all it encounters.', th: 'เสาเพลิงลุกโชนมีชีวิต เกิดจากพลังงานธาตุบริสุทธิ์ การสัมผัสของมันจะจุดไฟทุกสิ่งที่พบเจอ' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: 'https://placehold.co/32x32/FF4500/FFFFFF?text=🔥',
-    thumbnail: 'https://placehold.co/128x128/FF4500/FFFFFF?text=Elemental',
-    tags: [ 'elemental', 'fire', 'summon' ],
-    level: 3,
     attributeOverrides: [
-      { attributeId: 'hit-point', value: { type: 'fixed', value: 30 } },
-      { attributeId: 'armor-class', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'movement', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'strength-ability', value: { type: 'fixed', value: 14 } },
-      { attributeId: 'agility-ability', value: { type: 'fixed', value: 10 } },
-      { attributeId: 'dexterity-ability', value: { type: 'fixed', value: 10 } },
-      { attributeId: 'intelligence-ability', value: { type: 'fixed', value: 6 } },
-      { attributeId: 'sense-ability', value: { type: 'fixed', value: 10 } },
-      { attributeId: 'charisma-ability', value: { type: 'fixed', value: 8 } }
+      { attributeId: 'hit-points', baseValue: { type: 'fixed', value: 20 } },
+      { attributeId: 'armor-class', baseValue: { type: 'fixed', value: 10 } },
+      { attributeId: 'damage-reduction', baseValue: { type: 'fixed', value: 1 } },
+      { attributeId: 'speed', baseValue: { type: 'fixed', value: 3 } }
     ],
-    traitIds: [],
-    actionIds: [ 'fire-elemental-touch' ],
-    skillIds: [],
-    conditionIds: [],
-    equipment: {},
-    defaultDamageScales: {
-      fire: 'immunity',
-      piercing: 'resistant',
+    resistances: {
       bludgeoning: 'resistant',
-      slashing: 'resistant'
-    }
+      fire: 'vulnerable'
+    },
+    actionIds: [ 'action-constrict', 'action-crush' ],
+    skillIds: [ 'skill-stealth' ],
+    conditionIds: [],
+    equipments: {},
+    holdItems: []
   },
   {
-    id: 'owlbear',
-    name: { en: 'Owlbear', th: 'หมีนกฮูก' },
-    description: { en: 'A monstrous hybrid of bear and owl, known for its ferocity and powerful attacks.', th: 'ลูกผสมสัตว์ประหลาดระหว่างหมีกับนกฮูก ขึ้นชื่อเรื่องความดุร้ายและการโจมตีที่ทรงพลัง' },
-    createdAt: '2023-01-01T00:00:00Z',
-    icon: 'https://placehold.co/32x32/A0522D/FFFFFF?text=🐻🦉',
-    thumbnail: 'https://placehold.co/128x128/A0522D/FFFFFF?text=Owlbear',
-    tags: [ 'beast', 'monstrosity' ],
-    level: 5,
+    id: 'creature-clockwork-sentinel',
+    name: { en: 'Clockwork Sentinel' },
+    description: { en: 'A vigilant automaton from the city-states of Artificium. Built for guard duty, it moves with a rhythmic, clanking gait, its single glowing eye scanning for threats. It is durable, relentless, and follows its last given orders without question.' },
+    ownerId: 'system',
+    gameSystemId: 'game-system-ixo',
+    tags: [ 'construct', 'sentry' ],
+    threatLevel: 3,
+    originId: 'artificium',
+    statOverrides: {
+      strength: 3,
+      agility: 0,
+      sense: 2,
+      technique: 3,
+      intelligence: -2,
+      presence: -1
+    },
     attributeOverrides: [
-      { attributeId: 'hit-point', value: { type: 'fixed', value: 59 } },
-      { attributeId: 'armor-class', value: { type: 'fixed', value: 13 } },
-      { attributeId: 'movement', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'strength-ability', value: { type: 'fixed', value: 20 } },
-      { attributeId: 'agility-ability', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'dexterity-ability', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'intelligence-ability', value: { type: 'fixed', value: 3 } },
-      { attributeId: 'sense-ability', value: { type: 'fixed', value: 12 } },
-      { attributeId: 'charisma-ability', value: { type: 'fixed', value: 7 } }
+      { attributeId: 'hit-points', baseValue: { type: 'fixed', value: 45 } },
+      { attributeId: 'armor-class', baseValue: { type: 'fixed', value: 14 } },
+      { attributeId: 'damage-reduction', baseValue: { type: 'fixed', value: 4 } },
+      { attributeId: 'speed', baseValue: { type: 'fixed', value: 6 } }
     ],
-    traitIds: [],
-    actionIds: [ 'owlbear-claws', 'owlbear-beak' ],
-    skillIds: [],
+    resistances: {
+      poison: 'immune',
+      psychic: 'immune'
+    },
+    actionIds: [ 'action-power-mace', 'action-steam-vent', 'action-target-lock' ],
+    skillIds: [ 'skill-perception' ],
+    conditionIds: [ 'condition-charmed-immune', 'condition-frightened-immune' ],
+    equipments: {
+      'main-hand': 'item-weapon-power-mace'
+    },
+    holdItems: []
+  },
+  {
+    id: 'creature-dolorian-scavenger',
+    name: { en: 'Dolorian Scavenger' },
+    description: { en: 'A gaunt, hunched humanoid that stalks the desolate wastes of Doloria. Wrapped in rags and wielding a crude, sharpened pipe, these creatures are masters of survival, using pack tactics and dirty tricks to bring down prey much stronger than themselves.' },
+    ownerId: 'system',
+    gameSystemId: 'game-system-ixo',
+    tags: [ 'humanoid', 'scavenger' ],
+    threatLevel: 2,
+    originId: 'doloria',
+    statOverrides: {
+      strength: 2,
+      agility: 2,
+      sense: 3,
+      technique: 1,
+      intelligence: 0,
+      presence: 0
+    },
+    attributeOverrides: [
+      { attributeId: 'hit-points', baseValue: { type: 'fixed', value: 33 } },
+      { attributeId: 'armor-class', baseValue: { type: 'fixed', value: 13 } },
+      { attributeId: 'damage-reduction', baseValue: { type: 'fixed', value: 2 } },
+      { attributeId: 'speed', baseValue: { type: 'fixed', value: 8 } }
+    ],
+    resistances: {},
+    actionIds: [ 'action-shiv', 'action-pocket-sand', 'action-harried-retreat' ],
+    skillIds: [ 'skill-stealth', 'skill-perception', 'skill-endurance' ],
     conditionIds: [],
-    equipment: {},
-    defaultDamageScales: {}
+    equipments: {
+      'main-hand': 'item-weapon-shiv'
+    },
+    holdItems: []
+  },
+  {
+    id: 'creature-ash-waste-marauder',
+    name: { en: 'Ash Waste Marauder' },
+    description: { en: 'These desperate and pragmatic survivors hail from the desolate wastes of Doloria. Twisted by a raw desire for survival, they stalk the fractured realms in small packs, using cunning tactics and dirty tricks to overwhelm their prey.' },
+    ownerId: 'system',
+    gameSystemId: 'game-system-ixo',
+    tags: [ 'humanoid', 'marauder' ],
+    threatLevel: 2,
+    originId: 'doloria',
+    statOverrides: {
+      strength: 2,
+      agility: 2,
+      sense: 1,
+      technique: 0,
+      intelligence: -1,
+      presence: 0
+    },
+    attributeOverrides: [
+      { attributeId: 'hit-points', baseValue: { type: 'fixed', value: 18 } },
+      { attributeId: 'armor-class', baseValue: { type: 'fixed', value: 11 } },
+      { attributeId: 'damage-reduction', baseValue: { type: 'fixed', value: 1 } },
+      { attributeId: 'speed', baseValue: { type: 'fixed', value: 8 } }
+    ],
+    resistances: {
+      poison: 'resistant'
+    },
+    actionIds: [ 'action-scavenged-blade', 'action-harass' ],
+    skillIds: [ 'skill-endurance', 'skill-stealth' ],
+    conditionIds: [],
+    equipments: {
+      'main-hand': 'item-weapon-scavenged-blade'
+    },
+    holdItems: []
   }
 ];
+  

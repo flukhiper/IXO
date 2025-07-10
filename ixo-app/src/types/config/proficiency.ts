@@ -1,15 +1,17 @@
-import type { BaseConfig, DiceValue, FixedValue } from './base';
+import type { BaseConfig, EffectConfig } from './base';
 
 export interface ProficiencyGainConfig {
-  statModifier: {
-    statId: string;
-    value: number;
-  }[];
-  attributeModifier: {
-    attributeId: string;
-    baseValue: FixedValue | DiceValue;
-    formula?: string;
-  }[];
+  // statModifier: {
+  //   statId: string;
+  //   value: number;
+  // }[];
+  // attributeModifier: {
+  //   attributeId: string;
+  //   baseValue: FixedValue | DiceValue;
+  //   formula?: string;
+  // }[];
+
+  effects: EffectConfig[];
 
   skillGain: {
     includedSkillTags?: string[];   // Must include ALL these tags

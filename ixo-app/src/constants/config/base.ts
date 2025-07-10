@@ -2,6 +2,7 @@ export const VALUE_TYPE = {
   FIXED: 'fixed',
   DICE: 'dice',
   REF: 'ref',
+  SELECT: 'select',
   FULL: 'full',
   HALF: 'half'
 } as const;
@@ -35,6 +36,9 @@ export const PHASE_TYPE = {
 
 export const KEYWORD_TYPE = {
   // Permanent Bonus Keywords
+  STAT_GIFTED: 'stat-gifted',
+  STAT_LEARNED: 'stat-learned',
+  STAT_MASTERY: 'stat-mastery',
   ATTRIBUTE_GIFTED: 'attribute-gifted',
   ATTRIBUTE_LEARNED: 'attribute-learned',
   ATTRIBUTE_MASTERY: 'attribute-mastery',
@@ -85,9 +89,6 @@ export const KEYWORD_TYPE = {
   // Action Damage Keywords
   DAMAGE: 'damage',
   BOUND_DAMAGE: 'bound-damage',
-  INVOKED_DAMAGE: 'invoked-damage',
-  WEAPON_DAMAGE: 'weapon-damage',
-  UNARMED_DAMAGE: 'unarmed-damage',
 
   // Action Resource Keywords
   EXPAND: 'expand',
@@ -105,6 +106,7 @@ export const KEYWORD_TYPE = {
 } as const;
 
 export const KEYWORD_VALUE_TYPE = {
-  ANY: 'any',
-  ALL: 'all'
+  ANY: 'any', // must input when using the keyword
+  SELECTED: 'selected', // select from the list of options when using the keyword
+  ALL: 'all' // use all the options when using the keyword
 } as const;

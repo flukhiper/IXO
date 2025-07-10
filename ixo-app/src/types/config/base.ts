@@ -1,4 +1,4 @@
-import { CONDITION_OPERATOR, VALUE_TYPE } from '@/constants/config/base';
+import { CONDITION_OPERATOR, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 import type { Keyword } from './keyword/base';
 
 export interface LocalizeText {
@@ -35,6 +35,10 @@ export interface RefValue {
   id: string; // e.g. 'attack-roll', 'main-weapon', etc.
 }
 
+export interface SelectValue {
+  type: typeof VALUE_TYPE.SELECT;
+}
+
 export interface FullValue {
   type: typeof VALUE_TYPE.FULL;
 }
@@ -43,12 +47,13 @@ export interface HalfValue {
   type: typeof VALUE_TYPE.HALF;
 }
 
-
 export type ConditionOperator = typeof CONDITION_OPERATOR[keyof typeof CONDITION_OPERATOR];
 export interface ConditionFormula {
   operator: ConditionOperator;
   formula: string;
 }
+
+export type PhaseType = typeof PHASE_TYPE[keyof typeof PHASE_TYPE];
 
 export interface EffectConfig {
   name?: LocalizeText;

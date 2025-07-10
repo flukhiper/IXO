@@ -3,6 +3,11 @@ import { BaseKeyword } from './base';
 
 type SpecialValue = typeof KEYWORD_VALUE_TYPE.ANY | typeof KEYWORD_VALUE_TYPE.ALL;
 // Permanent Bonus Keywords
+export interface StatGiftedKeyword extends BaseKeyword {
+  type: typeof KEYWORD_TYPE.STAT_GIFTED;
+  statId: string | SpecialValue;
+  numberOfStats?: number; // if statId is typeof KEYWORD_VALUE_TYPE.ANY, this is the number of stats that gifted
+}
 export interface AttributeGiftedKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.ATTRIBUTE_GIFTED;
   attributeId: string | SpecialValue;
@@ -18,6 +23,11 @@ export interface SavingThrowGiftedKeyword extends BaseKeyword {
   savingThrowId: string | SpecialValue;
   numberOfAttributes?: number; // if skillCheckAttributeId is typeof KEYWORD_VALUE_TYPE.ANY, this is the number of attributes that gifted
 }
+export interface StatLearnedKeyword extends BaseKeyword {
+  type: typeof KEYWORD_TYPE.STAT_LEARNED;
+  statId: string | SpecialValue;
+  numberOfStats?: number; // if statId is typeof KEYWORD_VALUE_TYPE.ANY, this is the number of stats that learned
+}
 export interface AttributeLearnedKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.ATTRIBUTE_LEARNED;
   attributeId: string | SpecialValue;
@@ -32,6 +42,11 @@ export interface SavingThrowLearnedKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.SAVING_THROW_LEARNED;
   savingThrowId: string | SpecialValue;
   numberOfAttributes?: number; // if skillCheckAttributeId is typeof KEYWORD_VALUE_TYPE.ANY, this is the number of attributes that learned
+}
+export interface StatMasteryKeyword extends BaseKeyword {
+  type: typeof KEYWORD_TYPE.STAT_MASTERY;
+  statId: string | SpecialValue;
+  numberOfStats?: number; // if statId is typeof KEYWORD_VALUE_TYPE.ANY, this is the number of stats that mastered
 }
 export interface AttributeMasteryKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.ATTRIBUTE_MASTERY;

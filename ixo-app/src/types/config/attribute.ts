@@ -1,6 +1,5 @@
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import { PHASE_TYPE } from '@/constants/config/base';
-import type { BaseConfig, DiceValue, FixedValue, FullValue, HalfValue } from './base';
+import type { BaseConfig, DiceValue, FixedValue, FullValue, HalfValue, PhaseType } from './base';
 
 export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
 
@@ -20,7 +19,7 @@ export interface BaseAttributeConfig extends BaseConfig {
 export interface ResourceAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.RESOURCE;
   restores: {
-    phase: typeof PHASE_TYPE.SHORT_DOWNTIME;
+    phase: PhaseType;
     baseValue: FixedValue | DiceValue | FullValue | HalfValue;
     formula?: string;
   }[];

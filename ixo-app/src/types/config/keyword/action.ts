@@ -1,6 +1,6 @@
-import { KEYWORD_TYPE, KEYWORD_VALUE_TYPE, PHASE_TYPE } from '@/constants/config/base';
+import { KEYWORD_TYPE, KEYWORD_VALUE_TYPE } from '@/constants/config/base';
 import type { BaseKeyword } from '@/types/config/keyword/base';
-import type { DiceValue, FixedValue, FullValue, HalfValue } from '@/types/config/base';
+import type { DiceValue, FixedValue, FullValue, HalfValue, PhaseType, RefValue, SelectValue } from '@/types/config/base';
 
 // Action Keywords
 export interface FullKeyword extends BaseKeyword {
@@ -25,7 +25,7 @@ export interface ReactionKeyword extends BaseKeyword {
 export interface UsageKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.USAGE;
   numberOfUsages: number;
-  phase: typeof PHASE_TYPE.SHORT_DOWNTIME;
+  phase: PhaseType;
 }
   
 // Action Target Keywords
@@ -73,31 +73,15 @@ export interface SavingThrowKeyword extends BaseKeyword {
 // Action Damage Keywords
 export interface DamageKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.DAMAGE;
-  damageTypeId: string;
-  baseValue: DiceValue | FixedValue;
+  damageTypeId: string | typeof KEYWORD_VALUE_TYPE.SELECTED; // if selected, then the damage type is not specified
+  baseValue: DiceValue | FixedValue | RefValue | SelectValue;
   formula?: string;
 }
 // Action Damage Type Keywords
 export interface BoundDamageKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.BOUND_DAMAGE;
   damageTypeIds: string[]; // choose from DAMAGE_TYPE to determine damage type
-  baseValue: DiceValue | FixedValue;
-  formula?: string;
-}
-export interface InvokedDamageKeyword extends BaseKeyword {
-  type: typeof KEYWORD_TYPE.INVOKED_DAMAGE;
-  damageTypeIds: string[]; // choose from DAMAGE_TYPE to determine damage type
-  baseValue: DiceValue | FixedValue;
-  formula?: string;
-}
-export interface WeaponDamageKeyword extends BaseKeyword {
-  type: typeof KEYWORD_TYPE.WEAPON_DAMAGE;
-  equipSlotId: string;
-}
-export interface UnarmedDamageKeyword extends BaseKeyword {
-  type: typeof KEYWORD_TYPE.UNARMED_DAMAGE;
-  damageTypeId: string;
-  baseValue: DiceValue | FixedValue;
+  baseValue: DiceValue | FixedValue | RefValue | SelectValue;
   formula?: string;
 }
   
@@ -117,7 +101,7 @@ export interface LimitKeyword extends BaseKeyword {
 export interface RestoreKeyword extends BaseKeyword {
   type: typeof KEYWORD_TYPE.RESTORE;
   attributeId: string;
-  baseValue: DiceValue | FixedValue | FullValue | HalfValue;
+  baseValue: DiceValue | FixedValue | RefValue | FullValue | HalfValue;
   formula?: string;
 }
 export interface ReduceKeyword extends BaseKeyword {
