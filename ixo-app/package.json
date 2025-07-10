@@ -10,10 +10,10 @@
     "test:ts": "ts-node --project tsconfig.test.json -r tsconfig-paths/register"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "canvas": "^3.1.0",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
-    "dotenv": "^17.0.0",
     "konva": "^9.3.20",
     "mathjs": "^14.5.2",
     "mongoose": "^8.16.0",
@@ -32,6 +32,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.0",
     "eslint": "^9.22.0",
     "eslint-config-next": "15.2.3",
     "eslint-plugin-react-compiler": "^19.0.0-beta-e993439-20250328",

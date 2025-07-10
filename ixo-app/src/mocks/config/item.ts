@@ -1,6 +1,6 @@
-import { ItemConfig } from '@/types/config/item';
+import type { ItemConfig } from '@/types/config/item';
 
-export const mockItemConfigs: ItemConfig[] = [
+export const mock: ItemConfig[] = [
   {
     id: 'item-armor-padded-robes',
     name: { en: 'Padded Robes' },

@@ -7,7 +7,7 @@ import useContainerSize from '@/hooks/useContainerSize';
 import { useGame } from '@/contexts/GameContext';
 import { useSelection } from '@/contexts/SelectionContext';
 
-import MapObject from './MapObject';
+// import MapObject from './MapObject';
 
 const RealStageComponent = () => {
   // refs
@@ -15,7 +15,7 @@ const RealStageComponent = () => {
 
   // hooks
   const { size, containerRef } = useContainerSize<HTMLDivElement>();
-  const { gameState, onMapChange } = useGame();
+  const { gameState } = useGame();
   const { setSelectedObjectId } = useSelection();
 
   // effects
@@ -93,14 +93,14 @@ const RealStageComponent = () => {
         draggable
       >
         <Layer>
-          {
+          {/* {
             gameState.board.maps && Object.values(gameState.board.maps).map((map) => {
               return <MapObject 
                 key={map.id} {...map} 
                 onChange={onMapChange}
               />;
             })
-          }
+          } */}
         </Layer>
         <Layer>
           <Text text={'Try to drag shapes '} fontSize={15} stroke={'green'} />

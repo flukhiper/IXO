@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import type { CharacterConfig } from '@/types/config/character';
+import { LocalizeTextSchema } from './common';
 
 // Reuse sub-schemas from ProficiencyConfig
 const StatModifierSchema = new mongoose.Schema({
@@ -44,6 +45,9 @@ const EquipmentRulesSchema = new mongoose.Schema({
 }, { _id: false });
 
 const CharacterConfigSchema = new mongoose.Schema<CharacterConfig>({
+  id: { type: String, required: true, unique: true },
+  name: { type: LocalizeTextSchema, required: true },
+  description: { type: LocalizeTextSchema },
   startStatPoint: { type: Number, required: true },
   startOriginChoice: { type: [ String ], required: true },
   startTraitChoice: { type: [ String ], required: true },

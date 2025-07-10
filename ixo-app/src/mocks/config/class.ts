@@ -2,7 +2,7 @@ import type { ClassConfig } from '@/types/config/class';
 import { CLASS_TYPE, ARCHETYPE_ROLE_TYPE } from '@/constants/config/class';
 import { KEYWORD_TYPE, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockClassConfigs: ClassConfig[] = [
+export const mock: ClassConfig[] = [
   // STRENGTH-BASED — Enforcer
   {
     id: 'class-enforcer-bruiser',

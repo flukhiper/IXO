@@ -1,7 +1,7 @@
 import type { StatConfig } from '@/types/config/stat';
 import { STAT_TYPE } from '@/constants/config/stat';
 
-export const mockStats: StatConfig[] = [
+export const mock: StatConfig[] = [
   // Primary Stats
   {
     id: 'stat-strength',

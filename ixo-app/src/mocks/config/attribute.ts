@@ -2,7 +2,7 @@ import type { AnyAttributeConfig } from '@/types/config/attribute';
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
 import { PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockAttributes: AnyAttributeConfig[] = [
+export const mock: AnyAttributeConfig[] = [
   // Resource Attributes
   {
     id: 'attribute-hit-points',

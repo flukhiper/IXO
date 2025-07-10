@@ -2,7 +2,7 @@ import type { ConditionConfig } from '@/types/config/condition';
 import { CONDITION_STACK_TYPE, CONDITION_TICK_TYPE, CONDITION_EFFECT_TYPE } from '@/constants/config/condition';
 import { PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockConditionConfigs: ConditionConfig[] = [
+export const mock: ConditionConfig[] = [
   {
     id: 'burned',
     name: { en: 'Burned', th: 'ติดไฟ' },

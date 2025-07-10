@@ -6,4 +6,12 @@ export class AttributeConfigService extends BaseConfigService<AnyAttributeConfig
   constructor () {
     super(new AttributeConfigRepository());
   }
+
+  async createMany (items: AnyAttributeConfig[]) {
+    await super.createMany(items);
+  }
+
+  async deleteAll () {
+    await super.deleteAll();
+  }
 } 

@@ -1,7 +1,7 @@
 import type { ActionConfig } from '@/types/config/action';
 
 // === Mock Action Configs ===
-export const mockActionConfigs: ActionConfig[] = [
+export const mock: ActionConfig[] = [
   {
     id: 'action-common-full-attack',
     name: { en: 'Full Attack' },

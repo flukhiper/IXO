@@ -1,6 +1,6 @@
 import type { DamageScaleConfig } from '@/types/config/damageScale';
 
-export const mockDamageScales: DamageScaleConfig[] = [
+export const mock: DamageScaleConfig[] = [
   {
     id: 'normal',
     name: { en: 'Normal', th: 'ปกติ' },

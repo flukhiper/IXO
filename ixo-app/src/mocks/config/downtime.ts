@@ -2,7 +2,7 @@ import type { DowntimeConfig } from '@/types/config/downtime';
 import { KEYWORD_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
 // === Mock Downtime Configs ===
-export const mockDowntimeConfigs: DowntimeConfig[] = [
+export const mock: DowntimeConfig[] = [
   // 1. Prepare Combat Loadout
   {
     id: 'downtime-prepare-combat-loadout',

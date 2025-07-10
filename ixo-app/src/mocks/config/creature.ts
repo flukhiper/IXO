@@ -1,6 +1,6 @@
-import { CreatureConfig } from '@/types/config/creature';
+import type { CreatureConfig } from '@/types/config/creature';
 
-export const mockCreatureConfigs: CreatureConfig[] = [
+export const mock: CreatureConfig[] = [
   {
     id: 'creature-grasping-vine',
     name: { en: 'Grasping Vine' },

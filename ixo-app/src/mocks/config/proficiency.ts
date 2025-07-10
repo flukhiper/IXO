@@ -1,7 +1,7 @@
 import type { ProficiencyConfig } from '@/types/config/proficiency';
 import { KEYWORD_TYPE } from '@/constants/config/base';
 
-export const mockProficiencyConfigs: ProficiencyConfig[] = [
+export const mock: ProficiencyConfig[] = [
   // 1. General Weapon Paths
   {
     id: 'proficiency-weapon-simple',

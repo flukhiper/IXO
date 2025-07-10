@@ -1,7 +1,7 @@
 import type { TraitConfig } from '@/types/config/trait';
 import { KEYWORD_TYPE, PHASE_TYPE, KEYWORD_VALUE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockTraitConfigs: TraitConfig[] = [
+export const mock: TraitConfig[] = [
   // === FULL TRAITS ===
   {
     id: 'trait-dragonoid',

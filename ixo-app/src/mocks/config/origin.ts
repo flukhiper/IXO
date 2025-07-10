@@ -1,7 +1,7 @@
 import type { OriginConfig } from '@/types/config/origin';
 import { KEYWORD_TYPE } from '@/constants/config/base';
 
-export const mockOrigins: OriginConfig[] = [
+export const mock: OriginConfig[] = [
   {
     id: 'origin-primordia',
     name: {

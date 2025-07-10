@@ -1,6 +1,6 @@
 import type { DamageTypeConfig } from '@/types/config/damageType';
 
-export const mockDamageTypes: DamageTypeConfig[] = [
+export const mock: DamageTypeConfig[] = [
   {
     id: 'bludgeoning',
     name: { en: 'Bludgeoning', th: 'ทุบตี' },

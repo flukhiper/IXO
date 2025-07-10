@@ -2,7 +2,7 @@ import type { SkillConfig } from '@/types/config/skill';
 import { SKILL_STACK_TYPE } from '@/constants/config/skill';
 import { KEYWORD_TYPE, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
 
-export const mockSkillConfigs: SkillConfig[] = [
+export const mock: SkillConfig[] = [
   // === Tier 0 Role Skills ===
   // --- Attacker ---
   {
