@@ -1,8 +1,8 @@
-import { SkillConfigRepository } from '@/repositories/SkillConfigRepository';
+import { SkillConfigRepository } from '@/repositories/config/SkillConfigRepository';
 import type { SkillConfig } from '@/types/config/skill';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class SkillConfigService extends BaseConfigService<SkillConfig, SkillConfigRepository> {
+export class SkillConfigService extends BaseService<SkillConfig, SkillConfigRepository> {
   constructor () {
     super(new SkillConfigRepository());
   }

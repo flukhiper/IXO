@@ -1,8 +1,8 @@
-import { CharacterConfigRepository } from '@/repositories/CharacterConfigRepository';
+import { CharacterConfigRepository } from '@/repositories/config/CharacterConfigRepository';
 import type { CharacterConfig } from '@/types/config/character';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
  
-export class CharacterConfigService extends BaseConfigService<CharacterConfig & { id: string }, CharacterConfigRepository> {
+export class CharacterConfigService extends BaseService<CharacterConfig & { id: string }, CharacterConfigRepository> {
   constructor () {
     super(new CharacterConfigRepository());
   }

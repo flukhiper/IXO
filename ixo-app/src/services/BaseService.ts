@@ -1,12 +1,6 @@
-export abstract class BaseConfigService<T, R extends {
-  saveOne: (item: T) => Promise<void>;
-  saveMany?: (items: T[]) => Promise<void>;
-  getById: (id: string) => Promise<T | null>;
-  getAll: () => Promise<T[]>;
-  updateOne: (id: string, update: Partial<T>) => Promise<void>;
-  deleteOne: (id: string) => Promise<void>;
-  deleteAll?: () => Promise<void>;
-}> {
+import type { BaseRepository } from '@/repositories/BaseRepository';
+
+export abstract class BaseService<T extends { id: string }, R extends BaseRepository<T>> {
   protected readonly repository: R;
 
   constructor (repository: R) {

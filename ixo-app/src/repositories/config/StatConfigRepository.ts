@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { StatConfigModel } from '@/models/mongoose/StatConfig';
+import { BaseRepository } from '../BaseRepository';
+import { StatConfigModel } from '@/models/mongoose/config/StatConfig';
 import type { StatConfig } from '@/types/config/stat';
 
 export class StatConfigRepository extends BaseRepository<StatConfig> {

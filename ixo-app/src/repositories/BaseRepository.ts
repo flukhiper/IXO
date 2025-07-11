@@ -45,4 +45,9 @@ export abstract class BaseRepository<T extends { id: string }> {
   async deleteAll () {
     await this.model.deleteMany({});
   }
+
+  async getAllByFilter (filter: Record<string, unknown>): Promise<T[]> {
+    const docs = await this.model.find(filter).lean();
+    return docs as unknown as T[];
+  }
 } 

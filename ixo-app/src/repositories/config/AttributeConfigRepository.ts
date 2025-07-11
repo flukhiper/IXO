@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { AttributeConfigModel } from '@/models/mongoose/AttributeConfig';
+import { BaseRepository } from '../BaseRepository';
+import { AttributeConfigModel } from '@/models/mongoose/config/AttributeConfig';
 import type { AnyAttributeConfig } from '@/types/config/attribute';
 
 export class AttributeConfigRepository extends BaseRepository<AnyAttributeConfig> {

@@ -1,8 +1,8 @@
-import { AttributeConfigRepository } from '@/repositories/AttributeConfigRepository';
+import { AttributeConfigRepository } from '@/repositories/config/AttributeConfigRepository';
 import type { AnyAttributeConfig } from '@/types/config/attribute';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class AttributeConfigService extends BaseConfigService<AnyAttributeConfig, AttributeConfigRepository> {
+export class AttributeConfigService extends BaseService<AnyAttributeConfig, AttributeConfigRepository> {
   constructor () {
     super(new AttributeConfigRepository());
   }

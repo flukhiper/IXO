@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { GameSystemConfigModel } from '@/models/mongoose/GameSystemConfig';
+import { BaseRepository } from '../BaseRepository';
+import { GameSystemConfigModel } from '@/models/mongoose/config/GameSystemConfig';
 import type { GameSystem } from '@/types/config/gameSystem';
 
 export class GameSystemConfigRepository extends BaseRepository<GameSystem> {

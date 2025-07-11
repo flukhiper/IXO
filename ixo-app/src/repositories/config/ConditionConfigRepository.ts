@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { ConditionConfigModel } from '@/models/mongoose/ConditionConfig';
+import { BaseRepository } from '../BaseRepository';
+import { ConditionConfigModel } from '@/models/mongoose/config/ConditionConfig';
 import type { ConditionConfig } from '@/types/config/condition';
 
 export class ConditionConfigRepository extends BaseRepository<ConditionConfig> {

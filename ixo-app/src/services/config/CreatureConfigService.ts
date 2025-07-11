@@ -1,8 +1,8 @@
-import { CreatureConfigRepository } from '@/repositories/CreatureConfigRepository';
+import { CreatureConfigRepository } from '@/repositories/config/CreatureConfigRepository';
 import type { CreatureConfig } from '@/types/config/creature';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class CreatureConfigService extends BaseConfigService<CreatureConfig, CreatureConfigRepository> {
+export class CreatureConfigService extends BaseService<CreatureConfig, CreatureConfigRepository> {
   constructor () {
     super(new CreatureConfigRepository());
   }

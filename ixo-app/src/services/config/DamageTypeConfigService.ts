@@ -1,8 +1,8 @@
-import { DamageTypeConfigRepository } from '@/repositories/DamageTypeConfigRepository';
+import { DamageTypeConfigRepository } from '@/repositories/config/DamageTypeConfigRepository';
 import type { DamageTypeConfig } from '@/types/config/damageType';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class DamageTypeConfigService extends BaseConfigService<DamageTypeConfig, DamageTypeConfigRepository> {
+export class DamageTypeConfigService extends BaseService<DamageTypeConfig, DamageTypeConfigRepository> {
   constructor () {
     super(new DamageTypeConfigRepository());
   }

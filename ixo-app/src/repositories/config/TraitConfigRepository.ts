@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { TraitConfigModel } from '@/models/mongoose/TraitConfig';
+import { BaseRepository } from '../BaseRepository';
+import { TraitConfigModel } from '@/models/mongoose/config/TraitConfig';
 import type { TraitConfig } from '@/types/config/trait';
 
 export class TraitConfigRepository extends BaseRepository<TraitConfig> {

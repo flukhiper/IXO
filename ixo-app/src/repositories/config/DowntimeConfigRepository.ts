@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { DowntimeConfigModel } from '@/models/mongoose/DowntimeConfig';
+import { BaseRepository } from '../BaseRepository';
+import { DowntimeConfigModel } from '@/models/mongoose/config/DowntimeConfig';
 import type { DowntimeConfig } from '@/types/config/downtime';
 
 export class DowntimeConfigRepository extends BaseRepository<DowntimeConfig> {

@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { ActionConfigModel } from '@/models/mongoose/ActionConfig';
+import { BaseRepository } from '../BaseRepository';
+import { ActionConfigModel } from '@/models/mongoose/config/ActionConfig';
 import type { ActionConfig } from '@/types/config/action';
 
 export class ActionConfigRepository extends BaseRepository<ActionConfig> {

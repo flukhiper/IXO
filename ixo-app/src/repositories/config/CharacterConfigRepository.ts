@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { CharacterConfigModel } from '@/models/mongoose/CharacterConfig';
+import { BaseRepository } from '../BaseRepository';
+import { CharacterConfigModel } from '@/models/mongoose/config/CharacterConfig';
 import type { CharacterConfig } from '@/types/config/character';
 
 export class CharacterConfigRepository extends BaseRepository<CharacterConfig & { id: string }> {

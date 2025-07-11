@@ -1,8 +1,8 @@
-import { DowntimeConfigRepository } from '@/repositories/DowntimeConfigRepository';
+import { DowntimeConfigRepository } from '@/repositories/config/DowntimeConfigRepository';
 import type { DowntimeConfig } from '@/types/config/downtime';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class DowntimeConfigService extends BaseConfigService<DowntimeConfig, DowntimeConfigRepository> {
+export class DowntimeConfigService extends BaseService<DowntimeConfig, DowntimeConfigRepository> {
   constructor () {
     super(new DowntimeConfigRepository());
   }

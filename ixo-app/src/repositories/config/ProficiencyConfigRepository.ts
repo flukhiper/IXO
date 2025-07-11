@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { ProficiencyConfigModel } from '@/models/mongoose/ProficiencyConfig';
+import { BaseRepository } from '../BaseRepository';
+import { ProficiencyConfigModel } from '@/models/mongoose/config/ProficiencyConfig';
 import type { ProficiencyConfig } from '@/types/config/proficiency';
 
 export class ProficiencyConfigRepository extends BaseRepository<ProficiencyConfig> {

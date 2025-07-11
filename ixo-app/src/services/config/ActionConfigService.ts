@@ -1,8 +1,8 @@
-import { ActionConfigRepository } from '@/repositories/ActionConfigRepository';
+import { ActionConfigRepository } from '@/repositories/config/ActionConfigRepository';
 import type { ActionConfig } from '@/types/config/action';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class ActionConfigService extends BaseConfigService<ActionConfig, ActionConfigRepository> {
+export class ActionConfigService extends BaseService<ActionConfig, ActionConfigRepository> {
   constructor () {
     super(new ActionConfigRepository());
   }

@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { CreatureConfigModel } from '@/models/mongoose/CreatureConfig';
+import { BaseRepository } from '../BaseRepository';
+import { CreatureConfigModel } from '@/models/mongoose/config/CreatureConfig';
 import type { CreatureConfig } from '@/types/config/creature';
 
 export class CreatureConfigRepository extends BaseRepository<CreatureConfig> {

@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { SkillConfigModel } from '@/models/mongoose/SkillConfig';
+import { BaseRepository } from '../BaseRepository';
+import { SkillConfigModel } from '@/models/mongoose/config/SkillConfig';
 import type { SkillConfig } from '@/types/config/skill';
 
 export class SkillConfigRepository extends BaseRepository<SkillConfig> {

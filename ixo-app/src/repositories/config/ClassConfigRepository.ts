@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { ClassConfigModel } from '@/models/mongoose/ClassConfig';
+import { BaseRepository } from '../BaseRepository';
+import { ClassConfigModel } from '@/models/mongoose/config/ClassConfig';
 import type { ClassConfig } from '@/types/config/class';
 
 export class ClassConfigRepository extends BaseRepository<ClassConfig> {

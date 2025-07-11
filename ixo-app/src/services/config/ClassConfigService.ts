@@ -1,8 +1,8 @@
-import { ClassConfigRepository } from '@/repositories/ClassConfigRepository';
+import { ClassConfigRepository } from '@/repositories/config/ClassConfigRepository';
 import type { ClassConfig } from '@/types/config/class';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
  
-export class ClassConfigService extends BaseConfigService<ClassConfig, ClassConfigRepository> {
+export class ClassConfigService extends BaseService<ClassConfig, ClassConfigRepository> {
   constructor () {
     super(new ClassConfigRepository());
   }

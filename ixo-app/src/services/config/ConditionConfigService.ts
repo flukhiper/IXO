@@ -1,8 +1,8 @@
-import { ConditionConfigRepository } from '@/repositories/ConditionConfigRepository';
+import { ConditionConfigRepository } from '@/repositories/config/ConditionConfigRepository';
 import type { ConditionConfig } from '@/types/config/condition';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class ConditionConfigService extends BaseConfigService<ConditionConfig, ConditionConfigRepository> {
+export class ConditionConfigService extends BaseService<ConditionConfig, ConditionConfigRepository> {
   constructor () {
     super(new ConditionConfigRepository());
   }

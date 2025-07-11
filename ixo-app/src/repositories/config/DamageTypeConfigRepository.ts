@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { DamageTypeConfigModel } from '@/models/mongoose/DamageTypeConfig';
+import { BaseRepository } from '../BaseRepository';
+import { DamageTypeConfigModel } from '@/models/mongoose/config/DamageTypeConfig';
 import type { DamageTypeConfig } from '@/types/config/damageType';
 
 export class DamageTypeConfigRepository extends BaseRepository<DamageTypeConfig> {

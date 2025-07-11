@@ -1,8 +1,8 @@
-import { ProficiencyConfigRepository } from '@/repositories/ProficiencyConfigRepository';
+import { ProficiencyConfigRepository } from '@/repositories/config/ProficiencyConfigRepository';
 import type { ProficiencyConfig } from '@/types/config/proficiency';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class ProficiencyConfigService extends BaseConfigService<ProficiencyConfig, ProficiencyConfigRepository> {
+export class ProficiencyConfigService extends BaseService<ProficiencyConfig, ProficiencyConfigRepository> {
   constructor () {
     super(new ProficiencyConfigRepository());
   }

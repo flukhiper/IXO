@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { OriginConfigModel } from '@/models/mongoose/OriginConfig';
+import { BaseRepository } from '../BaseRepository';
+import { OriginConfigModel } from '@/models/mongoose/config/OriginConfig';
 import type { OriginConfig } from '@/types/config/origin';
 
 export class OriginConfigRepository extends BaseRepository<OriginConfig> {

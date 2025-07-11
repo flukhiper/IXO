@@ -1,8 +1,8 @@
-import { ItemConfigRepository } from '@/repositories/ItemConfigRepository';
+import { ItemConfigRepository } from '@/repositories/config/ItemConfigRepository';
 import type { ItemConfig } from '@/types/config/item';
-import { BaseConfigService } from './BaseConfigService';
+import { BaseService } from '../BaseService';
 
-export class ItemConfigService extends BaseConfigService<ItemConfig, ItemConfigRepository> {
+export class ItemConfigService extends BaseService<ItemConfig, ItemConfigRepository> {
   constructor () {
     super(new ItemConfigRepository());
   }

@@ -64,8 +64,6 @@ const configMap = [
 async function seed () {
   await initMongo(process.env.MONGODB_URI!);
 
-  console.log('*->>>', configMap);
-
   for (const { service, data } of configMap) {
     if (Array.isArray(data)) {
       await service.deleteAll();
