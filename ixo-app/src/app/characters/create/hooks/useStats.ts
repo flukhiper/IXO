@@ -1,29 +1,29 @@
-import { OriginConfig } from '@/types/config/origin';
 import { useEffect, useState } from 'react';
+import { StatConfig } from '@/types/config/stat';
 
-
-export function useOrigins (gameSystemId?: string) {
-  const [ origins, setOrigins ] = useState<OriginConfig[]>([]);
+export function useStats (gameSystemId?: string) {
+  const [ stats, setStats ] = useState<StatConfig[]>([]);
   const [ loading, setLoading ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
 
   useEffect(() => {
     if (!gameSystemId) {
-      setOrigins([]);
+      setStats([]);
       return;
     }
     setLoading(true);
-    fetch(`/api/configs/origin?gameSystemId=${encodeURIComponent(gameSystemId)}`)
+    const params = new URLSearchParams({ gameSystemId });
+    fetch(`/api/configs/stat?${params}`)
       .then(res => res.json())
       .then(data => {
-        setOrigins(Array.isArray(data) ? data : []);
+        setStats(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(() => {
-        setError('Failed to load origins');
+        setError('Failed to load stats');
         setLoading(false);
       });
   }, [ gameSystemId ]);
 
-  return { origins, loading, error };
+  return { stats, loading, error };
 } 

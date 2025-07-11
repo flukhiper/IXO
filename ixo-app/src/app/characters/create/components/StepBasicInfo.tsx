@@ -7,6 +7,7 @@ interface StepBasicInfoProps {
     portrait: string;
     gameSystemId: string;
     isPublic: boolean;
+    level: number;
   };
   onChange: (value: StepBasicInfoProps['value']) => void;
   onNext: () => void;
@@ -34,6 +35,19 @@ export default function StepBasicInfo ({ value, onChange, onNext, errors }: Step
           className="w-full border rounded px-3 py-2"
           required
         />
+      </div>
+      <div>
+        <label className="block font-medium mb-1">Level *</label>
+        <select
+          value={value.level}
+          onChange={e => onChange({ ...value, level: Number(e.target.value) })}
+          className="w-full border rounded px-3 py-2"
+          required
+        >
+          {Array.from({ length: 12 }, (_, i) => i + 1).map(lvl => 
+            <option key={lvl} value={lvl}>{lvl}</option>
+          )}
+        </select>
       </div>
       <div>
         <label className="block font-medium mb-1">Portrait</label>

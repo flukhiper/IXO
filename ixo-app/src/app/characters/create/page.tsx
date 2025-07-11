@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import StepBasicInfo from './components/StepBasicInfo';
 import StepChooseOrigin from './components/StepChooseOrigin';
+import StepChooseTrait from './components/StepChooseTrait';
+import StepChooseClass from './components/StepChooseClass';
+import StepAssignProficiency from './components/StepAssignProficiency';
+import StepAssignStats from './components/StepAssignStats';
 
 const steps = [
   'Basic Info',
   'Choose Origin',
   'Choose Trait',
   'Choose Class',
-  'Choose Role Skill',
   'Assign Proficiency',
   'Assign Stats',
   'Purchase Equipment'
@@ -26,9 +29,16 @@ export default function CharacterCreatePage () {
     name: '',
     portrait: '',
     gameSystemId: gameSystems[0].id,
-    isPublic: false
+    isPublic: false,
+    level: 1
   });
   const [ originId, setOriginId ] = useState('');
+  const [ traitId, setTraitId ] = useState('');
+  const [ classLevels, setClassLevels ] = useState<{ classId: string; level: number }[]>([]);
+  const [ statIncreases, setStatIncreases ] = useState<{ classId: string; level: number; statId: string }[]>([]);
+  const [ skills, setSkills ] = useState<{ skillId: string; type: 'class' | 'general' | 'role'; classId?: string; learnedAt: number }[]>([]);
+  const [ proficiencies, setProficiencies ] = useState<string[]>([]);
+  const [ baseStats, setBaseStats ] = useState<{ statId: string; value: number }[]>([]);
   const [ errors, setErrors ] = useState<string[]>([]);
 
   const validate = () => {
@@ -36,12 +46,39 @@ export default function CharacterCreatePage () {
       const errs: string[] = [];
       if (!basicInfo.name.trim()) errs.push('Name is required');
       if (!basicInfo.gameSystemId) errs.push('Game system is required');
+      if (!basicInfo.level || basicInfo.level < 1 || basicInfo.level > 12) errs.push('Level must be between 1 and 12');
       setErrors(errs);
       return errs.length === 0;
     }
     if (step === 1) {
       const errs: string[] = [];
       if (!originId) errs.push('Origin is required');
+      setErrors(errs);
+      return errs.length === 0;
+    }
+    if (step === 2) {
+      const errs: string[] = [];
+      if (!traitId) errs.push('Trait is required');
+      setErrors(errs);
+      return errs.length === 0;
+    }
+    if (step === 3) {
+      const totalLevels = classLevels.reduce((sum, c) => sum + c.level, 0);
+      const errs: string[] = [];
+      if (classLevels.length === 0) errs.push('At least one class is required');
+      if (totalLevels > basicInfo.level) errs.push('Total class levels cannot exceed character level');
+      setErrors(errs);
+      return errs.length === 0;
+    }
+    if (step === 4) {
+      const errs: string[] = [];
+      if (proficiencies.length === 0) errs.push('At least one proficiency is required');
+      setErrors(errs);
+      return errs.length === 0;
+    }
+    if (step === 5) {
+      const errs: string[] = [];
+      if (baseStats.length === 0) errs.push('At least one stat is required');
       setErrors(errs);
       return errs.length === 0;
     }
@@ -77,6 +114,55 @@ export default function CharacterCreatePage () {
         />
       );
     }
+    if (step === 2) {
+      return (
+        <StepChooseTrait
+          gameSystemId={basicInfo.gameSystemId}
+          value={traitId}
+          onChange={setTraitId}
+          onNext={handleNext}
+          errors={errors}
+        />
+      );
+    }
+    if (step === 3) {
+      return (
+        <StepChooseClass
+          gameSystemId={basicInfo.gameSystemId}
+          characterLevel={basicInfo.level}
+          value={classLevels}
+          onChange={setClassLevels}
+          statIncreases={statIncreases}
+          setStatIncreases={setStatIncreases}
+          skills={skills}
+          setSkills={setSkills}
+          onNext={handleNext}
+          errors={errors}
+        />
+      );
+    }
+    if (step === 4) {
+      return (
+        <StepAssignProficiency
+          gameSystemId={basicInfo.gameSystemId}
+          proficiencies={proficiencies}
+          setProficiencies={setProficiencies}
+          onNext={handleNext}
+          errors={errors}
+        />
+      );
+    }
+    if (step === 5) {
+      return (
+        <StepAssignStats
+          gameSystemId={basicInfo.gameSystemId}
+          baseStats={baseStats}
+          setBaseStats={setBaseStats}
+          onNext={handleNext}
+          errors={errors}
+        />
+      );
+    }
     // Placeholder for next steps
     return <div>Step {step + 1}: {steps[step]} (to be implemented)</div>;
   }
@@ -98,8 +184,8 @@ export default function CharacterCreatePage () {
         >
           Back
         </button>
-        {/* Hide Next button on step 0 and 1, since it's in the form */}
-        {step > 1 && 
+        {/* Hide Next button on steps 0-3, since it's in the form */}
+        {step > 3 && 
           <button
             onClick={handleNext}
             disabled={step === steps.length - 1}
