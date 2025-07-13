@@ -6,4 +6,8 @@ export class TraitConfigService extends BaseService<TraitConfig, TraitConfigRepo
   constructor () {
     super(new TraitConfigRepository());
   }
+
+  async getByGameSystemId (gameSystemId: string) {
+    return this.repository.getAllByFilter({ gameSystemId });
+  }
 } 

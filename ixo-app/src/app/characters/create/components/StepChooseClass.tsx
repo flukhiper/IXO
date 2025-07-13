@@ -196,6 +196,15 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
     return Math.max(1, characterLevel - otherLevels);
   };
 
+  // Check if a class can be added (when not already selected)
+  const canAddClass = (classId: string) => {
+    if (value.some(c => c.classId === classId)) {
+      return true; // Already selected, can always modify
+    }
+    // Check if adding level 1 would exceed character level
+    return totalLevels + 1 <= characterLevel;
+  };
+
   // Helpers to get/set stat and skill selections in top-level state
   function getStatSelection (classId: string, level: number) {
     return statIncreases.find(s => s.classId === classId && s.level === level)?.statId || '';
@@ -236,18 +245,25 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
             <div className="space-y-3">
               {classes.map(classItem => {
                 const selected = value.some(c => c.classId === classItem.id);
+                const canAdd = canAddClass(classItem.id);
                 return (
-                  <div key={classItem.id} className="flex items-start space-x-3 p-3 border rounded hover:bg-gray-50">
+                  <div key={classItem.id} className={`flex items-start space-x-3 p-3 border rounded ${
+                    canAdd ? 'hover:bg-gray-50' : 'bg-gray-100 opacity-60'
+                  }`}>
                     <input
                       type="checkbox"
                       id={classItem.id}
                       checked={selected}
                       onChange={() => handleClassToggle(classItem.id)}
+                      disabled={!canAdd}
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <label htmlFor={classItem.id} className="font-medium cursor-pointer">
+                      <label htmlFor={classItem.id} className={`font-medium ${canAdd ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
                         {classItem.name.en}
+                        {!canAdd && !selected && 
+                          <span className="ml-2 text-xs text-red-600">(Max level reached)</span>
+                        }
                       </label>
                       {classItem.description &&
                     <p className="text-sm text-gray-600 mt-1">
@@ -280,7 +296,10 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
             </div>
         }
       </div>
-      <div className="text-sm text-gray-700">Total assigned class levels: {totalLevels} / {characterLevel}</div>
+      <div className={`text-sm ${totalLevels >= characterLevel ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
+        Total assigned class levels: {totalLevels} / {characterLevel}
+        {totalLevels >= characterLevel && ' (Maximum reached)'}
+      </div>
 
       {/* Progression UI for each class/level */}
       {value.map(({ classId, level }) => {

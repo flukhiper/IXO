@@ -4,13 +4,23 @@ import { MONGODB_URI } from '@/configs/mongodb';
 
 import * as originController from './controllers/origin';
 import * as gamesystemController from './controllers/gamesystem';
-// import * as traitController from './controllers/trait';
+import * as itemController from './controllers/item';
+import * as traitController from './controllers/trait';
+import * as proficiencyController from './controllers/proficiency';
+import * as statController from './controllers/stat';
+import * as classController from './controllers/class';
+import * as skillController from './controllers/skill';
 // ...add more as needed
 
 const controllerMap = {
   origin: originController,
-  gamesystem: gamesystemController
-  // trait: traitController,
+  gamesystem: gamesystemController,
+  item: itemController,
+  trait: traitController,
+  proficiency: proficiencyController,
+  stat: statController,
+  class: classController,
+  skill: skillController
   // ...add more as needed
 };
 

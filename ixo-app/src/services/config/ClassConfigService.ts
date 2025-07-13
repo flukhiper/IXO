@@ -6,4 +6,8 @@ export class ClassConfigService extends BaseService<ClassConfig, ClassConfigRepo
   constructor () {
     super(new ClassConfigRepository());
   }
+
+  async getByGameSystemId (gameSystemId: string) {
+    return this.repository.getAllByFilter({ gameSystemId });
+  }
 } 

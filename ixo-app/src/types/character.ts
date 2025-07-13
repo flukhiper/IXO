@@ -17,22 +17,26 @@ export type CharacterWeaponSet = {
   [K in WeaponSlotType]: string[];
 };
 
-// Grid-based inventory system
+// Updated inventory system with unique IDs for each item
+export interface InventoryPosition {
+  row: number;
+  column: number;
+}
+
+export interface CharacterInventoryItem {
+  id: string; // Unique identifier for this inventory item instance
+  itemConfigId: string; // Reference to the item config
+  position: InventoryPosition;
+}
+
 export interface InventoryGrid {
   rows: number;
   columns: number;
-  items: InventoryGridItem[];
-}
-
-export interface InventoryGridItem {
-  itemId: string;
-  quantity: number;
-  position: { row: number; column: number }; // top-left corner of the item in the grid
-  // Optionally: size, rotation, etc.
+  items: CharacterInventoryItem[];
 }
 
 export interface CharacterInventory {
-  base: InventoryGrid; // The character's body inventory
+  base: InventoryGrid; // The character's body inventory (6x12 grid)
   containers: {
     [containerItemId: string]: InventoryGrid; // e.g., backpack, pouch, etc.
   };
@@ -40,7 +44,7 @@ export interface CharacterInventory {
 
 // Core Character interface
 export interface Character {
-  id: string;
+  id: string; // crypto.randomUUID() generated
   playerID: string;
   name: string;
   gameSystemId: string;
@@ -63,12 +67,16 @@ export interface Character {
 
 // Character proficiency (e.g., weapons, domains, armors)
 export interface CharacterProficiency {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   proficiencyId: string; // Reference to proficiency config
   level: number;         // Starts at 0, can be raised to 1 at creation
 }
 
 // Character class (supports multi-classing and class history)
 export interface CharacterClass {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   classId: string;      // Reference to the class config
   isActive: boolean;    // Is this the current/main class?
   level: number;        // Level in this class
@@ -77,6 +85,8 @@ export interface CharacterClass {
 
 // Character skill (learned from class, general, or role)
 export interface CharacterSkill {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   skillId: string;           // Reference to the skill config
   type: SkillType;           // 'class' | 'general' | 'role'
   classId?: string;          // Set if type === 'class'
@@ -87,12 +97,16 @@ export interface CharacterSkill {
 
 // Character trait (reference to trait config, can be toggled active/inactive)
 export interface CharacterTrait {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   traitId: string;
   isActive: boolean;
 }
 
 // Character attributes (HP, AC, Initiative, etc.)
 export interface CharacterAttribute {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   attributeId: string;
   baseValue: number | string;
   currentValue: number | string;
@@ -100,7 +114,8 @@ export interface CharacterAttribute {
 }
 
 export interface AttributeModifier {
-  id: string;
+  id: string; // crypto.randomUUID() generated
+  attributeId: string; // Reference to character attribute
   source: string; // 'origin', 'class', 'item', 'trait', etc.
   sourceId?: string; // ID of the source (originId, classId, etc.), optional for player-choice
   value: number; // Flat value only
@@ -109,6 +124,8 @@ export interface AttributeModifier {
 
 // Character stats (STR, DEX, CON, etc.)
 export interface CharacterStat {
+  id: string; // crypto.randomUUID() generated
+  characterId: string; // Reference to character
   statId: string;
   baseValue: number;      // Starts at 0, can be -1 to +3 at creation
   currentValue: number;
@@ -116,7 +133,8 @@ export interface CharacterStat {
 }
 
 export interface StatModifier {
-  id: string;
+  id: string; // crypto.randomUUID() generated
+  statId: string; // Reference to character stat
   source: string; // 'origin', 'class', 'item', 'trait', 'player-choice', etc.
   sourceId?: string; // ID of the source (originId, classId, etc.), optional for player-choice
   value: number; // Flat value only

@@ -7,6 +7,8 @@ import StepChooseTrait from './components/StepChooseTrait';
 import StepChooseClass from './components/StepChooseClass';
 import StepAssignProficiency from './components/StepAssignProficiency';
 import StepAssignStats from './components/StepAssignStats';
+import StepPurchaseEquipment from './components/StepPurchaseEquipment';
+import type { ItemConfig } from '@/types/config/item';
 
 const steps = [
   'Basic Info',
@@ -33,12 +35,13 @@ export default function CharacterCreatePage () {
     level: 1
   });
   const [ originId, setOriginId ] = useState('');
-  const [ traitId, setTraitId ] = useState('');
+  const [ traitIds, setTraitIds ] = useState<string[]>([]);
   const [ classLevels, setClassLevels ] = useState<{ classId: string; level: number }[]>([]);
   const [ statIncreases, setStatIncreases ] = useState<{ classId: string; level: number; statId: string }[]>([]);
   const [ skills, setSkills ] = useState<{ skillId: string; type: 'class' | 'general' | 'role'; classId?: string; learnedAt: number }[]>([]);
   const [ proficiencies, setProficiencies ] = useState<string[]>([]);
   const [ baseStats, setBaseStats ] = useState<{ statId: string; value: number }[]>([]);
+  const [ purchasedItems, setPurchasedItems ] = useState<ItemConfig[]>([]);
   const [ errors, setErrors ] = useState<string[]>([]);
 
   const validate = () => {
@@ -58,7 +61,7 @@ export default function CharacterCreatePage () {
     }
     if (step === 2) {
       const errs: string[] = [];
-      if (!traitId) errs.push('Trait is required');
+      if (traitIds.length === 0) errs.push('At least one trait is required');
       setErrors(errs);
       return errs.length === 0;
     }
@@ -79,6 +82,12 @@ export default function CharacterCreatePage () {
     if (step === 5) {
       const errs: string[] = [];
       if (baseStats.length === 0) errs.push('At least one stat is required');
+      setErrors(errs);
+      return errs.length === 0;
+    }
+    if (step === 6) {
+      const errs: string[] = [];
+      if (purchasedItems.length === 0) errs.push('At least one item is required');
       setErrors(errs);
       return errs.length === 0;
     }
@@ -118,8 +127,8 @@ export default function CharacterCreatePage () {
       return (
         <StepChooseTrait
           gameSystemId={basicInfo.gameSystemId}
-          value={traitId}
-          onChange={setTraitId}
+          value={traitIds}
+          onChange={setTraitIds}
           onNext={handleNext}
           errors={errors}
         />
@@ -163,6 +172,16 @@ export default function CharacterCreatePage () {
         />
       );
     }
+    if (step === 6) {
+      return (
+        <StepPurchaseEquipment
+          gameSystemId={basicInfo.gameSystemId}
+          setPurchasedItems={setPurchasedItems}
+          onNext={handleNext}
+          errors={errors}
+        />
+      );
+    }
     // Placeholder for next steps
     return <div>Step {step + 1}: {steps[step]} (to be implemented)</div>;
   }
@@ -184,16 +203,6 @@ export default function CharacterCreatePage () {
         >
           Back
         </button>
-        {/* Hide Next button on steps 0-3, since it's in the form */}
-        {step > 3 && 
-          <button
-            onClick={handleNext}
-            disabled={step === steps.length - 1}
-            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-          >
-            Next
-          </button>
-        }
       </div>
     </div>
   );
