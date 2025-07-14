@@ -1,23 +1,49 @@
 import React from 'react';
 import { useProficiencies } from '../hooks/useProficiencies';
+import type { CharacterConfig } from '@/types/config/character';
 
 interface StepAssignProficiencyProps {
   gameSystemId: string;
-  proficiencies: string[];
-  setProficiencies: React.Dispatch<React.SetStateAction<string[]>>;
+  characterConfig: CharacterConfig;
+  proficiencies: { id: string; level: number }[];
+  setProficiencies: (proficiencies: { id: string; level: number }[]) => void;
   onNext: () => void;
   errors: string[];
+  classProgressionPoints: number;
 }
 
-export default function StepAssignProficiency ( { gameSystemId, proficiencies, setProficiencies, onNext, errors }: StepAssignProficiencyProps ) {
-  const maxPoints = 4;
+export default function StepAssignProficiency ({ gameSystemId, characterConfig, proficiencies, setProficiencies, onNext, errors, classProgressionPoints }: StepAssignProficiencyProps) {
+  // Calculate points
+  const startPoints = characterConfig.startProficiencyPoint || 0;
+  const classPoints = classProgressionPoints;
+
+  // Calculate how many start/class points have been spent
+  const usedStartPoints = proficiencies.filter(p => p.level > 0).length > startPoints ? startPoints : proficiencies.filter(p => p.level > 0).length;
+  const usedClassPoints = proficiencies.reduce((sum, p) => sum + Math.max(0, p.level - 1), 0) + Math.max(0, proficiencies.filter(p => p.level > 0).length - startPoints);
+  const remainingStartPoints = Math.max(0, startPoints - usedStartPoints);
+  const remainingClassPoints = Math.max(0, classPoints - usedClassPoints);
+
   const { proficiencies: allProficiencies, loading, error: fetchError } = useProficiencies(gameSystemId);
 
-  const handleToggle = (id: string) => {
-    if (proficiencies.includes(id)) {
-      setProficiencies(proficiencies.filter(pid => pid !== id));
-    } else if (proficiencies.length < maxPoints) {
-      setProficiencies([ ...proficiencies, id ]);
+  const getLevel = (id: string) => proficiencies.find(p => p.id === id)?.level || 0;
+
+  const handleIncrease = (id: string) => {
+    const currentLevel = getLevel(id);
+    if (currentLevel === 0 && remainingStartPoints > 0) {
+      setProficiencies([ ...proficiencies.filter(p => p.id !== id), { id, level: 1 } ]);
+    } else if (currentLevel >= 1 && remainingClassPoints > 0) {
+      setProficiencies([ ...proficiencies.filter(p => p.id !== id), { id, level: currentLevel + 1 } ]);
+    }
+  };
+
+  const handleDecrease = (id: string) => {
+    const currentLevel = getLevel(id);
+    if (currentLevel > 0) {
+      setProficiencies(
+        currentLevel === 1
+          ? proficiencies.filter(p => p.id !== id)
+          : [ ...proficiencies.filter(p => p.id !== id), { id, level: currentLevel - 1 } ]
+      );
     }
   };
 
@@ -31,8 +57,12 @@ export default function StepAssignProficiency ( { gameSystemId, proficiencies, s
     >
       <div>
         <label className="block font-medium mb-1">Assign Proficiencies *</label>
-        <p className="text-sm text-gray-600 mb-4">You have {maxPoints} points. Select up to 4 different proficiencies.</p>
-        <div className="mb-2 text-sm text-blue-700">Points spent: {proficiencies.length} / {maxPoints}</div>
+        <p className="text-sm text-gray-600 mb-4">
+          Spend all <b>start points</b> first (can only raise a proficiency to level 1), then <b>class points</b> (can raise to any level).
+        </p>
+        <div className="mb-2 text-sm text-blue-700">
+          Start points: {remainingStartPoints} / {startPoints} | Class points: {remainingClassPoints} / {classPoints}
+        </div>
         {loading ? 
           <div>Loading proficiencies...</div>
           : fetchError ? 
@@ -40,25 +70,23 @@ export default function StepAssignProficiency ( { gameSystemId, proficiencies, s
             : 
             <div className="space-y-2">
               {allProficiencies.map(prof => {
-                const checked = proficiencies.includes(prof.id);
-                const disabled = !checked && proficiencies.length >= maxPoints;
+                const level = getLevel(prof.id);
+                const canIncrease = level === 0 && remainingStartPoints > 0 || level >= 1 && remainingClassPoints > 0;
+                const canDecrease = level > 0;
                 return (
-                  <div key={prof.id} className="flex items-start space-x-3 p-2 border rounded hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      id={prof.id}
-                      checked={checked}
-                      disabled={disabled}
-                      onChange={() => handleToggle(prof.id)}
-                      className="mt-1"
-                    />
+                  <div key={prof.id} className="flex items-center space-x-3 p-2 border rounded hover:bg-gray-50">
                     <div className="flex-1">
                       <label htmlFor={prof.id} className="font-medium cursor-pointer">
                         {prof.name.en}
                       </label>
                       {prof.description?.en && 
-                      <p className="text-sm text-gray-600 mt-1">{prof.description.en}</p>
+                        <p className="text-sm text-gray-600 mt-1">{prof.description.en}</p>
                       }
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button type="button" onClick={() => handleDecrease(prof.id)} disabled={!canDecrease} className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50">-</button>
+                      <span className="w-6 text-center">{level}</span>
+                      <button type="button" onClick={() => handleIncrease(prof.id)} disabled={!canIncrease} className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50">+</button>
                     </div>
                   </div>
                 );

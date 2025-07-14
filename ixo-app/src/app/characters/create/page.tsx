@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StepBasicInfo from './components/StepBasicInfo';
 import StepChooseOrigin from './components/StepChooseOrigin';
 import StepChooseTrait from './components/StepChooseTrait';
@@ -9,6 +9,7 @@ import StepAssignProficiency from './components/StepAssignProficiency';
 import StepAssignStats from './components/StepAssignStats';
 import StepPurchaseEquipment from './components/StepPurchaseEquipment';
 import type { ItemConfig } from '@/types/config/item';
+import { useCharacterConfig } from './hooks/useCharacterConfig';
 
 const steps = [
   'Basic Info',
@@ -39,10 +40,39 @@ export default function CharacterCreatePage () {
   const [ classLevels, setClassLevels ] = useState<{ classId: string; level: number }[]>([]);
   const [ statIncreases, setStatIncreases ] = useState<{ classId: string; level: number; statId: string }[]>([]);
   const [ skills, setSkills ] = useState<{ skillId: string; type: 'class' | 'general' | 'role'; classId?: string; learnedAt: number }[]>([]);
-  const [ proficiencies, setProficiencies ] = useState<string[]>([]);
+  // Change proficiencies state to track { id, level }[]
+  const [ proficiencies, setProficiencies ] = useState<{ id: string; level: number }[]>([]);
   const [ baseStats, setBaseStats ] = useState<{ statId: string; value: number }[]>([]);
   const [ purchasedItems, setPurchasedItems ] = useState<ItemConfig[]>([]);
   const [ errors, setErrors ] = useState<string[]>([]);
+
+  // Fetch character config for the selected game system
+  const { config: characterConfig, loading: configLoading, error: configError } = useCharacterConfig(basicInfo.gameSystemId);
+
+  // Reset all step states when game system changes
+  useEffect(() => {
+    setOriginId('');
+    setTraitIds([]);
+    setClassLevels([]);
+    setStatIncreases([]);
+    setSkills([]);
+    setProficiencies([]);
+    setBaseStats([]);
+    setPurchasedItems([]);
+    setStep(0); // Optionally reset to first step
+  }, [ basicInfo.gameSystemId ]);
+
+  // Calculate total class progression proficiency points
+  const classProgressionPoints = classLevels.reduce((sum, { level }) => {
+    let points = 0;
+    for (let i = 1; i <= level; i++) {
+      const prog = characterConfig?.classProgression[i];
+      if (prog && prog.proficiencyPoint) {
+        points += prog.proficiencyPoint;
+      }
+    }
+    return sum + points;
+  }, 0);
 
   const validate = () => {
     if (step === 0) {
@@ -101,6 +131,18 @@ export default function CharacterCreatePage () {
   };
   const handleBack = () => setStep((s) => Math.max(s - 1, 0));
 
+  // Show loading/error for config
+  if (configLoading) {
+    return <div className="max-w-2xl mx-auto py-8">Loading character settings...</div>;
+  }
+  if (configError || !characterConfig) {
+    return (
+      <div className="max-w-2xl mx-auto py-8 text-red-600">
+        Failed to load character settings: {configError || 'No config found'}
+      </div>
+    );
+  }
+
   function renderStep () {
     if (step === 0) {
       return (
@@ -116,6 +158,7 @@ export default function CharacterCreatePage () {
       return (
         <StepChooseOrigin
           gameSystemId={basicInfo.gameSystemId}
+          characterConfig={characterConfig!}
           value={originId}
           onChange={setOriginId}
           onNext={handleNext}
@@ -127,6 +170,7 @@ export default function CharacterCreatePage () {
       return (
         <StepChooseTrait
           gameSystemId={basicInfo.gameSystemId}
+          characterConfig={characterConfig!}
           value={traitIds}
           onChange={setTraitIds}
           onNext={handleNext}
@@ -138,6 +182,7 @@ export default function CharacterCreatePage () {
       return (
         <StepChooseClass
           gameSystemId={basicInfo.gameSystemId}
+          characterConfig={characterConfig!}
           characterLevel={basicInfo.level}
           value={classLevels}
           onChange={setClassLevels}
@@ -154,8 +199,10 @@ export default function CharacterCreatePage () {
       return (
         <StepAssignProficiency
           gameSystemId={basicInfo.gameSystemId}
+          characterConfig={characterConfig!}
           proficiencies={proficiencies}
           setProficiencies={setProficiencies}
+          classProgressionPoints={classProgressionPoints}
           onNext={handleNext}
           errors={errors}
         />
@@ -176,6 +223,7 @@ export default function CharacterCreatePage () {
       return (
         <StepPurchaseEquipment
           gameSystemId={basicInfo.gameSystemId}
+          characterConfig={characterConfig!}
           setPurchasedItems={setPurchasedItems}
           onNext={handleNext}
           errors={errors}

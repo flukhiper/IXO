@@ -1,16 +1,20 @@
 import React from 'react';
 import { useOrigins } from '../hooks/useOrigins';
+import type { CharacterConfig } from '@/types/config/character';
 
 interface StepChooseOriginProps {
   gameSystemId: string;
+  characterConfig: CharacterConfig;
   value: string; // selected originId
   onChange: (originId: string) => void;
   onNext: () => void;
   errors: string[];
 }
 
-export default function StepChooseOrigin ({ gameSystemId, value, onChange, onNext, errors }: StepChooseOriginProps) {
+export default function StepChooseOrigin ({ gameSystemId, characterConfig, value, onChange, onNext, errors }: StepChooseOriginProps) {
   const { origins, loading, error } = useOrigins(gameSystemId);
+  const allowedOrigins = characterConfig?.startOriginChoice || [];
+  const filteredOrigins = origins.filter(origin => allowedOrigins.includes(origin.id));
 
   return (
     <form
@@ -34,7 +38,7 @@ export default function StepChooseOrigin ({ gameSystemId, value, onChange, onNex
               required
             >
               <option value="">Select an origin</option>
-              {origins.map(origin => 
+              {filteredOrigins.map(origin => 
                 <option key={origin.id} value={origin.id}>
                   {origin.name.en}
                 </option>

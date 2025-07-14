@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import type { ItemConfig } from '@/types/config/item';
-import type { InventoryItem, InventoryPosition, GridCell } from '@/types/inventory';
+import type { InventoryItem, InventoryPosition, GridCell } from '@/types/runtime/inventory';
 
 interface UseInventoryProps {
   rows: number;

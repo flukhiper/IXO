@@ -1,70 +1,44 @@
 import React from 'react';
 import { useTraits } from '../hooks/useTraits';
+import type { CharacterConfig } from '@/types/config/character';
+import type { TraitConfig } from '@/types/config/trait';
 
 interface StepChooseTraitProps {
   gameSystemId: string;
+  characterConfig: CharacterConfig;
   value: string[]; // selected traitIds array
   onChange: (traitIds: string[]) => void;
   onNext: () => void;
   errors: string[];
 }
 
-export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext, errors }: StepChooseTraitProps) {
+export default function StepChooseTrait ({ gameSystemId, characterConfig, value, onChange, onNext, errors }: StepChooseTraitProps) {
   const { traits, loading, error } = useTraits(gameSystemId);
+  const allowedTraits = characterConfig?.startTraitChoice || [];
+  const maxTraitPoints = characterConfig?.startNumberOfTraitChoice || 2;
+  const filteredTraits: TraitConfig[] = traits.filter(trait => allowedTraits.includes(trait.id));
 
-  // Get selected traits
-  const selectedTraits = traits.filter(trait => value.includes(trait.id));
-  
-  // Check if we have a full trait selected
-  const hasFullTrait = selectedTraits.some(trait => trait.isFullTrait);
-  
-  // Check if we can select more traits
-  const canSelectMore = !hasFullTrait && selectedTraits.length < 2;
-
-  // Filter available traits based on current selection
-  const availableTraits = traits.filter(trait => {
-    // If we have a full trait, no more selections allowed
-    if (hasFullTrait) return false;
-    
-    // If we already have 2 part traits, no more selections
-    if (selectedTraits.length >= 2) return false;
-    
-    // Don't show already selected traits
-    if (value.includes(trait.id)) return false;
-    
-    // If we have 1 part trait selected, only allow part traits
-    if (selectedTraits.length === 1 && trait.isFullTrait) return false;
-    
-    return true;
-  });
+  // Get selected trait configs
+  const selectedTraits = filteredTraits.filter(trait => value.includes(trait.id));
+  // Calculate used points
+  const usedTraitPoints = selectedTraits.reduce((sum, trait) => sum + (trait.isFullTrait ? 2 : 1), 0);
+  // Only allow adding traits if it would not exceed the max
+  const canAddTrait = (trait: TraitConfig) => {
+    const traitValue = trait.isFullTrait ? 2 : 1;
+    return !value.includes(trait.id) && usedTraitPoints + traitValue <= maxTraitPoints;
+  };
+  // Filter available traits based on current selection and point limit
+  const availableTraits = filteredTraits.filter(canAddTrait);
 
   const handleAddTrait = (traitId: string) => {
-    if (canSelectMore && !value.includes(traitId)) {
+    const trait = filteredTraits.find(t => t.id === traitId);
+    if (trait && canAddTrait(trait)) {
       onChange([ ...value, traitId ]);
     }
   };
 
   const handleRemoveTrait = (traitId: string) => {
     onChange(value.filter(id => id !== traitId));
-  };
-
-  const getSelectionStatus = () => {
-    if (hasFullTrait) {
-      return 'Full trait selected - no more traits can be chosen';
-    }
-    if (selectedTraits.length === 0) {
-      return 'Choose up to 2 part traits OR 1 full trait';
-    }
-    if (selectedTraits.length === 1 && selectedTraits[0].isFullTrait) {
-      return 'Full trait selected - no more traits can be chosen';
-    }
-    if (selectedTraits.length === 1 && !selectedTraits[0].isFullTrait) {
-      return '1 part trait selected - can choose 1 more part trait';
-    }
-    if (selectedTraits.length === 2) {
-      return '2 part traits selected - maximum reached';
-    }
-    return '';
   };
 
   return (
@@ -78,9 +52,11 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
       <div>
         <label className="block font-medium mb-1">Choose Traits *</label>
         <div className="text-sm text-gray-600 mb-3">
-          {getSelectionStatus()}
+          {`You may select up to ${maxTraitPoints} trait point${maxTraitPoints > 1 ? 's' : ''}. (Full trait = 2, Part trait = 1)`}
         </div>
-        
+        <div className="text-sm text-blue-700 mb-2">
+          {`Selected: ${usedTraitPoints} / ${maxTraitPoints} trait points`}
+        </div>
         {loading ? 
           <div>Loading traits...</div>
           : error ? 
@@ -90,7 +66,7 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
               {/* Selected Traits */}
               {selectedTraits.length > 0 && 
                 <div className="bg-blue-50 border border-blue-200 rounded p-4">
-                  <h3 className="font-medium mb-3 text-blue-800">Selected Traits ({selectedTraits.length})</h3>
+                  <h3 className="font-medium mb-3 text-blue-800">Selected Traits ({usedTraitPoints} / {maxTraitPoints} points)</h3>
                   <div className="space-y-3">
                     {selectedTraits.map(trait => 
                       <div key={trait.id} className="bg-white border border-blue-300 rounded p-3">
@@ -98,25 +74,9 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="font-medium">{trait.name.en}</span>
-                              <span className={`text-xs px-2 py-1 rounded ${
-                                trait.isFullTrait 
-                                  ? 'bg-red-100 text-red-800' 
-                                  : 'bg-green-100 text-green-800'
-                              }`}>
-                                {trait.isFullTrait ? 'Full Trait' : 'Part Trait'}
-                              </span>
+                              <span className="ml-2 text-xs text-gray-500">({trait.isFullTrait ? 'Full (2)' : 'Part (1)'})</span>
                             </div>
                             <p className="text-sm text-gray-600 mb-2">{trait.description?.en}</p>
-                            {trait.effects && trait.effects.length > 0 && 
-                              <div className="text-sm">
-                                <strong className="text-gray-700">Effects:</strong>
-                                <ul className="list-disc list-inside ml-2 mt-1">
-                                  {trait.effects.map((effect, index) => 
-                                    <li key={index} className="text-gray-600">{effect.description?.en}</li>
-                                  )}
-                                </ul>
-                              </div>
-                            }
                           </div>
                           <button
                             type="button"
@@ -133,7 +93,7 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
               }
 
               {/* Available Traits */}
-              {canSelectMore && 
+              {availableTraits.length > 0 && usedTraitPoints < maxTraitPoints &&
                 <div>
                   <h3 className="font-medium mb-2">Available Traits</h3>
                   <select
@@ -144,12 +104,12 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
                       }
                     }}
                     className="w-full border rounded px-3 py-2"
-                    disabled={!canSelectMore}
+                    disabled={availableTraits.length === 0 || usedTraitPoints >= maxTraitPoints}
                   >
                     <option value="">Select a trait to add</option>
                     {availableTraits.map(trait => 
                       <option key={trait.id} value={trait.id}>
-                        {trait.name.en} ({trait.isFullTrait ? 'Full' : 'Part'})
+                        {trait.name.en} ({trait.isFullTrait ? 'Full (2)' : 'Part (1)'})
                       </option>
                     )}
                   </select>
@@ -169,7 +129,7 @@ export default function StepChooseTrait ({ gameSystemId, value, onChange, onNext
         <button
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={value.length === 0}
+          disabled={usedTraitPoints === 0}
         >
           Next
         </button>

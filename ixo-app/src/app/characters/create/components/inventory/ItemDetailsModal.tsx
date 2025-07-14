@@ -1,7 +1,7 @@
 'use client';
 
 
-import type { InventoryItem } from '@/types/inventory';
+import type { InventoryItem } from '@/types/runtime/inventory';
 
 interface ItemDetailsModalProps {
   item: InventoryItem | null;

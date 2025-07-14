@@ -7,10 +7,12 @@ import InventoryGrid from './inventory/InventoryGrid';
 import ItemShop from './inventory/ItemShop';
 import ItemDetailsModal from './inventory/ItemDetailsModal';
 import type { ItemConfig } from '@/types/config/item';
-import type { InventoryItem, InventoryPosition } from '@/types/inventory';
+import type { InventoryItem, InventoryPosition } from '@/types/runtime/inventory';
+import type { CharacterConfig } from '@/types/config/character';
 
 interface StepPurchaseEquipmentProps {
   gameSystemId: string;
+  characterConfig: CharacterConfig;
   setPurchasedItems: (items: ItemConfig[]) => void;
   onNext: () => void;
   errors: string[];
@@ -18,6 +20,7 @@ interface StepPurchaseEquipmentProps {
 
 export default function StepPurchaseEquipment ({
   gameSystemId,
+  characterConfig,
   setPurchasedItems,
   onNext,
   errors
@@ -27,8 +30,8 @@ export default function StepPurchaseEquipment ({
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ dragPreview, setDragPreview ] = useState<{ item: ItemConfig; position: InventoryPosition } | null>(null);
 
-  // Starting budget - could be made configurable
-  const startingBudget = 200;
+  // Starting budget from character config
+  const startingBudget = characterConfig?.startGold ?? 200;
   
   // Initialize inventory with 6x12 grid (changed from 12x6)
   const {

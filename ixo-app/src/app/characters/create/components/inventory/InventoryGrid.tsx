@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { Stage, Layer, Rect, Text, Group } from 'react-konva';
 import Konva from 'konva';
-import type { InventoryItem, InventoryPosition, GridCell } from '@/types/inventory';
+import type { InventoryItem, InventoryPosition, GridCell } from '@/types/runtime/inventory';
 
 interface InventoryGridProps {
   rows: number;

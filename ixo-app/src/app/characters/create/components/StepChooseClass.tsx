@@ -5,9 +5,11 @@ import { useStats } from '../hooks/useStats';
 // Import types if available
 import type { SkillConfig } from '@/types/config/skill';
 import type { StatConfig } from '@/types/config/stat';
+import type { CharacterConfig } from '@/types/config/character';
 
 interface StepChooseClassProps {
   gameSystemId: string;
+  characterConfig: CharacterConfig;
   characterLevel: number;
   value: { classId: string; level: number }[]; // selected classes with levels
   onChange: (classLevels: { classId: string; level: number }[]) => void;
@@ -19,155 +21,11 @@ interface StepChooseClassProps {
   setSkills: React.Dispatch<React.SetStateAction<{ skillId: string; type: 'class' | 'general' | 'role'; classId?: string; learnedAt: number }[]>>;
 }
 
-const progressionTable = [
-  { level: 1, type: 'classSkill', label: 'Class Skill – Tier 1', tier: 1 },
-  { level: 2, type: 'generalSkill', label: 'General Skill – Tier 1', tier: 1 },
-  { level: 3, type: 'roleSkill', label: 'Role Skill – Tier 1', tier: 1 },
-  { level: 4, type: 'stat', label: '+1 Stat (player\'s choice)' },
-  { level: 5, type: 'classSkill', label: 'Class Skill – Tier 2', tier: 2 },
-  { level: 6, type: 'generalSkill', label: 'General Skill – Tier 2', tier: 2 },
-  { level: 7, type: 'roleSkill', label: 'Role Skill – Tier 2', tier: 2 },
-  { level: 8, type: 'stat', label: '+1 Stat (player\'s choice)' },
-  { level: 9, type: 'classSkill', label: 'Class Skill – Tier 3', tier: 3 },
-  { level: 10, type: 'generalSkill', label: 'General Skill – Tier 3', tier: 3 },
-  { level: 11, type: 'roleSkill', label: 'Role Skill – Tier 3', tier: 3 },
-  { level: 12, type: 'stat', label: '+1 Stat (player\'s choice)' }
-];
-
-// GeneralSkillPicker component
-function GeneralSkillPicker ({
-  skills, value, onChange, loading, error, label
-}: {
-  skills: SkillConfig[];
-  value: string;
-  onChange: (skillId: string) => void;
-  loading: boolean;
-  error: string | null;
-  label: string;
-}) {
-  return (
-    <div className="mb-4">
-      <div className="font-medium mb-1">{label}</div>
-      {loading ?
-        <div>Loading general skills...</div>
-        : error ?
-          <div className="text-red-600">{error}</div>
-          :
-          <>
-            <select
-              className="w-full border rounded px-3 py-2"
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              required
-            >
-              <option value="">Select a general skill</option>
-              {skills.map(skill => 
-                <option key={skill.id} value={skill.id}>{skill.name.en}</option>
-              )}
-            </select>
-            {value &&
-            <div className="text-green-700 text-sm mt-1">
-              Selected: {skills.find(s => s.id === value)?.name.en}
-            </div>
-            }
-          </>
-      }
-    </div>
-  );
-}
-
-// RoleSkillPicker component
-function RoleSkillPicker ({
-  skills, value, onChange, loading, error, label
-}: {
-  skills: SkillConfig[];
-  value: string;
-  onChange: (skillId: string) => void;
-  loading: boolean;
-  error: string | null;
-  label: string;
-}) {
-  return (
-    <div className="mb-4">
-      <div className="font-medium mb-1">{label}</div>
-      {loading ?
-        <div>Loading role skills...</div>
-        : error ?
-          <div className="text-red-600">{error}</div>
-          :
-          <>
-            <select
-              className="w-full border rounded px-3 py-2"
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              required
-            >
-              <option value="">Select a role skill</option>
-              {skills.map(skill => 
-                <option key={skill.id} value={skill.id}>{skill.name.en}</option>
-              )}
-            </select>
-            {value &&
-            <div className="text-green-700 text-sm mt-1">
-              Selected: {skills.find(s => s.id === value)?.name.en}
-            </div>
-            }
-          </>
-      }
-    </div>
-  );
-}
-
-// StatPicker component
-function StatPicker ({
-  stats, value, onChange, loading, error, label
-}: {
-  stats: StatConfig[];
-  value: string;
-  onChange: (statId: string) => void;
-  loading: boolean;
-  error: string | null;
-  label: string;
-}) {
-  return (
-    <div className="mb-4">
-      <div className="font-medium mb-1">{label}</div>
-      {loading ?
-        <div>Loading stats...</div>
-        : error ?
-          <div className="text-red-600">{error}</div>
-          :
-          <>
-            <select
-              className="w-full border rounded px-3 py-2"
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              required
-            >
-              <option value="">Select a stat</option>
-              {stats.map(stat => 
-                <option key={stat.id} value={stat.id}>{stat.abbreviation} - {stat.name.en}</option>
-              )}
-            </select>
-            {value &&
-            <div className="text-green-700 text-sm mt-1">
-              Selected: {stats.find(s => s.id === value)?.abbreviation}
-            </div>
-            }
-          </>
-      }
-    </div>
-  );
-}
-
-export default function StepChooseClass ({ gameSystemId, characterLevel, value, onChange, onNext, errors, statIncreases, setStatIncreases, skills, setSkills }: StepChooseClassProps) {
+export default function StepChooseClass ({ gameSystemId, characterConfig, characterLevel, value, onChange, onNext, errors, statIncreases, setStatIncreases, skills, setSkills }: StepChooseClassProps) {
   const { classes, loading, error } = useClasses(gameSystemId);
-  const { getClassSkills, getGeneralSkills, getRoleSkills } = useCachedSkills(gameSystemId);
-  const { stats, loading: statsLoading, error: statsError } = useStats(gameSystemId);
-  // Remove local state for selections
-  // const [ generalSkillSelections, setGeneralSkillSelections ] = useState<Record<string, string>>({});
-  // const [ roleSkillSelections, setRoleSkillSelections ] = useState<Record<string, string>>({});
-  // const [ statSelections, setStatSelections ] = useState<Record<string, string>>({});
+  // Filter classes by characterConfig.startClassChoice
+  const allowedClasses = characterConfig?.startClassChoice || [];
+  const filteredClasses = classes.filter(cls => allowedClasses.includes(cls.id));
 
   // Helper: get total assigned levels
   const totalLevels = value.reduce((sum, c) => sum + c.level, 0);
@@ -205,27 +63,6 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
     return totalLevels + 1 <= characterLevel;
   };
 
-  // Helpers to get/set stat and skill selections in top-level state
-  function getStatSelection (classId: string, level: number) {
-    return statIncreases.find(s => s.classId === classId && s.level === level)?.statId || '';
-  }
-  function handleStatChange (classId: string, level: number, statId: string) {
-    setStatIncreases(prev => {
-      const filtered = prev.filter(s => !(s.classId === classId && s.level === level));
-      return statId ? [ ...filtered, { classId, level, statId } ] : filtered;
-    });
-  }
-
-  function getSkillSelection (classId: string, level: number, type: 'general' | 'role') {
-    return skills.find(s => s.classId === classId && s.learnedAt === level && s.type === type)?.skillId || '';
-  }
-  function handleSkillChange (classId: string, level: number, type: 'general' | 'role', skillId: string) {
-    setSkills(prev => {
-      const filtered = prev.filter(s => !(s.classId === classId && s.learnedAt === level && s.type === type));
-      return skillId ? [ ...filtered, { skillId, type, classId, learnedAt: level } ] : filtered;
-    });
-  }
-
   return (
     <form
       onSubmit={e => {
@@ -243,7 +80,7 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
             <div className="text-red-600">{error}</div>
             :
             <div className="space-y-3">
-              {classes.map(classItem => {
+              {filteredClasses.map(classItem => {
                 const selected = value.some(c => c.classId === classItem.id);
                 const canAdd = canAddClass(classItem.id);
                 return (
@@ -301,83 +138,73 @@ export default function StepChooseClass ({ gameSystemId, characterLevel, value, 
         {totalLevels >= characterLevel && ' (Maximum reached)'}
       </div>
 
-      {/* Progression UI for each class/level */}
+      {/* Progression UI for each class/level using characterConfig.classProgression */}
       {value.map(({ classId, level }) => {
-        const classObj = classes.find(c => c.id === classId);
+        const classObj = filteredClasses.find(c => c.id === classId);
         const archetypeRoleId = classObj?.role || '';
         return (
           <div key={classId} className="border rounded p-4 mt-6">
-            <h2 className="font-bold mb-2">Class: {classId} (Level {level})</h2>
+            <h2 className="font-bold mb-2">Class: {classObj?.name?.en || classId} (Level {level})</h2>
             {[ ...Array(level) ].map((_, i) => {
-              const prog = progressionTable[i];
-              if (prog.type === 'classSkill' && prog.tier) {
-                const { skills, loading, error } = getClassSkills(classId, prog.tier);
-                return (
-                  <div key={i} className="mb-4">
-                    <div className="font-medium mb-1">Level {i + 1}: {prog.label}</div>
-                    {loading ?
-                      <div>Loading class skills...</div>
-                      : error ?
-                        <div className="text-red-600">{error}</div>
-                        : skills.length > 0 ?
-                          <div className="bg-blue-50 p-2 rounded text-sm">
-                            {skills.map(skill => 
-                              <div key={skill.id}>
-                                <b>{skill.name.en}</b> <span className="text-gray-600">(auto-granted)</span>
-                              </div>
-                            )}
-                          </div>
-                          :
-                          <div className="text-gray-500">No class skill found for this tier.</div>
-                    }
-                  </div>
-                );
-              }
-              if (prog.type === 'generalSkill' && prog.tier) {
-                const { skills: generalSkills, loading, error } = getGeneralSkills(prog.tier);
-                return (
-                  <GeneralSkillPicker
-                    key={i}
-                    skills={generalSkills}
-                    value={getSkillSelection(classId, i + 1, 'general')}
-                    onChange={skillId => handleSkillChange(classId, i + 1, 'general', skillId)}
-                    loading={loading}
-                    error={error}
-                    label={`Level ${i + 1}: ${prog.label}`}
-                  />
-                );
-              }
-              if (prog.type === 'roleSkill' && prog.tier) {
-                const { skills: roleSkills, loading, error } = getRoleSkills(archetypeRoleId, prog.tier);
-                return (
-                  <RoleSkillPicker
-                    key={i}
-                    skills={roleSkills}
-                    value={getSkillSelection(classId, i + 1, 'role')}
-                    onChange={skillId => handleSkillChange(classId, i + 1, 'role', skillId)}
-                    loading={loading}
-                    error={error}
-                    label={`Level ${i + 1}: ${prog.label}`}
-                  />
-                );
-              }
-              if (prog.type === 'stat') {
-                return (
-                  <StatPicker
-                    key={i}
-                    stats={stats}
-                    value={getStatSelection(classId, i + 1)}
-                    onChange={statId => handleStatChange(classId, i + 1, statId)}
-                    loading={statsLoading}
-                    error={statsError}
-                    label={`Level ${i + 1}: ${prog.label}`}
-                  />
-                );
-              }
+              const progression = characterConfig.classProgression[i + 1];
+              if (!progression) return null;
               return (
                 <div key={i} className="mb-4">
-                  <div className="font-medium mb-1">Level {i + 1}: {prog.label}</div>
-                  <div className="bg-gray-50 p-2 rounded text-sm text-gray-600">[UI for {prog.type} goes here]</div>
+                  <div className="font-medium mb-1">Level {i + 1} Progression</div>
+                  {/* Stat Modifier */}
+                  {progression.statModifier && progression.statModifier.length > 0 && 
+                    <div className="mb-2">
+                      <div className="text-sm text-blue-800 font-semibold">Stat Modifiers:</div>
+                      <ul className="ml-4 list-disc">
+                        {progression.statModifier.map((mod, idx) => 
+                          <li key={idx}>{mod.statId}: {mod.value > 0 ? '+' : ''}{mod.value}</li>
+                        )}
+                      </ul>
+                    </div>
+                  }
+                  {/* Attribute Modifier */}
+                  {progression.attributeModifier && progression.attributeModifier.length > 0 && 
+                    <div className="mb-2">
+                      <div className="text-sm text-green-800 font-semibold">Attribute Modifiers:</div>
+                      <ul className="ml-4 list-disc">
+                        {progression.attributeModifier.map((mod, idx) => 
+                          <li key={idx}>{mod.attributeId}: {typeof mod.baseValue === 'object' ? JSON.stringify(mod.baseValue) : mod.baseValue}{mod.formula ? ` (${mod.formula})` : ''}</li>
+                        )}
+                      </ul>
+                    </div>
+                  }
+                  {/* Proficiency Point */}
+                  {progression.proficiencyPoint && progression.proficiencyPoint > 0 && 
+                    <div className="mb-2 text-purple-800 font-semibold">
+                      Proficiency Points: +{progression.proficiencyPoint}
+                    </div>
+                  }
+                  {/* Skill Gain */}
+                  {progression.skillGain && progression.skillGain.length > 0 && 
+                    <div className="mb-2">
+                      <div className="text-sm text-orange-800 font-semibold">Skill Gains:</div>
+                      {progression.skillGain.map((gain, idx) => 
+                        <div key={idx} className="ml-4 mb-1">
+                          <div>Choose {gain.numberOfSkill} skill(s) {gain.skillType ? `of type ${gain.skillType}` : ''} {gain.tier ? `(Tier ${gain.tier})` : ''}</div>
+                          {/* TODO: Implement skill selection UI filtered by criteria */}
+                          <div className="text-xs text-gray-500">[Skill selection UI not yet implemented]</div>
+                        </div>
+                      )}
+                    </div>
+                  }
+                  {/* Action Gain */}
+                  {progression.actionGain && progression.actionGain.length > 0 && 
+                    <div className="mb-2">
+                      <div className="text-sm text-pink-800 font-semibold">Action Gains:</div>
+                      {progression.actionGain.map((gain, idx) => 
+                        <div key={idx} className="ml-4 mb-1">
+                          <div>Choose {gain.numberOfAction} action(s)</div>
+                          {/* TODO: Implement action selection UI filtered by criteria */}
+                          <div className="text-xs text-gray-500">[Action selection UI not yet implemented]</div>
+                        </div>
+                      )}
+                    </div>
+                  }
                 </div>
               );
             })}

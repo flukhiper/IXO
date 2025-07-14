@@ -1,4 +1,4 @@
-import type { ItemConfig } from './config/item';
+import type { ItemConfig } from '@/types/config/item';
 
 export interface InventoryPosition {
   row: number;
