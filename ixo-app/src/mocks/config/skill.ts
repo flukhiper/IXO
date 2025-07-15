@@ -1,8 +1,176 @@
 import type { SkillConfig } from '@/types/config/skill';
-import { SKILL_STACK_TYPE } from '@/constants/config/skill';
+import { SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
 import { KEYWORD_TYPE, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
+import { ARCHETYPE_ROLE_TYPE, CLASS_TYPE } from '@/constants/config/class';
 
 export const mock: SkillConfig[] = [
+  {
+    id: 'combat-awareness',
+    name: { en: 'Combat Awareness' },
+    description: { en: '+2 to initiative. You can’t be surprised while conscious.' },
+    type: SKILL_TYPE.GENERAL,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'initiative-bonus', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 2,
+    requiredStats: [],
+    requiredClassRole: [],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Initiative Bonus' },
+        keywords: [
+          { type: KEYWORD_TYPE.REFLEX, value: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'vigor',
+    name: { en: 'Vigor' },
+    description: { en: 'Advantage on poison/disease saves. Double carry capacity.' },
+    type: SKILL_TYPE.GENERAL,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'vigor-bonus', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 2,
+    requiredStats: [],
+    requiredClassRole: [],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Vigor Bonus' },
+        keywords: [
+          { type: KEYWORD_TYPE.SAVING_THROW_GIFTED, savingThrowId: 'poison', numberOfAttributes: 1 },
+          { type: KEYWORD_TYPE.ATTRIBUTE_GIFTED, attributeId: 'carry-capacity', numberOfAttributes: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'intimidating-demeanor',
+    name: { en: 'Intimidating Demeanor' },
+    description: { en: 'Use STR for Intimidation. On success, target has disadvantage next attack.' },
+    type: SKILL_TYPE.GENERAL,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'intimidation-override', type: SKILL_STACK_TYPE.OVERWRITE, priority: 1 },
+    tier: 1,
+    requiredCharacterLevel: 2,
+    requiredStats: [],
+    requiredClassRole: [],
+    requiredClassType: [],
+    requiredClassIds: [],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Intimidate With Strength' },
+        keywords: [
+          { type: KEYWORD_TYPE.SKILL_CHECK_LEARNED, skillCheckAttributeId: 'intimidation', numberOfAttributes: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'brutal-cleave',
+    name: { en: 'Brutal Cleave' },
+    description: { en: 'After hitting a melee attack, use bonus action to strike a nearby enemy.' },
+    type: SKILL_TYPE.ROLE,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'cleave-bonus', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 3,
+    requiredStats: [],
+    requiredClassRole: [ ARCHETYPE_ROLE_TYPE.ATTACKER ],
+    requiredClassType: [ CLASS_TYPE.ENFORCER ],
+    requiredClassIds: [ 'bruiser-attacker' ],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Bonus Cleave' },
+        keywords: [
+          { type: KEYWORD_TYPE.FREE },
+          { type: KEYWORD_TYPE.ATTACK_ROLL },
+          { type: KEYWORD_TYPE.TARGET, range: 5, numberOfTargets: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'tackle',
+    name: { en: 'Tackle' },
+    description: { en: 'Dash toward an enemy and attempt to knock them prone.' },
+    type: SKILL_TYPE.ROLE,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'tackle-shove', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 1,
+    requiredCharacterLevel: 3,
+    requiredStats: [],
+    requiredClassRole: [ ARCHETYPE_ROLE_TYPE.ATTACKER ],
+    requiredClassType: [ CLASS_TYPE.ENFORCER ],
+    requiredClassIds: [ 'bruiser-attacker' ],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Tackle Shove' },
+        keywords: [
+          { type: KEYWORD_TYPE.STANDARD },
+          { type: KEYWORD_TYPE.TARGET, range: 30, numberOfTargets: 1 },
+          { type: KEYWORD_TYPE.CONDITION, conditionId: 'prone', durationFormula: '1 round' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'seismic-slam',
+    name: { en: 'Seismic Slam' },
+    description: {
+      en: 'Slam the ground. Enemies in 10-ft radius must STR save or take 4d6 and fall prone.'
+    },
+    type: SKILL_TYPE.ROLE,
+    gameSystemId: 'game-system-ixo',
+    ownerId: 'system',
+    stack: { id: 'seismic-knock', type: SKILL_STACK_TYPE.IGNORE },
+    tier: 3,
+    requiredCharacterLevel: 11,
+    requiredStats: [],
+    requiredClassRole: [ ARCHETYPE_ROLE_TYPE.ATTACKER ],
+    requiredClassType: [ CLASS_TYPE.ENFORCER ],
+    requiredClassIds: [ 'bruiser-attacker' ],
+    requiredSkillIds: [],
+    requiredTraitIds: [],
+    effects: [
+      {
+        name: { en: 'Shockwave Zone' },
+        keywords: [
+          { type: KEYWORD_TYPE.FULL },
+          { type: KEYWORD_TYPE.RADIUS, radius: 10, range: 0, numberOfTargets: 6 },
+          { type: KEYWORD_TYPE.SAVING_THROW, savingThrowType: 'strength' },
+          {
+            type: KEYWORD_TYPE.DAMAGE,
+            damageTypeId: 'bludgeoning',
+            baseValue: { type: VALUE_TYPE.DICE, formula: '4d6' }
+          },
+          { type: KEYWORD_TYPE.CONDITION, conditionId: 'prone', durationFormula: '1 round' },
+          { type: KEYWORD_TYPE.USAGE, numberOfUsages: 1, phase: PHASE_TYPE.COMBAT }
+        ]
+      }
+    ]
+  },
+
   // === Tier 0 Role Skills ===
   // --- Attacker ---
   {

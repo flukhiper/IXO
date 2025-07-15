@@ -13,10 +13,11 @@ interface StepChooseTraitProps {
 }
 
 export default function StepChooseTrait ({ gameSystemId, characterConfig, value, onChange, onNext, errors }: StepChooseTraitProps) {
-  const { traits, loading, error } = useTraits(gameSystemId);
   const allowedTraits = characterConfig?.startTraitChoice || [];
+  const { traits, loading, error } = useTraits(gameSystemId, allowedTraits);
   const maxTraitPoints = characterConfig?.startNumberOfTraitChoice || 2;
-  const filteredTraits: TraitConfig[] = traits.filter(trait => allowedTraits.includes(trait.id));
+  // Use traits directly as the filtered list
+  const filteredTraits: TraitConfig[] = traits;
 
   // Get selected trait configs
   const selectedTraits = filteredTraits.filter(trait => value.includes(trait.id));

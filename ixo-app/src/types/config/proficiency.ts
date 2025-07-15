@@ -1,24 +1,29 @@
-import type { BaseConfig, EffectConfig } from './base';
+import type { BaseConfig, DiceValue, EffectConfig, FixedValue } from './base';
+import { SkillType } from './skill';
 
 export interface ProficiencyGainConfig {
-  // statModifier: {
-  //   statId: string;
-  //   value: number;
-  // }[];
-  // attributeModifier: {
-  //   attributeId: string;
-  //   baseValue: FixedValue | DiceValue;
-  //   formula?: string;
-  // }[];
+  statModifier?: {
+    statId: string;
+    value: number;
+  }[];
+  attributeModifier: {
+    attributeId: string;
+    baseValue: FixedValue | DiceValue;
+    formula?: string;
+  }[];
 
   effects: EffectConfig[];
 
-  skillGain: {
+  skillGain?: {
+    tier?: number; // must be 1, 2, or 3
+    skillType?: SkillType; // must be 'class', 'general', or 'role'
+    classId?: string; // must be a valid class ID
+    roleId?: string; // must be a valid role ID
     includedSkillTags?: string[];   // Must include ALL these tags
     excludedSkillTags?: string[];   // Must NOT include ANY of these tags
     numberOfSkill: number; // number of skills player can choose from the pool
   }[];
-  actionGain: {
+  actionGain?: {
     includedActionTags?: string[];   // Must include ALL these tags
     excludedActionTags?: string[];   // Must NOT include ANY of these tags
     numberOfAction: number; // number of actions player can choose from the pool

@@ -19,31 +19,35 @@ export interface BaseConfig extends BaseModel {
 
 export type ValueType = typeof VALUE_TYPE[keyof typeof VALUE_TYPE];
 
-export interface FixedValue {
+export interface BaseValue {
+  type: ValueType;
+}
+
+export interface FixedValue extends BaseValue {
   type: typeof VALUE_TYPE.FIXED;
   value: number; // e.g. 8
 }
 
-export interface DiceValue {
+export interface DiceValue extends BaseValue {
   type: typeof VALUE_TYPE.DICE;
   formula: string; // e.g. "1d8"
 }
 
-export interface RefValue {
+export interface RefValue extends BaseValue {
   type: typeof VALUE_TYPE.REF;
   ref: string; // e.g. 'attribute', 'equip-slot', etc.
   id: string; // e.g. 'attack-roll', 'main-weapon', etc.
 }
 
-export interface SelectValue {
+export interface SelectValue extends BaseValue {
   type: typeof VALUE_TYPE.SELECT;
 }
 
-export interface FullValue {
+export interface FullValue extends BaseValue {
   type: typeof VALUE_TYPE.FULL;
 }
 
-export interface HalfValue {
+export interface HalfValue extends BaseValue {
   type: typeof VALUE_TYPE.HALF;
 }
 

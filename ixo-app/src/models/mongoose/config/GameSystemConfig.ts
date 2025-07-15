@@ -11,4 +11,9 @@ const GameSystemConfigSchema = new mongoose.Schema<GameSystem>({
   ownerId: { type: String, required: true }
 }, { versionKey: false, timestamps: true });
 
+// Indexes for efficient queries
+GameSystemConfigSchema.index({ id: 1 }, { unique: true });
+GameSystemConfigSchema.index({ ownerId: 1 });
+GameSystemConfigSchema.index({ isPublic: 1 });
+
 export const GameSystemConfigModel = mongoose.models.GameSystemConfig || mongoose.model<GameSystem>('GameSystemConfig', GameSystemConfigSchema);

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import type { ProficiencyConfig } from '@/types/config/proficiency';
-import { LocalizeTextSchema } from './common';
+import { EffectConfigSchema, LocalizeTextSchema } from './common';
 
 const StatModifierSchema = new mongoose.Schema({
   statId: { type: String, required: true },
@@ -28,6 +28,7 @@ const ActionGainSchema = new mongoose.Schema({
 const ProficiencyGainConfigSchema = new mongoose.Schema({
   statModifier: { type: [ StatModifierSchema ], default: [] },
   attributeModifier: { type: [ AttributeModifierSchema ], default: [] },
+  effects: { type: [ EffectConfigSchema ], default: [] },
   skillGain: { type: [ SkillGainSchema ], default: [] },
   actionGain: { type: [ ActionGainSchema ], default: [] }
 }, { _id: false });

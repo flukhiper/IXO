@@ -26,4 +26,8 @@ export interface CharacterInventory {
   containers: {
     [containerItemId: string]: CharacterInventoryGrid; // e.g., backpack, pouch, etc.
   };
+  currency: {
+    gold: number;
+    // Add more currencies (e.g., silver, copper) as needed
+  };
 } 

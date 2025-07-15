@@ -1,17 +1,26 @@
+ 
 'use client';
 
 import { useEffect, useState } from 'react';
-import StepBasicInfo from './components/StepBasicInfo';
-import StepChooseOrigin from './components/StepChooseOrigin';
-import StepChooseTrait from './components/StepChooseTrait';
-import StepChooseClass from './components/StepChooseClass';
-import StepAssignProficiency from './components/StepAssignProficiency';
-import StepAssignStats from './components/StepAssignStats';
-import StepPurchaseEquipment from './components/StepPurchaseEquipment';
-import type { ItemConfig } from '@/types/config/item';
-import { useCharacterConfig } from './hooks/useCharacterConfig';
+import type { Character } from '@/types/runtime/character/Character';
+import type { CharacterClass } from '@/types/runtime/character/CharacterClass';
+import type { CharacterOrigin } from '@/types/runtime/character/CharacterOrigin';
+import type { CharacterTrait } from '@/types/runtime/character/CharacterTrait';
+import type { CharacterProficiency } from '@/types/runtime/character/CharacterProficiency';
+import type { CharacterStat } from '@/types/runtime/character/CharacterStat';
+import type { CharacterSkill } from '@/types/runtime/character/CharacterSkill';
+import type { CharacterAction } from '@/types/runtime/character/CharacterAction';
+import type { CharacterWeaponSet } from '@/types/runtime/character/CharacterGear';
+import type { CharacterInventory } from '@/types/runtime/character/CharacterInventory';
+import type { CharacterAttribute } from '@/types/runtime/character/CharacterAttribute';
+import type { CharacterGearSlot } from '@/types/runtime/character/CharacterGear';
+import type { CharacterConfig } from '@/types/config/character';
+import StepChooseGamesystem from './components/StepChooseGamesystem';
+import { useAttributes } from './hooks/useAttributes';
+import { getValueFromConfigValue } from '@/utils/config/valueGuards';
 
 const steps = [
+  'Choose Game System',
   'Basic Info',
   'Choose Origin',
   'Choose Trait',
@@ -21,217 +30,165 @@ const steps = [
   'Purchase Equipment'
 ];
 
-const gameSystems = [
-  { id: 'game-system-ixo', name: 'IXO' }
-  // Add more systems as needed
-];
+type CharacterInstance = {
+  character: Character;
+  classes: CharacterClass[];
+  origin: CharacterOrigin | null;
+  traits: CharacterTrait[];
+  proficiencies: CharacterProficiency[];
+  stats: CharacterStat[];
+  skills: CharacterSkill[];
+  actions: CharacterAction[];
+  attributes: CharacterAttribute[];
+  gear: CharacterGearSlot[];
+  weaponSets: CharacterWeaponSet[];
+  inventory: CharacterInventory | null;
+};
+
+function createDefaultCharacterInstance (): CharacterInstance {
+  const characterId = window.crypto.randomUUID();
+  const inventoryId = window.crypto.randomUUID();
+  return {
+    character: {
+      id: characterId,
+      playerID: '',
+      name: '',
+      gameSystemId: '',
+      portrait: '',
+      isPublic: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    classes: [],
+    origin: null,
+    traits: [],
+    proficiencies: [],
+    stats: [],
+    skills: [],
+    actions: [],
+    attributes: [],
+    gear: [],
+    weaponSets: [],
+    inventory: {
+      id: inventoryId,
+      characterId,
+      base: {
+        rows: 6,
+        columns: 12,
+        items: []
+      },
+      containers: {},
+      currency: {
+        gold: 0
+      }
+    }
+  };
+}
 
 export default function CharacterCreatePage () {
   const [ step, setStep ] = useState(0);
-  const [ basicInfo, setBasicInfo ] = useState({
-    name: '',
-    portrait: '',
-    gameSystemId: gameSystems[0].id,
-    isPublic: false,
-    level: 1
-  });
-  const [ originId, setOriginId ] = useState('');
-  const [ traitIds, setTraitIds ] = useState<string[]>([]);
-  const [ classLevels, setClassLevels ] = useState<{ classId: string; level: number }[]>([]);
-  const [ statIncreases, setStatIncreases ] = useState<{ classId: string; level: number; statId: string }[]>([]);
-  const [ skills, setSkills ] = useState<{ skillId: string; type: 'class' | 'general' | 'role'; classId?: string; learnedAt: number }[]>([]);
-  // Change proficiencies state to track { id, level }[]
-  const [ proficiencies, setProficiencies ] = useState<{ id: string; level: number }[]>([]);
-  const [ baseStats, setBaseStats ] = useState<{ statId: string; value: number }[]>([]);
-  const [ purchasedItems, setPurchasedItems ] = useState<ItemConfig[]>([]);
-  const [ errors, setErrors ] = useState<string[]>([]);
-
-  // Fetch character config for the selected game system
-  const { config: characterConfig, loading: configLoading, error: configError } = useCharacterConfig(basicInfo.gameSystemId);
+  const [ gameSystemId, setGameSystemId ] = useState<string>('');
+  const [ characterConfig, setCharacterConfig ] = useState<CharacterConfig | null>(null);
+  const [ characterInstance, setCharacterInstance ] = useState<CharacterInstance>(createDefaultCharacterInstance());
+  const { attributes: attributeConfigs } = useAttributes(gameSystemId);
 
   // Reset all step states when game system changes
   useEffect(() => {
-    setOriginId('');
-    setTraitIds([]);
-    setClassLevels([]);
-    setStatIncreases([]);
-    setSkills([]);
-    setProficiencies([]);
-    setBaseStats([]);
-    setPurchasedItems([]);
+    setCharacterInstance(createDefaultCharacterInstance());
     setStep(0); // Optionally reset to first step
-  }, [ basicInfo.gameSystemId ]);
+  }, [ gameSystemId ]);
 
-  // Calculate total class progression proficiency points
-  const classProgressionPoints = classLevels.reduce((sum, { level }) => {
-    let points = 0;
-    for (let i = 1; i <= level; i++) {
-      const prog = characterConfig?.classProgression[i];
-      if (prog && prog.proficiencyPoint) {
-        points += prog.proficiencyPoint;
-      }
+  // When characterConfig changes, fully reset characterInstance and initialize inventory with base grid size and gold from characterConfig. Also, generate new ids for character.id and inventory.id using crypto.randomUUID().
+  useEffect(() => {
+    if (characterConfig) {
+      setCharacterInstance(prev => ({
+        ...prev,
+        character: {
+          ...prev.character,
+          gameSystemId: characterConfig.gameSystemId
+        },
+        inventory: {
+          ...prev.inventory!,
+          base: {
+            ...prev.inventory!.base,
+            rows: characterConfig.startInventorySpace.rows,
+            columns: characterConfig.startInventorySpace.columns,
+            items: []
+          },
+          containers: {},
+          currency: {
+            ...prev.inventory!.currency,
+            gold: characterConfig.startGold
+          }
+        }
+      }));
     }
-    return sum + points;
-  }, 0);
+  }, [ characterConfig ]);
 
-  const validate = () => {
-    if (step === 0) {
-      const errs: string[] = [];
-      if (!basicInfo.name.trim()) errs.push('Name is required');
-      if (!basicInfo.gameSystemId) errs.push('Game system is required');
-      if (!basicInfo.level || basicInfo.level < 1 || basicInfo.level > 12) errs.push('Level must be between 1 and 12');
-      setErrors(errs);
-      return errs.length === 0;
+  // When attribute configs are fetched, initialize characterInstance.attributes
+  useEffect(() => {
+    if (attributeConfigs && attributeConfigs.length > 0) {
+      setCharacterInstance(prev => ({
+        ...prev,
+        attributes: attributeConfigs.map(cfg => {
+          const baseValue = getValueFromConfigValue(cfg.baseValue);
+          return {
+            id: window.crypto.randomUUID(),
+            characterId: prev.character.id,
+            attributeId: cfg.id,
+            baseValue,
+            currentValue: baseValue,
+            modifiers: [
+              {
+                id: window.crypto.randomUUID(),
+                attributeId: cfg.id,
+                source: 'gamesystem-attribute-config',
+                isActive: true,
+                value: typeof baseValue === 'number' ? baseValue : 0,
+                formula: cfg.formula || undefined
+              }
+            ]
+          };
+        })
+      }));
     }
-    if (step === 1) {
-      const errs: string[] = [];
-      if (!originId) errs.push('Origin is required');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    if (step === 2) {
-      const errs: string[] = [];
-      if (traitIds.length === 0) errs.push('At least one trait is required');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    if (step === 3) {
-      const totalLevels = classLevels.reduce((sum, c) => sum + c.level, 0);
-      const errs: string[] = [];
-      if (classLevels.length === 0) errs.push('At least one class is required');
-      if (totalLevels > basicInfo.level) errs.push('Total class levels cannot exceed character level');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    if (step === 4) {
-      const errs: string[] = [];
-      if (proficiencies.length === 0) errs.push('At least one proficiency is required');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    if (step === 5) {
-      const errs: string[] = [];
-      if (baseStats.length === 0) errs.push('At least one stat is required');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    if (step === 6) {
-      const errs: string[] = [];
-      if (purchasedItems.length === 0) errs.push('At least one item is required');
-      setErrors(errs);
-      return errs.length === 0;
-    }
-    setErrors([]);
-    return true;
-  };
+  }, [ attributeConfigs ]);
 
-  const handleNext = () => {
-    if (!validate()) return;
-    setStep((s) => Math.min(s + 1, steps.length - 1));
-  };
-  const handleBack = () => setStep((s) => Math.max(s - 1, 0));
-
-  // Show loading/error for config
-  if (configLoading) {
-    return <div className="max-w-2xl mx-auto py-8">Loading character settings...</div>;
-  }
-  if (configError || !characterConfig) {
-    return (
-      <div className="max-w-2xl mx-auto py-8 text-red-600">
-        Failed to load character settings: {configError || 'No config found'}
-      </div>
-    );
+  // Centralized step validation
+  function validateStep (step: number): boolean {
+    switch (step) {
+      case 0:
+        return !!gameSystemId && !!characterConfig;
+      case 1:
+        // Example: require character name (customize as needed)
+        return !!characterInstance.character.name;
+      case 2:
+        // Example: require origin selection
+        return !!characterInstance.origin;
+      // Add more cases for each step as needed
+      default:
+        return true;
+    }
   }
 
   function renderStep () {
     if (step === 0) {
       return (
-        <StepBasicInfo
-          value={basicInfo}
-          onChange={setBasicInfo}
-          onNext={handleNext}
-          errors={errors}
+        <StepChooseGamesystem
+          gameSystemId={gameSystemId}
+          setGameSystemId={setGameSystemId}
+          setCharacterConfig={setCharacterConfig}
+          onNext={() => {
+            if (validateStep(0)) {
+              setStep(1);
+            } else {
+              alert('Please select a game system and character config.');
+            }
+          }}
         />
       );
     }
-    if (step === 1) {
-      return (
-        <StepChooseOrigin
-          gameSystemId={basicInfo.gameSystemId}
-          characterConfig={characterConfig!}
-          value={originId}
-          onChange={setOriginId}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    if (step === 2) {
-      return (
-        <StepChooseTrait
-          gameSystemId={basicInfo.gameSystemId}
-          characterConfig={characterConfig!}
-          value={traitIds}
-          onChange={setTraitIds}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    if (step === 3) {
-      return (
-        <StepChooseClass
-          gameSystemId={basicInfo.gameSystemId}
-          characterConfig={characterConfig!}
-          characterLevel={basicInfo.level}
-          value={classLevels}
-          onChange={setClassLevels}
-          statIncreases={statIncreases}
-          setStatIncreases={setStatIncreases}
-          skills={skills}
-          setSkills={setSkills}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    if (step === 4) {
-      return (
-        <StepAssignProficiency
-          gameSystemId={basicInfo.gameSystemId}
-          characterConfig={characterConfig!}
-          proficiencies={proficiencies}
-          setProficiencies={setProficiencies}
-          classProgressionPoints={classProgressionPoints}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    if (step === 5) {
-      return (
-        <StepAssignStats
-          gameSystemId={basicInfo.gameSystemId}
-          baseStats={baseStats}
-          setBaseStats={setBaseStats}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    if (step === 6) {
-      return (
-        <StepPurchaseEquipment
-          gameSystemId={basicInfo.gameSystemId}
-          characterConfig={characterConfig!}
-          setPurchasedItems={setPurchasedItems}
-          onNext={handleNext}
-          errors={errors}
-        />
-      );
-    }
-    // Placeholder for next steps
-    return <div>Step {step + 1}: {steps[step]} (to be implemented)</div>;
+    return <div className="p-8 text-gray-500">Step {step + 1} of {steps.length} (to be implemented)</div>;
   }
 
   return (
@@ -245,12 +202,27 @@ export default function CharacterCreatePage () {
       </div>
       <div className="flex justify-between">
         <button
-          onClick={handleBack}
+          onClick={() => setStep(s => Math.max(s - 1, 0))}
           disabled={step === 0}
           className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
         >
           Back
         </button>
+        {step > 0 && 
+          <button
+            onClick={() => {
+              if (validateStep(step)) {
+                setStep(s => Math.min(s + 1, steps.length - 1));
+              } else {
+                alert('Please complete the required fields for this step.');
+              }
+            }}
+            disabled={step === steps.length - 1}
+            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        }
       </div>
     </div>
   );

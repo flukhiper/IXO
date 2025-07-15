@@ -26,6 +26,10 @@ const attributeModifierSchema = new mongoose.Schema<AttributeModifier>({
     type: Boolean,
     required: true,
     default: true
+  },
+  formula: {
+    type: String,
+    required: false
   }
 }, { _id: false });
 

@@ -69,6 +69,10 @@ const characterInventorySchema = new mongoose.Schema<CharacterInventory>({
     type: Map,
     of: characterInventoryGridSchema,
     default: {}
+  },
+  currency: {
+    gold: { type: Number, required: true, default: 0 }
+    // Add more currencies (e.g., silver, copper) as needed
   }
 }, {
   timestamps: true

@@ -4,7 +4,7 @@ import { useGameSystems } from '../hooks/useGameSystems';
 interface StepBasicInfoProps {
   value: {
     name: string;
-    portrait: string;
+    portrait?: string;
     gameSystemId: string;
     isPublic: boolean;
     level: number;

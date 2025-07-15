@@ -15,4 +15,5 @@ export interface AttributeModifier {
   sourceId?: string; // ID of the source (originId, classId, etc.), optional for player-choice
   value: number; // Flat value only
   isActive: boolean;
+  formula?: string; // Reference formula for runtime evaluation
 } 

@@ -20,7 +20,14 @@ const eslintConfig = [
       '@stylistic/ts': stylisticTs
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': [ 'error', { varsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' } ],
+      '@typescript-eslint/no-unused-vars': [ 
+        'error', 
+        { 
+          varsIgnorePattern: '^_', 
+          argsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_'
+        } 
+      ],
       '@typescript-eslint/no-empty-object-type': [ 'error', { allowInterfaces: 'with-single-extends' } ],
       '@stylistic/ts/indent': [ 'error', 2 ],
       // "@stylistic/ts/semi": ["error", "never"],

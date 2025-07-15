@@ -26,4 +26,9 @@ const AttributeConfigSchema = new mongoose.Schema<AnyAttributeConfig>({
   ownerId: { type: String, required: true }
 }, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
 
+// Indexes for efficient queries
+AttributeConfigSchema.index({ id: 1 }, { unique: true });
+AttributeConfigSchema.index({ gameSystemId: 1 });
+AttributeConfigSchema.index({ type: 1 });
+
 export const AttributeConfigModel = mongoose.models.AttributeConfig || mongoose.model<AnyAttributeConfig>('AttributeConfig', AttributeConfigSchema); 

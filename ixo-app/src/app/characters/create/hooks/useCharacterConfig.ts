@@ -9,17 +9,26 @@ export function useCharacterConfig (gameSystemId?: string) {
   useEffect(() => {
     if (!gameSystemId) {
       setConfig(null);
+      setError(null);
       return;
     }
     setLoading(true);
-    fetch(`/api/configs/character?gameSystemId=${gameSystemId}`)
+    setError(null);
+    fetch(`/api/configs/character?gameSystemId=${encodeURIComponent(gameSystemId)}`)
       .then(res => res.json())
       .then(data => {
-        setConfig(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setConfig(data[0]); // Use the first config if array returned
+        } else if (data && typeof data === 'object' && data.id) {
+          setConfig(data);
+        } else {
+          setConfig(null);
+        }
         setLoading(false);
       })
       .catch(() => {
         setError('Failed to load character config');
+        setConfig(null);
         setLoading(false);
       });
   }, [ gameSystemId ]);

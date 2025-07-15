@@ -12,9 +12,8 @@ interface StepChooseOriginProps {
 }
 
 export default function StepChooseOrigin ({ gameSystemId, characterConfig, value, onChange, onNext, errors }: StepChooseOriginProps) {
-  const { origins, loading, error } = useOrigins(gameSystemId);
   const allowedOrigins = characterConfig?.startOriginChoice || [];
-  const filteredOrigins = origins.filter(origin => allowedOrigins.includes(origin.id));
+  const { origins, loading, error } = useOrigins(gameSystemId, allowedOrigins);
 
   return (
     <form
@@ -38,7 +37,7 @@ export default function StepChooseOrigin ({ gameSystemId, characterConfig, value
               required
             >
               <option value="">Select an origin</option>
-              {filteredOrigins.map(origin => 
+              {origins.map(origin => 
                 <option key={origin.id} value={origin.id}>
                   {origin.name.en}
                 </option>
