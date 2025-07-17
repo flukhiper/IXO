@@ -34,7 +34,6 @@ export default function StepChooseOrigin ({ gameSystemId, characterConfig, value
               value={value}
               onChange={e => onChange(e.target.value)}
               className="w-full border rounded px-3 py-2"
-              required
             >
               <option value="">Select an origin</option>
               {origins.map(origin => 
@@ -46,7 +45,7 @@ export default function StepChooseOrigin ({ gameSystemId, characterConfig, value
         }
       </div>
       {errors.length > 0 &&
-        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2">
+        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2 space-y-1">
           {errors.map((err, i) => <div key={i}>{err}</div>)}
         </div>
       }
@@ -54,7 +53,6 @@ export default function StepChooseOrigin ({ gameSystemId, characterConfig, value
         <button
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          disabled={!value}
         >
           Next
         </button>

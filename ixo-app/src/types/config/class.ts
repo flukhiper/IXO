@@ -2,35 +2,53 @@ import { ARCHETYPE_ROLE_TYPE, CLASS_TYPE } from '@/constants/config/class';
 import type { BaseConfig, DiceValue, EffectConfig, FixedValue } from './base';
 import { SkillType } from './skill';
 
+export interface StatModifierChoice {
+  statId?: string;
+  includeTags?: string[];
+  excludeTags?: string[];
+}
+export interface AttributeModifierChoice {
+  attributeId?: string;
+  includeTags?: string[];
+  excludeTags?: string[];
+}
+export interface SkillGainChoice {
+  skillId?: string;
+  tier?: number; // must be 1, 2, or 3
+  skillType?: SkillType; // must be 'class', 'general', or 'role'
+  classId?: string; // must be a valid class ID
+  roleId?: string; // must be a valid role ID
+  includedTags?: string[];   // Must include ALL these tags
+  excludedTags?: string[];   // Must NOT include ANY of these tags
+}
+export interface ActionGainChoice {
+  actionId?: string;
+  includedTags?: string[];   // Must include ALL these tags
+  excludedTags?: string[];   // Must NOT include ANY of these tags
+}
+
 export interface ClassGainConfig {
   statModifier?: {
-    statId: string;
-    value: number;
-  }[];
+    choices: StatModifierChoice[];
+    choice: number;
+    value: number; // How much bonus is gained from this progression
+  };
   attributeModifier?: {
-    attributeId: string;
+    choices: AttributeModifierChoice[];
+    choice: number;
     baseValue: FixedValue | DiceValue;
     formula?: string;
-  }[];
-
-  effects: EffectConfig[];
-
-  proficiencyPoint?: number; // number of points player can assign to proficiencies at creation
-
+  };
   skillGain?: {
-    tier?: number; // must be 1, 2, or 3
-    skillType?: SkillType; // must be 'class', 'general', or 'role'
-    classId?: string; // must be a valid class ID
-    roleId?: string; // must be a valid role ID
-    includedSkillTags?: string[];   // Must include ALL these tags
-    excludedSkillTags?: string[];   // Must NOT include ANY of these tags
-    numberOfSkill: number; // number of skills player can choose from the pool
-  }[];
+    choices: SkillGainChoice[];
+    choice: number;
+  };
   actionGain?: {
-    includedActionTags?: string[];   // Must include ALL these tags
-    excludedActionTags?: string[];   // Must NOT include ANY of these tags
-    numberOfAction: number; // number of actions player can choose from the pool
-  }[];
+    choices: ActionGainChoice[];
+    choice: number;
+  };
+  effects?: EffectConfig[];
+  proficiencyPoint?: number;
 }
 
 export type ArchetypeRoleType = typeof ARCHETYPE_ROLE_TYPE[keyof typeof ARCHETYPE_ROLE_TYPE];

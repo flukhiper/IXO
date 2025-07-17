@@ -16,7 +16,12 @@ import type { CharacterAttribute } from '@/types/runtime/character/CharacterAttr
 import type { CharacterGearSlot } from '@/types/runtime/character/CharacterGear';
 import type { CharacterConfig } from '@/types/config/character';
 import StepChooseGamesystem from './components/StepChooseGamesystem';
+import StepBasicInfo from './components/StepBasicInfo';
+import StepChooseOrigin from './components/StepChooseOrigin';
+import StepChooseTrait from './components/StepChooseTrait';
+import StepChooseClass from './components/StepChooseClass';
 import { useAttributes } from './hooks/useAttributes';
+import { useStats } from './hooks/useStats';
 import { getValueFromConfigValue } from '@/utils/config/valueGuards';
 
 const steps = [
@@ -90,7 +95,10 @@ export default function CharacterCreatePage () {
   const [ gameSystemId, setGameSystemId ] = useState<string>('');
   const [ characterConfig, setCharacterConfig ] = useState<CharacterConfig | null>(null);
   const [ characterInstance, setCharacterInstance ] = useState<CharacterInstance>(createDefaultCharacterInstance());
+  const [ stepErrors, setStepErrors ] = useState<{ [step: number]: string[] }>({});
+  
   const { attributes: attributeConfigs } = useAttributes(gameSystemId);
+  const { stats: statConfigs } = useStats(gameSystemId);
 
   // Reset all step states when game system changes
   useEffect(() => {
@@ -144,7 +152,7 @@ export default function CharacterCreatePage () {
                 attributeId: cfg.id,
                 source: 'gamesystem-attribute-config',
                 isActive: true,
-                value: typeof baseValue === 'number' ? baseValue : 0,
+                value: 0, // Set to 0 for now; will be evaluated in character sheet
                 formula: cfg.formula || undefined
               }
             ]
@@ -154,17 +162,56 @@ export default function CharacterCreatePage () {
     }
   }, [ attributeConfigs ]);
 
+  // When stat configs are fetched, initialize characterInstance.stats
+  useEffect(() => {
+    if (statConfigs && statConfigs.length > 0) {
+      setCharacterInstance(prev => ({
+        ...prev,
+        stats: statConfigs.map(cfg => {
+          return {
+            id: window.crypto.randomUUID(),
+            characterId: prev.character.id,
+            statId: cfg.id,
+            baseValue: 0, // Default base value for new character
+            currentValue: 0,
+            modifiers: []
+          };
+        })
+      }));
+    }
+  }, [ statConfigs ]);
+
   // Centralized step validation
   function validateStep (step: number): boolean {
     switch (step) {
       case 0:
-        return !!gameSystemId && !!characterConfig;
+        const errors0: string[] = [];
+        if (!gameSystemId) errors0.push('Please select a game system.');
+        if (!characterConfig) errors0.push('Please select a character config.');
+        setStepErrors(prev => ({ ...prev, [0]: errors0 }));
+        return errors0.length === 0;
       case 1:
         // Example: require character name (customize as needed)
-        return !!characterInstance.character.name;
+        const errors1: string[] = [];
+        if (!characterInstance.character.name) errors1.push('Name is required.');
+        setStepErrors(prev => ({ ...prev, [1]: errors1 }));
+        return errors1.length === 0;
       case 2:
         // Example: require origin selection
-        return !!characterInstance.origin;
+        const errors2: string[] = [];
+        if (!characterInstance.origin) errors2.push('Origin selection is required.');
+        setStepErrors(prev => ({ ...prev, [2]: errors2 }));
+        return errors2.length === 0;
+      case 3:
+        const errors3: string[] = [];
+        if (characterInstance.traits.length === 0) errors3.push('Please select at least one trait.');
+        setStepErrors(prev => ({ ...prev, [3]: errors3 }));
+        return errors3.length === 0;
+      case 4:
+        const errors4: string[] = [];
+        if (characterInstance.classes.length === 0) errors4.push('Please select at least one class.');
+        setStepErrors(prev => ({ ...prev, [4]: errors4 }));
+        return errors4.length === 0;
       // Add more cases for each step as needed
       default:
         return true;
@@ -181,10 +228,168 @@ export default function CharacterCreatePage () {
           onNext={() => {
             if (validateStep(0)) {
               setStep(1);
-            } else {
-              alert('Please select a game system and character config.');
             }
           }}
+          errors={stepErrors[0] || []}
+        />
+      );
+    }
+    if (step === 1) {
+      return (
+        <StepBasicInfo
+          value={{
+            name: characterInstance.character.name,
+            portrait: characterInstance.character.portrait,
+            isPublic: characterInstance.character.isPublic
+          }}
+          onChange={val => setCharacterInstance(prev => ({
+            ...prev,
+            character: {
+              ...prev.character,
+              ...val
+            }
+          }))}
+          onNext={() => {
+            if (validateStep(1)) {
+              setStep(2);
+            }
+          }}
+          errors={stepErrors[1] || []}
+        />
+      );
+    }
+    if (step === 2) {
+      return (
+        <StepChooseOrigin
+          gameSystemId={gameSystemId}
+          characterConfig={characterConfig!}
+          value={characterInstance.origin?.originId || ''}
+          onChange={originId => setCharacterInstance(prev => ({
+            ...prev,
+            origin: originId ? {
+              id: window.crypto.randomUUID(),
+              characterId: prev.character.id,
+              originId
+            } : null
+          }))}
+          onNext={() => {
+            if (validateStep(2)) {
+              setStep(3);
+            }
+          }}
+          errors={stepErrors[2] || []}
+        />
+      );
+    }
+    if (step === 3) {
+      return (
+        <StepChooseTrait
+          gameSystemId={gameSystemId}
+          characterConfig={characterConfig!}
+          value={characterInstance.traits.map(t => t.traitId)}
+          onChange={traitIds => setCharacterInstance(prev => ({
+            ...prev,
+            traits: traitIds.map(traitId => ({
+              id: window.crypto.randomUUID(),
+              characterId: prev.character.id,
+              traitId,
+              isActive: true
+            }))
+          }))}
+          onNext={() => {
+            if (validateStep(3)) {
+              setStep(4);
+            }
+          }}
+          errors={stepErrors[3] || []}
+        />
+      );
+    }
+    if (step === 4) {
+      return (
+        <StepChooseClass
+          value={characterInstance.classes}
+          onClassChange={(index, change) => {
+            setCharacterInstance(prev => {
+              const classes = [ ...prev.classes || [] ];
+              if (typeof change.newClassId !== 'undefined') {
+                classes[index] = {
+                  ...classes[index],
+                  classId: change.newClassId
+                };
+              }
+              if (typeof change.newLevel !== 'undefined') {
+                classes[index] = {
+                  ...classes[index],
+                  level: change.newLevel
+                };
+              }
+              return { ...prev, classes };
+            });
+          }}
+          onClassAdded={() => {
+            setCharacterInstance(prev => {
+              const classes = [ ...prev.classes || [] ];
+              classes.push({
+                id: window.crypto.randomUUID(),
+                characterId: prev.character.id,
+                classId: '',
+                level: 1,
+                chosenStats: [],
+                chosenAttributes: [],
+                chosenSkills: [],
+                chosenActions: []
+              });
+              return { ...prev, classes };
+            });
+          }}
+          onClassRemoved={index => {
+            setCharacterInstance(prev => {
+              const classes = [ ...prev.classes || [] ];
+              classes.splice(index, 1);
+              return { ...prev, classes };
+            });
+          }}
+          onClassProgressionSelected={(classIndex, type, level, ids) => {
+            setCharacterInstance(prev => {
+              const classes = [ ...prev.classes || [] ];
+              const classRow = { ...classes[classIndex] };
+              // Update the correct progression choice array
+              if (type === 'chosenStats') {
+                classRow.chosenStats = [
+                  ...(classRow.chosenStats || []).filter(cs => cs.level !== level),
+                  { level, statIds: ids }
+                ];
+              } else if (type === 'chosenAttributes') {
+                classRow.chosenAttributes = [
+                  ...(classRow.chosenAttributes || []).filter(ca => ca.level !== level),
+                  { level, attributeIds: ids }
+                ];
+              } else if (type === 'chosenSkills') {
+                classRow.chosenSkills = [
+                  ...(classRow.chosenSkills || []).filter(cs => cs.level !== level),
+                  { level, skillIds: ids }
+                ];
+              } else if (type === 'chosenActions') {
+                classRow.chosenActions = [
+                  ...(classRow.chosenActions || []).filter(ca => ca.level !== level),
+                  { level, actionIds: ids }
+                ];
+              }
+              classes[classIndex] = classRow;
+              return { ...prev, classes };
+            });
+          }}
+          onNext={() => {
+            if (validateStep(4)) {
+              setStep(5);
+            }
+          }}
+          errors={stepErrors[4] || []}
+          characterConfig={characterConfig!}
+          gameSystemId={gameSystemId}
+          statConfigs={statConfigs}
+          attributeConfigs={attributeConfigs}
         />
       );
     }

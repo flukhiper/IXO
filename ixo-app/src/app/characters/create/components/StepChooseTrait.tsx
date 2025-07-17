@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTraits } from '../hooks/useTraits';
 import type { CharacterConfig } from '@/types/config/character';
 import type { TraitConfig } from '@/types/config/trait';
@@ -12,32 +12,36 @@ interface StepChooseTraitProps {
   errors: string[];
 }
 
+// Helper to calculate trait points (full = 2, part = 1)
+function getTraitPoints (traits: TraitConfig[], selectedIds: string[]) {
+  return traits
+    .filter(trait => selectedIds.includes(trait.id))
+    .reduce((sum, trait) => sum + (trait.isFullTrait ? 2 : 1), 0);
+}
+
 export default function StepChooseTrait ({ gameSystemId, characterConfig, value, onChange, onNext, errors }: StepChooseTraitProps) {
   const allowedTraits = characterConfig?.startTraitChoice || [];
   const { traits, loading, error } = useTraits(gameSystemId, allowedTraits);
   const maxTraitPoints = characterConfig?.startNumberOfTraitChoice || 2;
-  // Use traits directly as the filtered list
-  const filteredTraits: TraitConfig[] = traits;
 
-  // Get selected trait configs
-  const selectedTraits = filteredTraits.filter(trait => value.includes(trait.id));
-  // Calculate used points
-  const usedTraitPoints = selectedTraits.reduce((sum, trait) => sum + (trait.isFullTrait ? 2 : 1), 0);
-  // Only allow adding traits if it would not exceed the max
+  // Memoized derived values for performance and clarity
+  const selectedTraits = useMemo(() => traits.filter(trait => value.includes(trait.id)), [ traits, value ]);
+  const usedTraitPoints = useMemo(() => getTraitPoints(traits, value), [ traits, value ]);
   const canAddTrait = (trait: TraitConfig) => {
     const traitValue = trait.isFullTrait ? 2 : 1;
     return !value.includes(trait.id) && usedTraitPoints + traitValue <= maxTraitPoints;
   };
-  // Filter available traits based on current selection and point limit
-  const availableTraits = filteredTraits.filter(canAddTrait);
+  const availableTraits = useMemo(() => traits.filter(canAddTrait), [ traits, usedTraitPoints, value ]);
 
+  // Add trait by id
   const handleAddTrait = (traitId: string) => {
-    const trait = filteredTraits.find(t => t.id === traitId);
+    const trait = traits.find(t => t.id === traitId);
     if (trait && canAddTrait(trait)) {
       onChange([ ...value, traitId ]);
     }
   };
 
+  // Remove trait by id
   const handleRemoveTrait = (traitId: string) => {
     onChange(value.filter(id => id !== traitId));
   };
@@ -121,16 +125,14 @@ export default function StepChooseTrait ({ gameSystemId, characterConfig, value,
       </div>
 
       {errors.length > 0 &&
-        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2">
+        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2 space-y-1">
           {errors.map((err, i) => <div key={i}>{err}</div>)}
         </div>
       }
-      
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={usedTraitPoints === 0}
+          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Next
         </button>

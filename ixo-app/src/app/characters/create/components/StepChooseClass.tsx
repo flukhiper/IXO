@@ -1,134 +1,430 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useClasses } from '../hooks/useClasses';
-import { useStats } from '../hooks/useStats';
 import { useCachedSkills } from '../hooks/useCachedSkills';
-// Import types if available
+import { useCachedActions } from '../hooks/useCachedActions';
 import type { CharacterConfig } from '@/types/config/character';
+import type { ClassConfig, ClassGainConfig } from '@/types/config/class';
 import type { StatConfig } from '@/types/config/stat';
-import type { SkillConfig } from '@/types/config/skill';
-import type { ActionConfig } from '@/types/config/action';
+import type { AnyAttributeConfig } from '@/types/config/attribute';
+
+function StatModifierSelector ({
+  progression,
+  onProgressionChange,
+  statConfigs,
+  selectedStatIds,
+  classIndex,
+  level
+}: {
+  progression: ClassGainConfig;
+  onProgressionChange: StepChooseClassProps['onClassProgressionSelected'];
+  statConfigs: StatConfig[];
+  selectedStatIds: string[];
+  classIndex: number;
+  level: number;
+}) {
+  if (!progression.statModifier || progression.statModifier.choices.length === 0) return null;
+
+  const statModifier = progression.statModifier;
+  const statOptions = statModifier.choices.map(c => {
+    let stat: StatConfig[] = [];
+    if (c.statId) {
+      stat = statConfigs.filter(s => s.id === c.statId);
+    } 
+    if (c.includeTags) {
+      stat = statConfigs.filter(s => c.includeTags?.every(tag => s.tags?.includes(tag)));
+    }
+    if (c.excludeTags) {
+      stat = statConfigs.filter(s => !c.excludeTags?.some(tag => s.tags?.includes(tag)));
+    }
+
+    return stat;
+  }).reduce((acc, curr) => acc.concat(curr), []);
+
+  return (
+    <div className="mb-2">
+      <div className="text-sm font-semibold">Stat Modifier:</div>
+      {statModifier.choices.length === 1 ? 
+        <div>
+          Gain {statModifier.value > 0 ? '+' : ''}{statModifier.value} to {statModifier.choices[0].statId || statModifier.choices[0].includeTags?.join(', ')}
+        </div>
+        : statModifier.choice > 0 ? 
+          <div>
+            <span>Choose {statModifier.choice} stat(s) to gain {statModifier.value > 0 ? '+' : ''}{statModifier.value}:</span>
+            <select
+              multiple={statModifier.choice > 1}
+              value={selectedStatIds}
+              onChange={e => {
+                const selected = Array.from(e.target.selectedOptions).map(o => o.value);
+                onProgressionChange(classIndex, 'chosenStats', level, selected);
+              }}
+              className="w-full border rounded px-3 py-2 mt-1"
+            >
+              {statOptions.map(opt => 
+                <option key={opt.id} value={opt.id}>{opt.name.en}</option>
+              )}
+            </select>
+          </div>
+          : null}
+    </div>
+  );
+}
+
+function AttributeModifierSelector ({
+  progression,
+  onProgressionChange,
+  attributeConfigs,
+  selectedAttributeIds,
+  classIndex,
+  level
+}: {
+  progression: ClassGainConfig;
+  onProgressionChange: StepChooseClassProps['onClassProgressionSelected'];
+  attributeConfigs: AnyAttributeConfig[];
+  selectedAttributeIds: string[];
+  classIndex: number;
+  level: number;
+}) {
+  if (!progression.attributeModifier || progression.attributeModifier.choices.length === 0) return null;
+
+  const attributeModifier = progression.attributeModifier;
+  const attributeOptions = attributeModifier.choices.map(c => {
+    let attribute: AnyAttributeConfig[] = [];
+    if (c.attributeId) {
+      attribute = attributeConfigs.filter(a => a.id === c.attributeId);
+    }
+    if (c.includeTags) {
+      attribute = attributeConfigs.filter(a => c.includeTags?.every(tag => a.tags?.includes(tag)));
+    }
+    if (c.excludeTags) {
+      attribute = attributeConfigs.filter(a => !c.excludeTags?.some(tag => a.tags?.includes(tag)));
+    }
+    return attribute;
+  }).reduce((acc, curr) => acc.concat(curr), []);
+
+  return (
+    <div className="mb-2">
+      <div className="text-sm font-semibold">Attribute Modifier:</div>
+      {attributeModifier.choices.length === 1 ? 
+        <div>
+          Gain {String(attributeModifier.baseValue)} to {attributeOptions.map(a => a.name.en).join(', ')}
+        </div>
+        : attributeModifier.choice > 0 ? 
+          <div>
+            <span>Choose {attributeModifier.choice} attribute(s) to gain {String(attributeModifier.baseValue)}:</span>
+            <select
+              multiple={attributeModifier.choice > 1}
+              value={selectedAttributeIds}
+              onChange={e => {
+                const selected = Array.from(e.target.selectedOptions).map(o => o.value);
+                onProgressionChange(classIndex, 'chosenAttributes', level, selected);
+              }}
+              className="w-full border rounded px-3 py-2 mt-1"
+            >
+              {attributeOptions.map(opt => 
+                <option key={opt.id} value={opt.id}>{opt.name.en}</option>
+              )}
+            </select>
+          </div>
+          : null}
+    </div>
+  );
+}
+
+function SkillGainSelector ({
+  progression,
+  onProgressionChange,
+  gameSystemId,
+  selectedSkillIds,
+  classIndex,
+  level
+}: {
+  progression: ClassGainConfig;
+  onProgressionChange: StepChooseClassProps['onClassProgressionSelected'];
+  gameSystemId: string;
+  selectedSkillIds: string[];
+  classIndex: number;
+  level: number;
+}) {
+  const { getSkillsForChoice } = useCachedSkills(gameSystemId);
+  if (!progression.skillGain || progression.skillGain.choices.length === 0) return null;
+  const skillGain = progression.skillGain;
+  // For now, only support the first choice (could be extended to support multiple choices)
+  const choice = skillGain.choices[0];
+  const { skills: skillOptions, loading } = getSkillsForChoice(choice);
+
+  return (
+    <div className="mb-2">
+      <div className="text-sm font-semibold">Skill Gain:</div>
+      {skillGain.choices.length === 1 ? 
+        <div>
+          Gain skill: {skillGain.choices[0].skillId || skillGain.choices[0].includedTags?.join(', ')}
+        </div>
+        : skillGain.choice > 0 ? 
+          <div>
+            <span>Choose {skillGain.choice} skill(s):</span>
+            <select
+              multiple={skillGain.choice > 1}
+              value={selectedSkillIds}
+              onChange={e => {
+                const selected = Array.from(e.target.selectedOptions).map(o => o.value);
+                onProgressionChange(classIndex, 'chosenSkills', level, selected);
+              }}
+              className="w-full border rounded px-3 py-2 mt-1"
+              disabled={loading}
+            >
+              {skillOptions.map(opt => 
+                <option key={opt.id} value={opt.id}>{opt.name.en}</option>
+              )}
+            </select>
+          </div>
+          : null}
+    </div>
+  );
+}
+
+function ActionGainSelector ({
+  progression,
+  onProgressionChange,
+  gameSystemId,
+  selectedActionIds,
+  classIndex,
+  level
+}: {
+  progression: ClassGainConfig;
+  onProgressionChange: StepChooseClassProps['onClassProgressionSelected'];
+  gameSystemId: string;
+  selectedActionIds: string[];
+  classIndex: number;
+  level: number;
+}) {
+  const { getActionsForChoice } = useCachedActions(gameSystemId);
+  if (!progression.actionGain || progression.actionGain.choices.length === 0) return null;
+  const actionGain = progression.actionGain;
+  // For now, only support the first choice (could be extended to support multiple choices)
+  const choice = actionGain.choices[0];
+  const { actions: actionOptions, loading } = getActionsForChoice(choice);
+
+  return (
+    <div className="mb-2">
+      <div className="text-sm font-semibold">Action Gain:</div>
+      {actionGain.choices.length === 1 ? 
+        <div>
+          Gain action: {actionGain.choices[0].actionId || actionGain.choices[0].includedTags?.join(', ')}
+        </div>
+        : actionGain.choice > 0 ? 
+          <div>
+            <span>Choose {actionGain.choice} action(s):</span>
+            <select
+              multiple={actionGain.choice > 1}
+              value={selectedActionIds}
+              onChange={e => {
+                const selected = Array.from(e.target.selectedOptions).map(o => o.value);
+                onProgressionChange(classIndex, 'chosenActions', level, selected);
+              }}
+              className="w-full border rounded px-3 py-2 mt-1"
+              disabled={loading}
+            >
+              {actionOptions.map(opt => 
+                <option key={opt.id} value={opt.id}>{opt.name?.en || opt.id}</option>
+              )}
+            </select>
+          </div>
+          : null}
+    </div>
+  );
+}
+
+function ClassSelector ({
+  selectedClass,
+  availableClasses,
+  maxLevel,
+  classes,
+  onClassChange,
+  onClassProgressionSelected,
+  statConfigs,
+  attributeConfigs,
+  classIndex,
+  gameSystemId,
+  selectedClasses
+}: {
+  selectedClass: ClassRow;
+  availableClasses: ClassConfig[];
+  maxLevel: number;
+  classes: ClassConfig[];
+  onClassChange: StepChooseClassProps['onClassChange'];
+  onClassProgressionSelected: StepChooseClassProps['onClassProgressionSelected'];
+  statConfigs: StatConfig[];
+  attributeConfigs: AnyAttributeConfig[];
+  classIndex: number;
+  gameSystemId: string;
+  selectedClasses: ClassRow[];
+}) {
+  const progressions = useMemo(() => {
+    if (!selectedClass) return [];
+    return Array.from({ length: selectedClass.level }, (_, i) => classes.find(c => c.id === selectedClass.classId)?.progression[i + 1]);
+  }, [ selectedClass, classes ]);
+
+  // Calculate the sum of all class levels except this one
+  const otherLevels = selectedClasses.reduce((sum, c, idx) => idx !== classIndex ? sum + (c.level || 0) : sum, 0);
+  // The max level this class can be set to
+  const maxAssignable = Math.max(1, maxLevel - otherLevels);
+
+  return (
+    <>
+      <div>
+        <label className="block font-medium mb-1">Class</label>
+        <select
+          value={selectedClass.classId}
+          onChange={e => onClassChange(classIndex, { newClassId: e.target.value })}
+          className="w-full border rounded px-3 py-2"
+        >
+          <option value="">Select a class</option>
+          {availableClasses.map(c => 
+            <option key={c.id} value={c.id}>{c.name.en}</option>
+          )}
+        </select>
+      </div>
+      {selectedClass.classId && 
+        <>
+          <div>
+            <label className="block font-medium mb-1">Level</label>
+            <select
+              value={selectedClass.level}
+              onChange={e => onClassChange(classIndex, { newLevel: Number(e.target.value) })}
+              className="w-full border rounded px-3 py-2"
+            >
+              {Array.from({ length: maxLevel }, (_, i) => i + 1).map(lvl => 
+                <option
+                  key={lvl}
+                  value={lvl}
+                  disabled={lvl > maxAssignable}
+                >
+                  {lvl}
+                </option>
+              )}
+            </select>
+            {maxAssignable < maxLevel && 
+              <div className="text-xs text-gray-500 mt-1">
+                You can assign up to {maxAssignable} level{maxAssignable > 1 ? 's' : ''} to this class (total cannot exceed {maxLevel}).
+              </div>
+            }
+          </div>
+          {/* Show progression details for each level */}
+          {progressions.map((progression, index) => {
+            if (!progression) return null;
+            const level = index + 1;
+            const selectedStatIds = selectedClass.chosenStats?.find(cs => cs.level === level)?.statIds || [];
+            const selectedAttributeIds = selectedClass.chosenAttributes?.find(ca => ca.level === level)?.attributeIds || [];
+            const selectedSkillIds = selectedClass.chosenSkills?.find(cs => cs.level === level)?.skillIds || [];
+            const selectedActionIds = selectedClass.chosenActions?.find(ca => ca.level === level)?.actionIds || [];
+            return (
+              <div key={level} className="border rounded p-4 mt-4">
+                <div className="font-bold mb-2">Level {level} Progression</div>
+                {/* Stat Modifier */}
+                <StatModifierSelector 
+                  progression={progression} 
+                  onProgressionChange={onClassProgressionSelected} 
+                  statConfigs={statConfigs}
+                  selectedStatIds={selectedStatIds}
+                  classIndex={classIndex}
+                  level={level}
+                />
+                {/* Attribute Modifier */}
+                <AttributeModifierSelector
+                  progression={progression} 
+                  attributeConfigs={attributeConfigs}
+                  onProgressionChange={onClassProgressionSelected} 
+                  selectedAttributeIds={selectedAttributeIds}
+                  classIndex={classIndex}
+                  level={level}
+                />
+                {/* Skill Gain */}
+                <SkillGainSelector
+                  progression={progression} 
+                  onProgressionChange={onClassProgressionSelected} 
+                  gameSystemId={gameSystemId}
+                  level={level}
+                  selectedSkillIds={selectedSkillIds}
+                  classIndex={classIndex}
+                />
+                {/* Action Gain */}
+                <ActionGainSelector
+                  progression={progression}
+                  onProgressionChange={onClassProgressionSelected}
+                  gameSystemId={gameSystemId}
+                  selectedActionIds={selectedActionIds}
+                  classIndex={classIndex}
+                  level={level}
+                />
+              </div>
+            );
+          })}
+        </>
+      }
+    </>
+  );
+}
+
+type ClassProgressionChoice = {
+  level: number;
+  statIds?: string[];
+  attributeIds?: string[];
+  skillIds?: string[];
+  actionIds?: string[];
+};
+
+export interface ClassRow {
+  classId: string;
+  level: number;
+  chosenStats?: ClassProgressionChoice[];
+  chosenAttributes?: ClassProgressionChoice[];
+  chosenSkills?: ClassProgressionChoice[];
+  chosenActions?: ClassProgressionChoice[];
+}
 
 interface StepChooseClassProps {
-  gameSystemId: string;
-  characterConfig: CharacterConfig;
-  characterLevel: number;
-  value: { classId: string; level: number }[]; // selected classes with levels
-  onChange: (classLevels: { classId: string; level: number }[]) => void;
+  value: ClassRow[];
+  onClassChange: (index: number, change: { newClassId?: string; newLevel?: number }) => void;
+  onClassAdded: () => void;
+  onClassRemoved: (index: number) => void;
+  onClassProgressionSelected: (
+    classIndex: number,
+    type: 'chosenStats' | 'chosenAttributes' | 'chosenSkills' | 'chosenActions',
+    level: number,
+    ids: string[]
+  ) => void;
   onNext: () => void;
   errors: string[];
-  statIncreases: { classId: string; level: number; statId: string }[];
-  setStatIncreases: React.Dispatch<React.SetStateAction<{ classId: string; level: number; statId: string }[]>>;
-  skillChoices: { classId: string; level: number; skillIds: string[] }[];
-  setSkillChoices: React.Dispatch<React.SetStateAction<{ classId: string; level: number; skillIds: string[] }[]>>;
-  actionChoices: { classId: string; level: number; actionIds: string[] }[];
-  setActionChoices: React.Dispatch<React.SetStateAction<{ classId: string; level: number; actionIds: string[] }[]>>;
+  characterConfig: CharacterConfig;
+  gameSystemId: string;
+  statConfigs: StatConfig[];
+  attributeConfigs: AnyAttributeConfig[];
 }
 
 export default function StepChooseClass ({
-  gameSystemId,
-  characterConfig,
-  characterLevel,
   value,
-  onChange,
+  onClassChange,
+  onClassAdded,
+  onClassRemoved,
+  onClassProgressionSelected,
   onNext,
   errors,
-  statIncreases,
-  setStatIncreases,
-  skillChoices,
-  setSkillChoices,
-  actionChoices,
-  setActionChoices
+  characterConfig,
+  gameSystemId,
+  statConfigs,
+  attributeConfigs
 }: StepChooseClassProps) {
   const allowedClasses = characterConfig?.startClassChoice || [];
-  const { classes, loading, error } = useClasses(gameSystemId, allowedClasses);
-  // Use classes directly as the filtered list
-  const filteredClasses = classes;
-  const { stats: allStats } = useStats(gameSystemId);
-  // For skills, use getClassSkills/getRoleSkills/getGeneralSkills as needed
-  const { getClassSkills, getRoleSkills, getGeneralSkills } = useCachedSkills(gameSystemId);
-  // For actions, you may need to implement a useActions hook or fetch all actions here
-  const [ allActions, setAllActions ] = useState<ActionConfig[]>([]);
-  useEffect(() => {
-    if (!gameSystemId) return;
-    fetch(`/api/configs/action?gameSystemId=${gameSystemId}`)
-      .then(res => res.json())
-      .then(data => setAllActions(Array.isArray(data) ? data : []));
-  }, [ gameSystemId ]);
+  const { classes } = useClasses(gameSystemId, allowedClasses);
+  const maxLevel = characterConfig.maxLevel;
 
-  // Helper: get total assigned levels
-  const totalLevels = value.reduce((sum, c) => sum + c.level, 0);
-
-  // Helper: get level for a class
-  const getLevel = (classId: string) => value.find(c => c.classId === classId)?.level || 0;
-
-  // Add or remove class
-  const handleClassToggle = (classId: string) => {
-    if (value.some(c => c.classId === classId)) {
-      onChange(value.filter(c => c.classId !== classId));
-    } else {
-      // Add with default level 1
-      onChange([ ...value, { classId, level: 1 } ]);
-    }
-  };
-
-  // Change level for a class
-  const handleLevelChange = (classId: string, newLevel: number) => {
-    onChange(value.map(c => c.classId === classId ? { ...c, level: newLevel } : c));
-  };
-
-  // Calculate max assignable level for a class
-  const getMaxLevel = (classId: string) => {
-    const otherLevels = value.filter(c => c.classId !== classId).reduce((sum, c) => sum + c.level, 0);
-    return Math.max(1, characterLevel - otherLevels);
-  };
-
-  // Check if a class can be added (when not already selected)
-  const canAddClass = (classId: string) => {
-    if (value.some(c => c.classId === classId)) {
-      return true; // Already selected, can always modify
-    }
-    // Check if adding level 1 would exceed character level
-    return totalLevels + 1 <= characterLevel;
-  };
-
-  // Check if all required choices are made
-  const allChoicesMade = value.every(({ classId, level }) => {
-    const classObj = filteredClasses.find(c => c.id === classId);
-    if (!classObj) return false;
-    for (let i = 1; i <= level; i++) {
-      const progression = classObj.progression[i];
-      if (!progression) continue;
-      // Stat choices
-      if (progression.statModifier) {
-        for (const mod of progression.statModifier) {
-          if ((mod as any).isChoice) {
-            if (!statIncreases.find(si => si.classId === classId && si.level === i && si.statId)) {
-              return false;
-            }
-          }
-        }
-      }
-      // Skill choices
-      if (progression.skillGain) {
-        for (const gain of progression.skillGain) {
-          const chosen = skillChoices.find(sc => sc.classId === classId && sc.level === i);
-          if (!chosen || chosen.skillIds.length < gain.numberOfSkill) {
-            return false;
-          }
-        }
-      }
-      // Action choices
-      if (progression.actionGain) {
-        for (const gain of progression.actionGain) {
-          const chosen = actionChoices.find(ac => ac.classId === classId && ac.level === i);
-          if (!chosen || chosen.actionIds.length < gain.numberOfAction) {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
-  });
+  // Multiclass: allow multiple class rows
+  const selectedClasses = value && value.length > 0
+    ? value
+    : [ { classId: '', level: 1, chosenStats: [], chosenAttributes: [], chosenSkills: [], chosenActions: [] } ];
+  // Only allow classes not already selected (except for the current row)
+  const getAvailableClasses = (currentIndex: number) =>
+    classes.filter(c => !selectedClasses.some((v, i) => v.classId === c.id && i !== currentIndex));
 
   return (
     <form
@@ -138,192 +434,50 @@ export default function StepChooseClass ({
       }}
       className="space-y-6"
     >
-      <div>
-        <label className="block font-medium mb-1">Choose Class(es) and Assign Levels *</label>
-        <p className="text-sm text-gray-600 mb-4">You may take multiple classes, total class levels ≤ character level ({characterLevel})</p>
-        {loading ?
-          <div>Loading classes...</div>
-          : error ?
-            <div className="text-red-600">{error}</div>
-            :
-            <div className="space-y-3">
-              {filteredClasses.map(classItem => {
-                const selected = value.some(c => c.classId === classItem.id);
-                const canAdd = canAddClass(classItem.id);
-                return (
-                  <div key={classItem.id} className={`flex items-start space-x-3 p-3 border rounded ${
-                    canAdd ? 'hover:bg-gray-50' : 'bg-gray-100 opacity-60'
-                  }`}>
-                    <input
-                      type="checkbox"
-                      id={classItem.id}
-                      checked={selected}
-                      onChange={() => handleClassToggle(classItem.id)}
-                      disabled={!canAdd}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <label htmlFor={classItem.id} className={`font-medium ${canAdd ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
-                        {classItem.name.en}
-                        {!canAdd && !selected && 
-                          <span className="ml-2 text-xs text-red-600">(Max level reached)</span>
-                        }
-                      </label>
-                      {classItem.description &&
-                    <p className="text-sm text-gray-600 mt-1">
-                      {classItem.description.en}
-                    </p>
-                      }
-                      {classItem.role &&
-                    <p className="text-sm text-gray-500 mt-1">
-                      Role: {classItem.role}
-                    </p>
-                      }
-                      {selected &&
-                    <div className="mt-2">
-                      <label className="text-sm mr-2">Level:</label>
-                      <input
-                        type="number"
-                        min={1}
-                        max={getMaxLevel(classItem.id)}
-                        value={getLevel(classItem.id)}
-                        onChange={e => handleLevelChange(classItem.id, Math.max(1, Math.min(getMaxLevel(classItem.id), Number(e.target.value))))}
-                        className="w-16 border rounded px-2 py-1"
-                      />
-                      <span className="ml-2 text-xs text-gray-500">(max {getMaxLevel(classItem.id)})</span>
-                    </div>
-                      }
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-        }
-      </div>
-      <div className={`text-sm ${totalLevels >= characterLevel ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
-        Total assigned class levels: {totalLevels} / {characterLevel}
-        {totalLevels >= characterLevel && ' (Maximum reached)'}
-      </div>
-
-      {/* Progression UI for each class/level using characterConfig.classProgression */}
-      {value.map(({ classId, level }) => {
-        const classObj = filteredClasses.find(c => c.id === classId);
-        if (!classObj) return null;
-        return (
-          <div key={classId} className="border rounded p-4 mt-6">
-            <h2 className="font-bold mb-2">Class: {classObj?.name?.en || classId} (Level {level})</h2>
-            {[ ...Array(level) ].map((_, i) => {
-              const progression = classObj.progression[i + 1];
-              if (!progression) return null;
-              return (
-                <div key={i} className="mb-4">
-                  <div className="font-medium mb-1">Level {i + 1} Progression</div>
-                  {/* Stat Modifier */}
-                  {progression.statModifier && progression.statModifier.length > 0 && 
-                    <div className="mb-2">
-                      <div className="text-sm text-blue-800 font-semibold">Stat Modifiers:</div>
-                      <ul className="ml-4 list-disc">
-                        {progression.statModifier.map((mod: { statId: string; value: number; isChoice?: boolean }, idx: number) =>
-                          mod.isChoice ? 
-                            <li key={idx}>
-                              <select
-                                value={statIncreases.find(si => si.classId === classId && si.level === i + 1)?.statId || ''}
-                                onChange={e => {
-                                  setStatIncreases(prev => [
-                                    ...prev.filter(si => !(si.classId === classId && si.level === i + 1)),
-                                    { classId, level: i + 1, statId: e.target.value }
-                                  ]);
-                                }}
-                              >
-                                <option value="">Select stat</option>
-                                {allStats.map(stat => 
-                                  <option key={stat.id} value={stat.id}>{stat.name.en}</option>
-                                )}
-                              </select>
-                            </li>
-                            : 
-                            <li key={idx}>{mod.statId}: {mod.value > 0 ? '+' : ''}{mod.value}</li>
-                          
-                        )}
-                      </ul>
-                    </div>
-                  }
-                  {/* Skill Gain */}
-                  {progression.skillGain && progression.skillGain.length > 0 && 
-                    <div className="mb-2">
-                      <div className="text-sm text-orange-800 font-semibold">Skill Gains:</div>
-                      {progression.skillGain.map((gain: { numberOfSkill: number; skillType?: string; tier?: number }, idx: number) => {
-                        // Use getClassSkills/getRoleSkills/getGeneralSkills as needed
-                        let eligibleSkills: SkillConfig[] = [];
-                        if (gain.skillType === 'class' && classObj.id && gain.tier) {
-                          eligibleSkills = getClassSkills(classObj.id, gain.tier).skills;
-                        } else if (gain.skillType === 'role' && classObj.role && gain.tier) {
-                          eligibleSkills = getRoleSkills(classObj.role, gain.tier).skills;
-                        } else if (gain.skillType === 'general' && gain.tier) {
-                          eligibleSkills = getGeneralSkills(gain.tier).skills;
-                        }
-                        const selected = skillChoices.find(sc => sc.classId === classId && sc.level === i + 1)?.skillIds || [];
-                        return (
-                          <div key={idx}>
-                            <label>Choose {gain.numberOfSkill} skill(s):</label>
-                            <select
-                              multiple={gain.numberOfSkill > 1}
-                              value={selected}
-                              onChange={e => {
-                                const values = Array.from(e.target.selectedOptions, o => o.value);
-                                setSkillChoices(prev => [
-                                  ...prev.filter(sc => !(sc.classId === classId && sc.level === i + 1)),
-                                  { classId, level: i + 1, skillIds: values }
-                                ]);
-                              }}
-                            >
-                              {eligibleSkills.map(skill => 
-                                <option key={skill.id} value={skill.id}>{skill.name.en}</option>
-                              )}
-                            </select>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  }
-                  {/* Action Gain */}
-                  {progression.actionGain && progression.actionGain.length > 0 && 
-                    <div className="mb-2">
-                      <div className="text-sm text-pink-800 font-semibold">Action Gains:</div>
-                      {progression.actionGain.map((gain: { numberOfAction: number }, idx: number) => {
-                        const selected = actionChoices.find(ac => ac.classId === classId && ac.level === i + 1)?.actionIds || [];
-                        return (
-                          <div key={idx}>
-                            <label>Choose {gain.numberOfAction} action(s):</label>
-                            <select
-                              multiple={gain.numberOfAction > 1}
-                              value={selected}
-                              onChange={e => {
-                                const values = Array.from(e.target.selectedOptions, o => o.value);
-                                setActionChoices(prev => [
-                                  ...prev.filter(ac => !(ac.classId === classId && ac.level === i + 1)),
-                                  { classId, level: i + 1, actionIds: values }
-                                ]);
-                              }}
-                            >
-                              {allActions.map(action => 
-                                <option key={action.id} value={action.id}>{action.name?.en || action.id}</option>
-                              )}
-                            </select>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  }
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-
-      {errors.length > 0 &&
-        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2">
+      {selectedClasses.map((classRow, idx) => 
+        <div key={idx} className="mb-6 border rounded p-4 relative">
+          <ClassSelector
+            selectedClass={classRow}
+            availableClasses={getAvailableClasses(idx)}
+            maxLevel={maxLevel}
+            classes={classes}
+            onClassChange={onClassChange}
+            onClassProgressionSelected={onClassProgressionSelected}
+            statConfigs={statConfigs}
+            attributeConfigs={attributeConfigs}
+            classIndex={idx}
+            gameSystemId={gameSystemId}
+            selectedClasses={selectedClasses}
+          />
+          {selectedClasses.length > 1 && 
+            <button
+              type="button"
+              className="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+              onClick={() => {
+                onClassRemoved(idx);
+              }}
+              aria-label="Remove class"
+            >
+              Remove
+            </button>
+          }
+        </div>
+      )}
+      {/* Add class button */}
+      {selectedClasses.length < classes.length && 
+        <button
+          type="button"
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          onClick={() => {
+            onClassAdded();
+          }}
+        >
+          + Add Class
+        </button>
+      }
+      {/* TODO: Add button to add another class row and repeat UI for each class */}
+      {errors.length > 0 && 
+        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2 space-y-1">
           {errors.map((err, i) => <div key={i}>{err}</div>)}
         </div>
       }
@@ -331,7 +485,6 @@ export default function StepChooseClass ({
         <button
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          disabled={!allChoicesMade || value.length === 0}
         >
           Next
         </button>

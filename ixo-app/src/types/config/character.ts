@@ -20,6 +20,6 @@ export interface CharacterConfig extends BaseConfig {
     numberOfBackpack: number | typeof INFINITE_VALUE; // number of backpack slots allowed, default is 1, like having many backpacks
     numberOfUtility: number | typeof INFINITE_VALUE; // number of utility slots allowed, default is 0, like having many utility items
   };
-
+  maxLevel: number; // NEW: maximum total class levels allowed
   tags?: string[]; // optional groupings like "starter", "template"
 }

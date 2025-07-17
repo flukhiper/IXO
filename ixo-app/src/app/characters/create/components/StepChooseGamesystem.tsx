@@ -8,9 +8,10 @@ interface StepChooseGamesystemProps {
   setGameSystemId: (id: string) => void;
   setCharacterConfig: (config: CharacterConfig | null) => void;
   onNext: () => void;
+  errors?: string[]; // Validation errors from parent
 }
 
-export default function StepChooseGamesystem ({ gameSystemId, setGameSystemId, setCharacterConfig, onNext }: StepChooseGamesystemProps) {
+export default function StepChooseGamesystem ({ gameSystemId, setGameSystemId, setCharacterConfig, onNext, errors = [] }: StepChooseGamesystemProps) {
   const { systems, loading: systemsLoading, error: systemsError } = useGameSystems();
   const { config: fetchedConfig, loading: configLoading, error: configError } = useCharacterConfig(gameSystemId);
 
@@ -61,6 +62,11 @@ export default function StepChooseGamesystem ({ gameSystemId, setGameSystemId, s
                 </div>
                 : <div className="text-gray-400">No character config found for this system.</div>
           }
+        </div>
+      }
+      {errors.length > 0 &&
+        <div className="bg-red-100 border border-red-300 text-red-700 rounded p-2 space-y-1">
+          {errors.map((err, i) => <div key={i}>{err}</div>)}
         </div>
       }
       <div className="flex justify-end">

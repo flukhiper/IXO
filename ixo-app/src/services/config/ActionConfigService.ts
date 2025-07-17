@@ -6,4 +6,8 @@ export class ActionConfigService extends BaseService<ActionConfig, ActionConfigR
   constructor () {
     super(new ActionConfigRepository());
   }
+
+  async getAllByFilter (filter: Record<string, unknown>) {
+    return this.repository.getAllByFilter(filter);
+  }
 }

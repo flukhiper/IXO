@@ -26,6 +26,7 @@ const CharacterConfigSchema = new mongoose.Schema<CharacterConfig>({
     columns: { type: Number, required: true }
   },
   equipmentRules: { type: EquipmentRulesSchema, required: true },
+  maxLevel: { type: Number, required: true },
   tags: { type: [ String ], default: [] }
 }, { versionKey: false, timestamps: true });
 

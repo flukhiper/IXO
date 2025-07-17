@@ -3,41 +3,54 @@ import type { ClassConfig } from '@/types/config/class';
 import { EffectConfigSchema, LocalizeTextSchema } from './common';
 import { CLASS_TYPE, ARCHETYPE_ROLE_TYPE } from '@/constants/config/class';
 
-// Reuse sub-schemas from ProficiencyConfig
-const StatModifierSchema = new mongoose.Schema({
-  statId: { type: String, required: true },
-  value: { type: Number, required: true }
+// New sub-schemas for choices and gain config
+const StatModifierChoiceSchema = new mongoose.Schema({
+  statId: { type: String },
+  includeTags: { type: [ String ], default: [] },
+  excludeTags: { type: [ String ], default: [] }
 }, { _id: false });
-
-const AttributeModifierSchema = new mongoose.Schema({
-  attributeId: { type: String, required: true },
-  baseValue: mongoose.Schema.Types.Mixed, // FixedValue | DiceValue
-  formula: { type: String }
+const AttributeModifierChoiceSchema = new mongoose.Schema({
+  attributeId: { type: String },
+  includeTags: { type: [ String ], default: [] },
+  excludeTags: { type: [ String ], default: [] }
 }, { _id: false });
-
-const SkillGainSchema = new mongoose.Schema({
+const SkillGainChoiceSchema = new mongoose.Schema({
+  skillId: { type: String },
   tier: { type: Number },
   skillType: { type: String },
   classId: { type: String },
   roleId: { type: String },
-  includedSkillTags: { type: [ String ] },
-  excludedSkillTags: { type: [ String ] },
-  numberOfSkill: { type: Number, required: true }
+  includedTags: { type: [ String ], default: [] },
+  excludedTags: { type: [ String ], default: [] }
 }, { _id: false });
-
-const ActionGainSchema = new mongoose.Schema({
-  includedActionTags: { type: [ String ] },
-  excludedActionTags: { type: [ String ] },
-  numberOfAction: { type: Number, required: true }
+const ActionGainChoiceSchema = new mongoose.Schema({
+  actionId: { type: String },
+  includedTags: { type: [ String ], default: [] },
+  excludedTags: { type: [ String ], default: [] }
 }, { _id: false });
 
 const ClassGainConfigSchema = new mongoose.Schema({
-  statModifier: { type: [ StatModifierSchema ], default: [] },
-  attributeModifier: { type: [ AttributeModifierSchema ], default: [] },
+  statModifier: {
+    choices: { type: [ StatModifierChoiceSchema ], default: [] },
+    choice: { type: Number },
+    value: { type: Number }
+  },
+  attributeModifier: {
+    choices: { type: [ AttributeModifierChoiceSchema ], default: [] },
+    choice: { type: Number },
+    baseValue: mongoose.Schema.Types.Mixed,
+    formula: { type: String }
+  },
+  skillGain: {
+    choices: { type: [ SkillGainChoiceSchema ], default: [] },
+    choice: { type: Number }
+  },
+  actionGain: {
+    choices: { type: [ ActionGainChoiceSchema ], default: [] },
+    choice: { type: Number }
+  },
   effects: { type: [ EffectConfigSchema ], default: [] },
-  proficiencyPoint: { type: Number, default: 0 },
-  skillGain: { type: [ SkillGainSchema ], default: [] },
-  actionGain: { type: [ ActionGainSchema ], default: [] }
+  proficiencyPoint: { type: Number, default: 0 }
 }, { _id: false });
 
 const ClassConfigSchema = new mongoose.Schema<ClassConfig>({

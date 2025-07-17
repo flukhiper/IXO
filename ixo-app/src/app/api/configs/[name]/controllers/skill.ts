@@ -5,52 +5,30 @@ const service = new SkillConfigService();
 
 export async function getHandler (req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
   const gameSystemId = searchParams.get('gameSystemId');
-  const type = searchParams.get('type');
-  const tier = searchParams.get('tier') || '1';
-  const classId = searchParams.get('classId') || undefined;
-  const archetypeRoleId = searchParams.get('archetypeRoleId') || undefined;
-  
-  if (id) {
-    const doc = await service.getById(id);
-    if (!doc) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json(doc);
-  }
-  
   if (!gameSystemId) {
     return NextResponse.json({ error: 'gameSystemId is required' }, { status: 400 });
   }
-  
-  // Handle different skill types based on parameters
-  if (type === 'class') {
-    const tierNum = parseInt(tier);
-    if (isNaN(tierNum)) {
-      return NextResponse.json({ error: 'Invalid tier parameter' }, { status: 400 });
+
+  // Build filter from SkillGainChoice fields
+  const filter: Record<string, null | string | number | Record<string, unknown>> = { gameSystemId };
+
+  if (searchParams.get('skillId')) filter.id = searchParams.get('skillId');
+  if (searchParams.get('skillType')) filter.type = searchParams.get('skillType');
+  if (searchParams.get('classId')) filter.classId = searchParams.get('classId');
+  if (searchParams.get('roleId')) filter.roleId = searchParams.get('roleId');
+  if (searchParams.get('tier')) filter.tier = Number(searchParams.get('tier'));
+  if (searchParams.get('includeTags') || searchParams.get('excludedTags')) {
+    filter.tags = {};
+    if (searchParams.get('includeTags')) {
+      filter.tags.$all = searchParams.get('includeTags')!.split(',');
     }
-    const docs = await service.getClassSkills(classId, tierNum, gameSystemId);
-    return NextResponse.json(docs);
-  }
-  
-  if (type === 'role') {
-    const tierNum = parseInt(tier);
-    if (isNaN(tierNum)) {
-      return NextResponse.json({ error: 'Invalid tier parameter' }, { status: 400 });
+    if (searchParams.get('excludedTags')) {
+      filter.tags.$not = { $in: searchParams.get('excludedTags')!.split(',') };
     }
-    const docs = await service.getRoleSkills(archetypeRoleId, tierNum, gameSystemId);
-    return NextResponse.json(docs);
   }
-  
-  if (type === 'general') {
-    const tierNum = parseInt(tier);
-    if (isNaN(tierNum)) {
-      return NextResponse.json({ error: 'Invalid tier parameter' }, { status: 400 });
-    }
-    const docs = await service.getGeneralSkills(tierNum, gameSystemId);
-    return NextResponse.json(docs);
-  }
-  
-  // Fallback: get all skills for the game system
-  const docs = await service.getByGameSystemId(gameSystemId);
+
+  // Fetch from service
+  const docs = await service.getAllByFilter(filter);
   return NextResponse.json(docs);
 } 
