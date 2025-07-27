@@ -1,14 +1,16 @@
 import { CONDITION_OPERATOR, PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
-import type { Keyword } from './keyword/base';
+import type { LocalizeText } from './common';
 
-export interface LocalizeText {
-  [local: string]: string;
-}
-
+/////////////////////
+// Config Model
+/////////////////////
 export interface BaseModel {
   id: string;
   name: LocalizeText;
-  description?: LocalizeText; // Optional short flavor (can move fully to Game Codex later)
+  description?: LocalizeText;
+  icon?: string;
+  thumbnail?: string;
+  tags?: string[];
   ownerId: string; // User ID of the creator
   createdAt?: string;
   updatedAt?: string;
@@ -17,21 +19,30 @@ export interface BaseConfig extends BaseModel {
   gameSystemId: string; // Reference to GameSystem
 }
 
+/////////////////////
+// Value Types
+/////////////////////
+
 export type ValueType = typeof VALUE_TYPE[keyof typeof VALUE_TYPE];
 
 export interface BaseValue {
   type: ValueType;
 }
 
-export interface FixedValue extends BaseValue {
-  type: typeof VALUE_TYPE.FIXED;
-  value: number; // e.g. 8
+export interface ConstantValue extends BaseValue {
+  type: typeof VALUE_TYPE.CONSTANT;
+  value: number;
 }
-
 export interface DiceValue extends BaseValue {
   type: typeof VALUE_TYPE.DICE;
-  formula: string; // e.g. "1d8"
+  formula: string;
 }
+
+/////////////////////
+// TBD
+/////////////////////
+
+
 
 export interface RefValue extends BaseValue {
   type: typeof VALUE_TYPE.REF;
@@ -58,9 +69,3 @@ export interface ConditionFormula {
 }
 
 export type PhaseType = typeof PHASE_TYPE[keyof typeof PHASE_TYPE];
-
-export interface EffectConfig {
-  name?: LocalizeText;
-  description?: LocalizeText;
-  keywords: Keyword[];
-}

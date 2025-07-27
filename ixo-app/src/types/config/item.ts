@@ -1,128 +1,101 @@
-import {  ITEM_TYPE } from '@/constants/config/item';
-import type { BaseConfig, ConditionFormula, DiceValue, EffectConfig, FixedValue, FullValue, HalfValue } from './base';
+import type { BaseConfig, ConstantValue, DiceValue } from './base';
+import type { NumberRange } from './common';
+import type { Effect } from './effect';
+import { ITEM_ARMOR_TYPE, ITEM_EQUIPPED_SLOT, ITEM_RARITY, ITEM_TYPE } from '@/constants/config/item';
 
-export interface InventorySpace {
-  rows: number;      // e.g., 6
-  columns: number;   // e.g., 12
+export interface ItemDamage {
+  type: string;
+  value: ConstantValue | DiceValue;
+  modifierFormula?: string;
 }
 
-// Core Base
+export interface ItemArmor {
+  value: ConstantValue;
+  modifierFormula?: string;
+}
+
+export interface WeaponProperty {
+  range?: number;
+  light: boolean;
+  fitness: boolean;
+  extraReach?: number;
+  thrown: boolean;
+  twoHanded: boolean;
+  versatile?: ItemDamage;
+  refined?: NumberRange<1, 4>;
+}
+
+export type ItemArmorType = typeof ITEM_ARMOR_TYPE[keyof typeof ITEM_ARMOR_TYPE];
+export interface ArmorProperty {
+  type: ItemArmorType;
+  refined?: NumberRange<1, 4>;
+}
+
+
 export type ItemType = typeof ITEM_TYPE[keyof typeof ITEM_TYPE];
-export interface ItemBaseConfig extends BaseConfig {
+export type ItemRarity = typeof ITEM_RARITY[keyof typeof ITEM_RARITY];
+export type ItemEquippedSlot = typeof ITEM_EQUIPPED_SLOT[keyof typeof ITEM_EQUIPPED_SLOT];
+export interface BaseItemConfig extends BaseConfig {
   type: ItemType;
-  icon?: string;
-  thumbnail?: string;
-  tags?: string[];
-
+  rarity: ItemRarity;
   weight: number;
-  cost: number; // gold cost
-  augmentSlots: number; // number of augment slots
-  space: InventorySpace;
-
-  slotTypes: string[]; // e.g., ['main-hand', 'off-hand', 'armor', 'accessory', 'backpack', 'utility']
-  
-  requiredCharacterLevel: number;
-  requiredProficiencies: {
-    proficiencyId: string;
-    level: number;
-  }[]; // must have at least one proficiency to able to use this item without proficiency penalty. [] mean no proficiency penalty
-  requiredStats: {
-    statId: string;
-    conditionFormulas: ConditionFormula;
-  }[]; // must have at least one stat to able to use this item without stat penalty. [] mean no stat penalty
-
-  effects?: EffectConfig[];
+  price: number;
+  space: [number, number];
+  equippedSlot: ItemEquippedSlot;
+  requiredProficiencyId?: string;
+  durabilityPoints?: number;
+  damage?: ItemDamage;
+  armor?: ItemArmor;
+  actionIds?: string[];
+  downtimeActivityIds?: string[];
+  effects?: Effect[];
 }
-
-export interface WeaponPropertyConfig {
-  light?: boolean; // light mean Usable for off-hand dual wield, Medium mean nothing, Heavy mean require stat STR 2 give modify AGI -2 (not stack with armor) except have range properties
-  range?: FixedValue | DiceValue; // this is ranged weapon
-  finesse?: boolean; // Use DEX instead of STR if higher
-  thrown?: FixedValue | DiceValue; // this item is throwable
-  extraReach?: FixedValue | DiceValue; // this item has extra reach
-  twoHanded?: boolean; // Requires two hands to use and stat STR 2 and give modify AGI -2
-  versatile?: FixedValue | DiceValue; // new damage when use two hands
-  enhancement?: 1 | 2 | 3; // Magical/quality boost, max +3
-}
-export interface ItemWeaponConfig extends ItemBaseConfig {
+export interface WeaponItemConfig extends BaseItemConfig {
   type: typeof ITEM_TYPE.WEAPON;
-  weapon: {
-    damageTypeId: string; // e.g., 'slashing', 'piercing', 'bludgeoning'
-    damage: FixedValue | DiceValue;
-    range: FixedValue | DiceValue;
-    property: WeaponPropertyConfig;
-  };
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.MAIN_HANDED | typeof ITEM_EQUIPPED_SLOT.OFF_HANDED;
+  durabilityPoints: number;
+  damage: ItemDamage;
+  weaponProperties: WeaponProperty;
+  actionIds: string[];
 }
-export interface ShieldPropertyConfig {
-  light?: boolean; // Max agi bounus: unlimited
-  medium?: boolean; // Max agi bounus: 2, require stat STR 2+
-  heavy?: boolean; // Max agi bounus: 1, require stat STR 3+
-  enhancement?: 1 | 2 | 3; // Magical/quality boost, max +3
-}
-export interface ItemShieldConfig extends ItemBaseConfig {
-  type: typeof ITEM_TYPE.SHIELD;
-  shield: {
-    armoreBonus: FixedValue | DiceValue;
-    durabilityPoints: number;
-    property: ShieldPropertyConfig;
-  };
-}
-export interface ArmorPropertyConfig {
-  light?: boolean; // Max agi bounus: unlimited
-  medium?: boolean; // Max agi bounus: 2, require stat STR 2+, disadvantage on stealth
-  heavy?: boolean; // Max agi bounus: 1, require stat STR 4+, disadvantage on stealth, -2m to movement speed
-  enhancement?: 1 | 2 | 3; // Magical/quality boost, max +3
-}
-export interface ItemArmorConfig extends ItemBaseConfig {
+export interface ArmorItemConfig extends BaseItemConfig {
   type: typeof ITEM_TYPE.ARMOR;
-  armor: {
-    armoreBonus: FixedValue | DiceValue;
-    durabilityPoints: number;
-    property: ShieldPropertyConfig;
-  };
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.ARMOR;
+  durabilityPoints: number;
+  armor: ItemArmor;
+  armorProperties: ArmorProperty;
+  actionIds: string[];
 }
-export interface ItemAccessoryConfig extends ItemBaseConfig {
-  type: typeof ITEM_TYPE.ACCESSORY;
-}
-export interface ItemBackpackConfig extends ItemBaseConfig {
-  type: typeof ITEM_TYPE.BACKPACK;
-  backpack: {
-    space: InventorySpace;
-  };
-}
-export interface ItemUtilityConfig extends ItemBaseConfig {
-  type: typeof ITEM_TYPE.UTILITY;
-  utility: {
-    actionIds: string[];
-    isExpendable: boolean;
-    numberOfUsages?: number;
-  };
-}
-export interface ItemConsumableConfig extends ItemBaseConfig {
-  type: typeof ITEM_TYPE.CONSUMABLE;
-  consumable: {
-    damages?: {
-      damageTypeId: string;
-      baseValue: FixedValue | DiceValue;
-    };
-    restores?: {
-      attributeId: string;
-      baseValue: FixedValue | DiceValue | HalfValue | FullValue;
-    };
-    conditionIds?: string[];
-    removeConditionTags?: string[];
-    
-    isExpendable: boolean;
-    numberOfUsages?: number;
-  };
+export interface ShieldItemConfig extends BaseItemConfig {
+  type: typeof ITEM_TYPE.SHIELD;
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.MAIN_HANDED | typeof ITEM_EQUIPPED_SLOT.OFF_HANDED;
+  durabilityPoints: number;
+  armor: ItemArmor;
+  armorProperties: ArmorProperty;
+  actionIds: string[];
 }
 
-// Final Union
+export interface AccessoryItemConfig extends BaseItemConfig {
+  type: typeof ITEM_TYPE.ACCESSORY;
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.ACCESSORY;
+  utilitySlots?: number;
+}
+
+export interface BackpackItemConfig extends BaseItemConfig {
+  type: typeof ITEM_TYPE.BACKPACK;
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.BACKPACK;
+  space: [number, number];
+}
+
+export interface UtilityItemConfig extends BaseItemConfig {
+  type: typeof ITEM_TYPE.UTILITY;
+  equippedSlot: typeof ITEM_EQUIPPED_SLOT.UTILITY;
+}
+
 export type ItemConfig =
-  | ItemWeaponConfig
-  | ItemShieldConfig
-  | ItemArmorConfig
-  | ItemAccessoryConfig
-  | ItemBackpackConfig
-  | ItemUtilityConfig
-  | ItemConsumableConfig;
+  | WeaponItemConfig
+  | ArmorItemConfig
+  | ShieldItemConfig
+  | AccessoryItemConfig
+  | BackpackItemConfig
+  | UtilityItemConfig;

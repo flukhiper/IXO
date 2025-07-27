@@ -1,8 +1,11 @@
-import type { BaseConfig, EffectConfig } from './base';
+import type { ActionSelectionRule } from './action';
+import type { BaseConfig } from './base';
+import type { DowntimeSelectionRule } from './downtime';
+import type { Effect } from './effect';
 
 export interface TraitConfig extends BaseConfig {
-  icon?: string;
-  tags?: string[]; // e.g., ["special", "natural", "construct"]
-  isFullTrait: boolean; // true = represents large transformation, counts as 2 traits
-  effects: EffectConfig[];
+  value: 1 | 2;
+  actionSelectionRule?: ActionSelectionRule;
+  downtimeSelectionRule?: DowntimeSelectionRule;
+  effects?: Effect[];
 }

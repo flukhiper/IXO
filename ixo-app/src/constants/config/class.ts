@@ -7,7 +7,7 @@ export const CLASS_TYPE = {
   HERALD: 'herald'
 } as const;
 
-export const ARCHETYPE_ROLE_TYPE = {
+export const CLASS_ROLE_TYPE = {
   ATTACKER: 'attacker',
   DEFENDER: 'defender',
   SUPPORT: 'support',

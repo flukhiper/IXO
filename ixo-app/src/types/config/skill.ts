@@ -1,31 +1,55 @@
-import { SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
-import type { BaseConfig, ConditionFormula, EffectConfig } from './base';
-import type { ArchetypeRoleType, ClassType } from './class';
+import { SKILL_STACK_TYPE } from '@/constants/config/skill';
+import type { BaseConfig } from './base';
+import type { ClassRole } from './class';
+import type { NumberRange } from './common';
+import type { Effect } from './effect';
+import type { ActionSelectionRule } from './action';
+import type { DowntimeSelectionRule } from './downtime';
+
+export interface SkillSelectionRule {
+  skillIds?: string[];
+  filterOptions?: {
+    classIds?: string[];
+    roles?: ClassRole[];
+    tiers?: SkillTier[];
+    isGeneral?: boolean;
+    includeTags?: string[];
+    excludeTags?: string[];
+  };
+  numberOfSelections: number;
+}
 
 export type SkillStackType = typeof SKILL_STACK_TYPE[keyof typeof SKILL_STACK_TYPE];
-export type SkillType = typeof SKILL_TYPE[keyof typeof SKILL_TYPE];
-export interface SkillConfig extends BaseConfig {
-  type: SkillType;
-  icon?: string;
-  tags?: string[];
-
-  stack: {
-    id: string;
-    type: SkillStackType;
-    priority?: number; // only used with 'overwrite'
-  };
-  tier: number; // 1-3
-
-  requiredCharacterLevel: number; // Needed level to see this skill in pool
-  requiredStats: {
-    statId: string;
-    conditionFormulas: ConditionFormula;
-  }[];  // Used for pool filtering
-  requiredClassRole: ArchetypeRoleType[];
-  requiredClassType: ClassType[];
-  requiredClassIds: string[]; // e.g., 'warrior', 'mage'
-  requiredSkillIds: string[];  // Used for pool filtering
-  requiredTraitIds: string[];  // Used for pool filtering
-
-  effects?: EffectConfig[];
+export type SkillTier = NumberRange<1, 3>;
+export interface BaseSkillConfig extends BaseConfig {
+  usedSlots: number;
+  stackId: string;
+  stackType: SkillStackType;
+  stackPriority?: number;
+  actionSelectionRule?: ActionSelectionRule;
+  downtimeSelectionRule?: DowntimeSelectionRule;
+  effects?: Effect[];
 }
+
+export interface GeneralSkillConfig extends BaseSkillConfig {
+  tier: SkillTier;
+  isGeneral: true;
+}
+
+export interface ClassSkillConfig extends BaseSkillConfig {
+  classIds: string[];
+  tier: SkillTier;
+  isGeneral: false;
+}
+
+export interface RoleSkillConfig extends BaseSkillConfig {
+  role: ClassRole;
+  tier: SkillTier;
+  isGeneral: false;
+} 
+
+export type SkillConfig =
+  | BaseSkillConfig
+  | GeneralSkillConfig
+  | ClassSkillConfig
+  | RoleSkillConfig;

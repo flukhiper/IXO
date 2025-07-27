@@ -1,5 +1,5 @@
 export const VALUE_TYPE = {
-  FIXED: 'fixed',
+  CONSTANT: 'constant',
   DICE: 'dice',
   REF: 'ref',
   SELECT: 'select',
