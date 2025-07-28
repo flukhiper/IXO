@@ -104,6 +104,7 @@ export type ActionStackType = typeof ACTION_STACK_TYPE[keyof typeof ACTION_STACK
 export type ActionCostType = typeof ACTION_COST_TYPE[keyof typeof ACTION_COST_TYPE];
 export type RequiredItemType = typeof ACTION_REQUIRED_ITEM_TYPE[keyof typeof ACTION_REQUIRED_ITEM_TYPE];
 export interface BaseActionConfig extends BaseConfig {
+  type: ActionType;
   usedSlots?: number;
   stackId: string;
   stackType: ActionStackType;
@@ -111,7 +112,6 @@ export interface BaseActionConfig extends BaseConfig {
 
   proficiencyId?: string;
 
-  actionType: ActionType;
   actionCost?: ActionCostType;
 
   isSystem: boolean;
@@ -120,6 +120,7 @@ export interface BaseActionConfig extends BaseConfig {
 }
 
 export interface ItemActionConfig extends Omit<BaseActionConfig, 'level'> {
+  type: typeof ACTION_TYPE.ITEM;
   requiredItem: RequiredItemType;
   requiredItemId?: string;
   requiredItemProficiency?: boolean;
@@ -130,6 +131,7 @@ export interface ItemActionConfig extends Omit<BaseActionConfig, 'level'> {
 }
 
 export interface CommandActionConfig extends BaseActionConfig {
+  type: typeof ACTION_TYPE.COMMAND;
   commandLevel: number;
 
   level: Record<StringRange<1, 6>, CommandActionDetail>;

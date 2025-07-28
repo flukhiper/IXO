@@ -1,7 +1,9 @@
 import type { BaseConfig, ConstantValue, DiceValue } from './base';
 import type { NumberRange } from './common';
 import type { Effect } from './effect';
-import { ITEM_ARMOR_TYPE, ITEM_EQUIPPED_SLOT, ITEM_RARITY, ITEM_TYPE } from '@/constants/config/item';
+import { ITEM_ARMOR_TYPE, ITEM_EQUIPPED_SLOT, ITEM_RARITY, ITEM_TYPE, MAX_ITEM_REFINED_LEVEL } from '@/constants/config/item';
+
+const _maxItemRefinedLevel = MAX_ITEM_REFINED_LEVEL + 1;
 
 export interface ItemDamage {
   type: string;
@@ -22,13 +24,13 @@ export interface WeaponProperty {
   thrown: boolean;
   twoHanded: boolean;
   versatile?: ItemDamage;
-  refined?: NumberRange<1, 4>;
+  refined?: NumberRange<1, typeof _maxItemRefinedLevel>;
 }
 
 export type ItemArmorType = typeof ITEM_ARMOR_TYPE[keyof typeof ITEM_ARMOR_TYPE];
 export interface ArmorProperty {
   type: ItemArmorType;
-  refined?: NumberRange<1, 4>;
+  refined?: NumberRange<1, typeof _maxItemRefinedLevel>;
 }
 
 

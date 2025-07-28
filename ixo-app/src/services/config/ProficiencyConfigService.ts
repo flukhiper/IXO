@@ -6,8 +6,4 @@ export class ProficiencyConfigService extends BaseService<ProficiencyConfig, Pro
   constructor () {
     super(new ProficiencyConfigRepository());
   }
-
-  async getByGameSystemId (gameSystemId: string) {
-    return this.repository.getAllByFilter({ gameSystemId });
-  }
 } 

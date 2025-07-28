@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GameConfigSystemService } from '@/services/config/GameConfigSystemService';
+import { GameConfigSystemService } from '@/services/config/GameSystemConfigService';
 
 const service = new GameConfigSystemService();
 

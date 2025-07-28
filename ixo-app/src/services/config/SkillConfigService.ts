@@ -6,8 +6,4 @@ export class SkillConfigService extends BaseService<SkillConfig, SkillConfigRepo
   constructor () {
     super(new SkillConfigRepository());
   }
-
-  async getAllByFilter (filter: Record<string, unknown>) {
-    return this.repository.getAllByFilter(filter);
-  }
 } 

@@ -19,6 +19,8 @@ export interface CharacterBuildingRule {
 
 export interface GamePlayRule {
   followUpThreshold: number;
+  
+  downtimeIds: string[];
 }
 
 export interface GameSystem extends BaseModel {

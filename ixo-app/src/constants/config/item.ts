@@ -29,3 +29,5 @@ export const ITEM_ARMOR_TYPE = {
   MEDIUM: 'medium',
   HEAVY: 'heavy'
 } as const;
+
+export const MAX_ITEM_REFINED_LEVEL = 3;

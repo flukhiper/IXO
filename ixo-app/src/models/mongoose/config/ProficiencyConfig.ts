@@ -1,47 +1,33 @@
 import mongoose from 'mongoose';
 import type { ProficiencyConfig } from '@/types/config/proficiency';
-import { EffectConfigSchema, LocalizeTextSchema } from './common';
+import { MAX_PROFICIENCY_GAIN_LEVEL } from '@/constants/config/proficiency';
+import { ActionSelectionRuleSchema, EffectConfigSchema, LocalizeTextSchema } from './common';
 
-const StatModifierSchema = new mongoose.Schema({
-  statId: { type: String, required: true },
-  value: { type: Number, required: true }
+// ProficiencyGain sub-schema
+const ProficiencyGainSchema = new mongoose.Schema({
+  actionSelectionRule: { type: ActionSelectionRuleSchema, default: undefined },
+  effects: { type: [ EffectConfigSchema ], default: [] }
 }, { _id: false });
 
-const AttributeModifierSchema = new mongoose.Schema({
-  attributeId: { type: String, required: true },
-  baseValue: mongoose.Schema.Types.Mixed, // FixedValue | DiceValue
-  formula: { type: String }
-}, { _id: false });
-
-const SkillGainSchema = new mongoose.Schema({
-  includedSkillTags: { type: [ String ] },
-  excludedSkillTags: { type: [ String ] },
-  numberOfSkill: { type: Number, required: true }
-}, { _id: false });
-
-const ActionGainSchema = new mongoose.Schema({
-  includedActionTags: { type: [ String ] },
-  excludedActionTags: { type: [ String ] },
-  numberOfAction: { type: Number, required: true }
-}, { _id: false });
-
-const ProficiencyGainConfigSchema = new mongoose.Schema({
-  statModifier: { type: [ StatModifierSchema ], default: [] },
-  attributeModifier: { type: [ AttributeModifierSchema ], default: [] },
-  effects: { type: [ EffectConfigSchema ], default: [] },
-  skillGain: { type: [ SkillGainSchema ], default: [] },
-  actionGain: { type: [ ActionGainSchema ], default: [] }
-}, { _id: false });
+const gainKeys = Array.from({ length: MAX_PROFICIENCY_GAIN_LEVEL }, (_, i) => `${i + 1}`);
+const gainShape = Object.fromEntries(gainKeys.map(key => [ key, { type: ProficiencyGainSchema, default: undefined } ]));
 
 const ProficiencyConfigSchema = new mongoose.Schema<ProficiencyConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  tags: { type: [ String ] },
+  tags: { type: [ String ], default: [] },
+  thumbnail: { type: String },
   icon: { type: String },
-  progression: { type: Map, of: ProficiencyGainConfigSchema, required: true },
+  gain: { type: gainShape, required: true },
   gameSystemId: { type: String, required: true },
-  ownerId: { type: String, required: true }
+  ownerId: { type: String, required: true },
+  createdAt: { type: Date },
+  updatedAt: { type: Date }
 }, { versionKey: false, timestamps: true });
+
+ProficiencyConfigSchema.index({ id: 1 }, { unique: true });
+ProficiencyConfigSchema.index({ gameSystemId: 1 });
+ProficiencyConfigSchema.index({ ownerId: 1 });
 
 export const ProficiencyConfigModel = mongoose.models.ProficiencyConfig || mongoose.model<ProficiencyConfig>('ProficiencyConfig', ProficiencyConfigSchema);

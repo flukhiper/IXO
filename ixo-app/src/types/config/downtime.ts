@@ -7,7 +7,6 @@ export interface DowntimeSelectionRule {
   numberOfSelections: number;
 }
 
-
 export interface DowntimeRestore {
   attributeId: string;
   value: ConstantValue | DiceValue;

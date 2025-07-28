@@ -11,7 +11,7 @@ import { ItemConfigService } from '@/services/config/ItemConfigService';
 import { ClassConfigService } from '@/services/config/ClassConfigService';
 import { StatConfigService } from '@/services/config/StatConfigService';
 import { ProficiencyConfigService } from '@/services/config/ProficiencyConfigService';
-import { GameConfigSystemService } from '@/services/config/GameConfigSystemService';
+import { GameConfigSystemService } from '@/services/config/GameSystemConfigService';
 import { DowntimeConfigService } from '@/services/config/DowntimeConfigService';
 import { DamageTypeConfigService } from '@/services/config/DamageTypeConfigService';
 import { DamageScaleConfigService } from '@/services/config/DamageScaleConfigService';

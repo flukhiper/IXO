@@ -46,11 +46,8 @@ export const ACTION_STACK_TYPE = {
 } as const;
 
 export const ACTION_TYPE = {
-  WEAPON_MELEE: 'weapon-melee',
-  WEAPON_RANGED: 'weapon-ranged',
-  UNARMED: 'unarmed',
-  COMMAND_MELEE: 'command-melee',
-  COMMAND_RANGED: 'command-ranged',
-  BLOCK: 'block',
-  UTILITY: 'utility'
+  COMMAND: 'command',
+  ITEM: 'item',
+  UTILITY: 'utility',
+  SPECIAL: 'special'
 } as const;

@@ -6,14 +6,4 @@ export class OriginConfigService extends BaseService<OriginConfig, OriginConfigR
   constructor () {
     super(new OriginConfigRepository());
   }
-
-  async getByGameSystemId (gameSystemId: string) {
-    return this.repository.getAllByFilter({ gameSystemId });
-  }
-
-  async getByIds (ids: string[], gameSystemId?: string) {
-    const filter: Record<string, unknown> = { id: { $in: ids } };
-    if (gameSystemId) filter.gameSystemId = gameSystemId;
-    return this.repository.getAllByFilter(filter);
-  }
 } 

@@ -44,4 +44,8 @@ export abstract class BaseService<T extends { id: string }, R extends BaseReposi
       throw new Error('deleteAll is not implemented in the repository');
     }
   }
+
+  async getByGameSystemId (gameSystemId: string) {
+    return this.repository.getAllByFilter({ gameSystemId });
+  }
 } 

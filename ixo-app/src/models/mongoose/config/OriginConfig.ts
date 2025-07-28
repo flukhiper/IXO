@@ -2,23 +2,22 @@ import mongoose from 'mongoose';
 import type { OriginConfig } from '@/types/config/origin';
 import { EffectConfigSchema, LocalizeTextSchema } from './common';
 
-const SpecialtySchema = new mongoose.Schema({
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema, required: true }
-}, { _id: false });
-
 const OriginConfigSchema = new mongoose.Schema<OriginConfig>({
   id: { type: String, required: true, unique: true },
   name: { type: LocalizeTextSchema, required: true },
   description: { type: LocalizeTextSchema },
-  tags: { type: [ String ] },
   icon: { type: String },
-  specialty: { type: SpecialtySchema },
-  effects: { type: [ EffectConfigSchema ] },
-  gameSystemId: { type: String, required: true },
+  thumbnail: { type: String },
+  tags: { type: [ String ], default: [] },
   ownerId: { type: String, required: true },
   createdAt: { type: Date },
-  updatedAt: { type: Date }
+  updatedAt: { type: Date },
+  gameSystemId: { type: String, required: true },
+  effects: { type: [ EffectConfigSchema ], default: [] }
 }, { versionKey: false, timestamps: true });
+
+OriginConfigSchema.index({ id: 1 }, { unique: true });
+OriginConfigSchema.index({ gameSystemId: 1 });
+OriginConfigSchema.index({ ownerId: 1 });
 
 export const OriginConfigModel = mongoose.models.OriginConfig || mongoose.model<OriginConfig>('OriginConfig', OriginConfigSchema);

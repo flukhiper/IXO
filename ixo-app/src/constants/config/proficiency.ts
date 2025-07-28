@@ -1,0 +1,1 @@
+export const MAX_PROFICIENCY_GAIN_LEVEL = 12;

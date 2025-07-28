@@ -6,8 +6,4 @@ export class StatConfigService extends BaseService<StatConfig, StatConfigReposit
   constructor () {
     super(new StatConfigRepository());
   }
-
-  async getByGameSystemId (gameSystemId: string) {
-    return this.repository.getAllByFilter({ gameSystemId });
-  }
 } 

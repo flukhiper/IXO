@@ -13,3 +13,5 @@ export const CLASS_ROLE_TYPE = {
   SUPPORT: 'support',
   SPECIALIST: 'specialist'
 } as const;
+
+export const MAX_CLASS_GAIN_LEVEL = 12;
