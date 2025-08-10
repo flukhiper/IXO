@@ -8,6 +8,7 @@ export interface BaseAttributeConfig extends BaseConfig {
   
   value: ConstantValue | DiceValue;
   modiferFomular?: string;
+  abbreviation: string;
 
   isSystem: boolean;
 }

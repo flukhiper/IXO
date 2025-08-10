@@ -1,213 +1,127 @@
 import type { DowntimeConfig } from '@/types/config/downtime';
-import { KEYWORD_TYPE, VALUE_TYPE } from '@/constants/config/base';
+import { DOWNTIME_DURATION } from '@/constants/config/downtime';
+import { VALUE_TYPE } from '@/constants/config/base';
 
-// === Mock Downtime Configs ===
-export const mock: DowntimeConfig[] = [
-  // 1. Prepare Combat Loadout
+export const mockDowntimes: DowntimeConfig[] = [
   {
-    id: 'downtime-prepare-combat-loadout',
-    name: { en: 'Prepare Combat Loadout', th: 'เตรียมชุดต่อสู้' },
+    id: 'downtime-prepare-loadout',
+    name: {
+      en: 'Prepare Loadout',
+      th: 'เตรียมอุปกรณ์'
+    },
     description: {
-      en: 'Change your prepared Combat and Command Actions. Can be performed once per downtime (about 1 hour).',
-      th: 'เปลี่ยนการเตรียมการกระทำต่อสู้และคำสั่งของคุณ ทำได้หนึ่งครั้งต่อช่วงพัก (ประมาณ 1 ชั่วโมง)'
+      en: 'You take time for mental and physical practice, deciding which of your known techniques and skills you will keep at the forefront of your mind. This is the only time you can change your prepared actions within the limits of your Action Slots (AS) and your prepared skills within the limits of your Skill Slots (SS).',
+      th: 'คุณใช้เวลาในการฝึกฝนทางจิตใจและร่างกาย ตัดสินใจว่าจะเก็บเทคนิคและทักษะที่รู้จักไว้ในใจของคุณ นี่เป็นช่วงเวลาเดียวที่คุณสามารถเปลี่ยนการกระทำที่เตรียมไว้ภายในขีดจำกัดของช่องแอคชั่น (AS) และทักษะที่เตรียมไว้ภายในขีดจำกัดของช่องทักษะ (SS) ของคุณ'
     },
-    icon: 'loadout-icon',
-    tags: [ 'core', 'utility' ],
-    requiredProficiencies: [],
-    shortDowntime: {
-      cost: 0,
-      duration: 1,
-      effects: [] // No mechanical effect, just narrative
-    },
-    longDowntime: {
-      cost: 0,
-      duration: 1,
-      effects: []
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    icon: 'loadout',
+    thumbnail: 'prepare-loadout-downtime.jpg',
+    tags: [ 'preparation', 'mental', 'practice' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    isSystem: true,
+    duration: {
+      [DOWNTIME_DURATION.SHORT]: {
+        numberOfUsage: 1,
+        downTimePointsCost: 1
+      }
+    }
   },
-  // 2. Tend to Wounds
   {
     id: 'downtime-tend-to-wounds',
-    name: { en: 'Tend to Wounds', th: 'รักษาบาดแผล' },
+    name: {
+      en: 'Tend to Wounds',
+      th: 'ดูแลบาดแผล'
+    },
     description: {
-      en: 'Restore 1d4 + Character Level HP. During Full Downtime, 2 slots can restore a character to max HP.',
-      th: 'ฟื้นฟู 1d4 + เลเวล HP ใน Full Downtime ใช้ 2 ช่องเพื่อฟื้นฟู HP เต็ม'
+      en: 'You spend time tending to your injuries or those of an ally. During short downtime, you can restore 1d4 + Character Level HP to yourself or one ally. During long downtime, you can fully restore all HP to yourself or one ally.',
+      th: 'คุณใช้เวลาในการดูแลบาดแผลของคุณหรือของพันธมิตร ในช่วงเวลาพักสั้น คุณสามารถฟื้นฟู 1d4 + ระดับตัวละคร HP ให้กับตัวเองหรือพันธมิตรหนึ่งคน ในช่วงเวลาพักยาว คุณสามารถฟื้นฟู HP ทั้งหมดให้กับตัวเองหรือพันธมิตรหนึ่งคน'
     },
-    icon: 'heal-icon',
-    tags: [ 'core', 'healing' ],
-    requiredProficiencies: [],
-    shortDowntime: {
-      cost: 1,
-      duration: 1,
-      effects: [
-        {
-          keywords: [
-            {
-              type: KEYWORD_TYPE.RESTORE,
-              attributeId: 'attribute-hit-points',
-              baseValue: { type: VALUE_TYPE.DICE, formula: '1d4' },
-              formula: '1d4 + level' // Narrative: add character level
+    icon: 'healing',
+    thumbnail: 'tend-wounds-downtime.jpg',
+    tags: [ 'healing', 'recovery', 'medical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    isSystem: true,
+    duration: {
+      [DOWNTIME_DURATION.SHORT]: {
+        numberOfUsage: 99,
+        downTimePointsCost: 1,
+        restore: [
+          {
+            attributeId: 'attr-hit-points',
+            value: {
+              type: VALUE_TYPE.DICE,
+              formula: '1d4 + Character Level'
             }
-          ]
-        }
-      ]
-    },
-    longDowntime: {
-      cost: 2,
-      duration: 2,
-      effects: [
-        {
-          keywords: [
-            {
-              type: KEYWORD_TYPE.RESTORE,
-              attributeId: 'attribute-hit-points',
-              baseValue: { type: VALUE_TYPE.FULL }
+          }
+        ]
+      },
+      [DOWNTIME_DURATION.LONG]: {
+        numberOfUsage: 99,
+        downTimePointsCost: 3,
+        restore: [
+          {
+            attributeId: 'attr-hit-points',
+            value: {
+              type: VALUE_TYPE.CONSTANT,
+              value: 999 // Represents full HP restoration
             }
-          ]
-        }
-      ]
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+          }
+        ]
+      }
+    }
   },
-  // 3. Maintain Gear
   {
     id: 'downtime-maintain-gear',
-    name: { en: 'Maintain Gear', th: 'ซ่อมบำรุงอุปกรณ์' },
-    description: {
-      en: 'Restore 1d4 DP to one piece of armor or shield (DC 10 Tinker). If proficient with Smith\'s Tools, restore 1d4+2 DP automatically.',
-      th: 'ฟื้นฟู 1d4 DP ให้กับเกราะหรือโล่หนึ่งชิ้น (DC 10 ช่าง) ถ้ามีความชำนาญ Smith\'s Tools ฟื้นฟู 1d4+2 DP อัตโนมัติ'
+    name: {
+      en: 'Maintain Gear',
+      th: 'บำรุงรักษาอุปกรณ์'
     },
-    icon: 'repair-icon',
-    tags: [ 'core', 'repair' ],
-    requiredProficiencies: [],
-    shortDowntime: {
-      cost: 1,
-      duration: 1,
-      effects: [
-        {
-          keywords: [
-            {
-              type: KEYWORD_TYPE.REPAIR,
-              numberOfItems: 1,
-              baseValue: { type: VALUE_TYPE.DICE, formula: '1d4' },
-              formula: '1d4 (or 1d4+2 if proficient with Smith\'s Tools)'
-            }
-          ]
+    description: {
+      en: 'You perform essential upkeep on equipment to restore its Durability. During short downtime, you can repair one item with a DC 13 Tinker check, restoring 1d4 Durability. During long downtime, you can repair two items with the same procedure. If you are proficient with Smith\'s Tools, you automatically succeed and restore 1d4 + 2 Durability.',
+      th: 'คุณทำการบำรุงรักษาที่จำเป็นสำหรับอุปกรณ์เพื่อฟื้นฟูความทนทาน ในช่วงเวลาพักสั้น คุณสามารถซ่อมแซมไอเทมหนึ่งชิ้นด้วยการตรวจสอบ Tinker DC 13 ฟื้นฟูความทนทาน 1d4 ในช่วงเวลาพักยาว คุณสามารถซ่อมแซมไอเทมสองชิ้นด้วยขั้นตอนเดียวกัน หากคุณมีความเชี่ยวชาญในเครื่องมือช่างเหล็ก คุณจะสำเร็จโดยอัตโนมัติและฟื้นฟูความทนทาน 1d4 + 2'
+    },
+    icon: 'repair',
+    thumbnail: 'maintain-gear-downtime.jpg',
+    tags: [ 'repair', 'maintenance', 'equipment' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    isSystem: true,
+    duration: {
+      [DOWNTIME_DURATION.SHORT]: {
+        numberOfUsage: 1,
+        downTimePointsCost: 1,
+        repair: {
+          numberOfItems: 1,
+          value: {
+            type: VALUE_TYPE.DICE,
+            formula: '1d4'
+          },
+          skillCheckId: 'skill-tinker',
+          modifierFormula: 'DC 13'
         }
-      ]
-    },
-    longDowntime: {
-      cost: 1,
-      duration: 1,
-      effects: [
-        {
-          keywords: [
-            {
-              type: KEYWORD_TYPE.REPAIR,
-              numberOfItems: 1,
-              baseValue: { type: VALUE_TYPE.DICE, formula: '1d4' },
-              formula: '1d4 (or 1d4+2 if proficient with Smith\'s Tools)'
-            }
-          ]
+      },
+      [DOWNTIME_DURATION.LONG]: {
+        numberOfUsage: 1,
+        downTimePointsCost: 2,
+        repair: {
+          numberOfItems: 2,
+          value: {
+            type: VALUE_TYPE.DICE,
+            formula: '1d4'
+          },
+          skillCheckId: 'skill-tinker',
+          modifierFormula: 'DC 13'
         }
-      ]
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // 4. Prepare Fortifying Meal (Proficient: Cook's Tools)
-  {
-    id: 'downtime-prepare-fortifying-meal',
-    name: { en: 'Prepare Fortifying Meal', th: 'เตรียมอาหารบำรุง' },
-    description: {
-      en: 'Create a meal that grants a minor, scaling combat buff for next combat. Requires Cook\'s Tools proficiency.',
-      th: 'สร้างอาหารที่ให้บัฟการต่อสู้เล็กน้อยตามเลเวลในคอมแบทถัดไป ต้องมีความชำนาญ Cook\'s Tools'
-    },
-    icon: 'meal-icon',
-    tags: [ 'proficient', 'buff', 'cooking' ],
-    requiredProficiencies: [ { proficiencyId: 'proficiency-cooks-tools', level: 1 } ],
-    shortDowntime: {
-      cost: 2,
-      duration: 2,
-      effects: [
-        {
-          keywords: [
-            // Focusing Meal: Aim X
-            { type: KEYWORD_TYPE.AIM, value: 'any' },
-            // Iron-Stomach Ration: Tough X
-            { type: KEYWORD_TYPE.TOUGH, value: 'any' },
-            // Moment of Clarity: Regain X Fractal Points (up to 3)
-            {
-              type: KEYWORD_TYPE.RESTORE,
-              attributeId: 'attribute-fractal-points',
-              baseValue: { type: VALUE_TYPE.FIXED, value: 1 },
-              formula: 'X = ceil(level/2), max 3'
-            }
-          ]
-        }
-      ]
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // 5. Alchemical Preparation (Proficient: Chemical's Tools)
-  {
-    id: 'downtime-alchemical-preparation',
-    name: { en: 'Alchemical Preparation', th: 'เตรียมสารเคมี' },
-    description: {
-      en: 'Craft a potion, poison, or chemical item from a known formula. Requires Chemical\'s Tools proficiency.',
-      th: 'สร้างโพชั่น พิษ หรือไอเท็มเคมีจากสูตรที่รู้ ต้องมีความชำนาญ Chemical\'s Tools'
-    },
-    icon: 'alchemy-icon',
-    tags: [ 'proficient', 'crafting', 'alchemy' ],
-    requiredProficiencies: [ { proficiencyId: 'proficiency-chemicals-tools', level: 1 } ],
-    shortDowntime: {
-      cost: 2,
-      duration: 2,
-      effects: [] // Narrative: crafting, not a direct effect
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // 6. Craft Trap (Proficient: Trapmaker's Tools)
-  {
-    id: 'downtime-craft-trap',
-    name: { en: 'Craft Trap', th: 'สร้างกับดัก' },
-    description: {
-      en: 'Create a non-magical trap (snare, alarm, caltrops, etc). Requires Trapmaker\'s Tools proficiency.',
-      th: 'สร้างกับดักที่ไม่ใช่เวทมนตร์ เช่น บ่วงเตือนภัย ตะปูเรือใบ ต้องมีความชำนาญ Trapmaker\'s Tools'
-    },
-    icon: 'trap-icon',
-    tags: [ 'proficient', 'crafting', 'trap' ],
-    requiredProficiencies: [ { proficiencyId: 'proficiency-trapmakers-tools', level: 1 } ],
-    shortDowntime: {
-      cost: 2,
-      duration: 2,
-      effects: [] // Narrative: crafting, not a direct effect
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // 7. Personal Project
-  {
-    id: 'downtime-personal-project',
-    name: { en: 'Personal Project', th: 'โปรเจกต์ส่วนตัว' },
-    description: {
-      en: 'Pursue a long-term, story-focused goal (e.g., forging a weapon, researching lore, etc).',
-      th: 'ทำกิจกรรมระยะยาวที่เน้นเนื้อเรื่อง เช่น สร้างอาวุธ วิจัยความรู้ ฯลฯ'
-    },
-    icon: 'project-icon',
-    tags: [ 'personal', 'project', 'story' ],
-    requiredProficiencies: [],
-    shortDowntime: {
-      cost: 3,
-      duration: 3,
-      effects: [] // Narrative only
-    },
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+      }
+    }
   }
-]; 
+];
+
+export default mockDowntimes;

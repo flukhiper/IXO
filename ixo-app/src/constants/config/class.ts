@@ -1,3 +1,7 @@
+export const CLASS_STAT_MODIFIER_OPTION = {
+  ALL: 'all'
+} as const;
+
 export const CLASS_TYPE = {
   ENFORCER: 'enforcer',
   SCOUT: 'scout',
@@ -14,4 +18,4 @@ export const CLASS_ROLE_TYPE = {
   SPECIALIST: 'specialist'
 } as const;
 
-export const MAX_CLASS_GAIN_LEVEL = 12;
+export const MAX_CLASS_GAIN_LEVEL = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] as const;

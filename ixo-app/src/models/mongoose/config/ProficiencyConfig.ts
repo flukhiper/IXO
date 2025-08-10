@@ -5,12 +5,11 @@ import { ActionSelectionRuleSchema, EffectConfigSchema, LocalizeTextSchema } fro
 
 // ProficiencyGain sub-schema
 const ProficiencyGainSchema = new mongoose.Schema({
-  actionSelectionRule: { type: ActionSelectionRuleSchema, default: undefined },
-  effects: { type: [ EffectConfigSchema ], default: [] }
+  actionSelectionRule: { type: [ ActionSelectionRuleSchema ], default: undefined },
+  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
 }, { _id: false });
 
-const gainKeys = Array.from({ length: MAX_PROFICIENCY_GAIN_LEVEL }, (_, i) => `${i + 1}`);
-const gainShape = Object.fromEntries(gainKeys.map(key => [ key, { type: ProficiencyGainSchema, default: undefined } ]));
+const gainShape = Object.fromEntries(MAX_PROFICIENCY_GAIN_LEVEL.map(key => [ key, { type: ProficiencyGainSchema, default: undefined } ]));
 
 const ProficiencyConfigSchema = new mongoose.Schema<ProficiencyConfig>({
   id: { type: String, required: true, unique: true },

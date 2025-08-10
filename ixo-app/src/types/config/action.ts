@@ -1,12 +1,15 @@
-import { ACTION_COST_TYPE, ACTION_HIT_TARGET_TYPE, ACTION_HIT_TYPE, ACTION_ITEM_OPTION, ACTION_REQUIRED_ITEM_TYPE, ACTION_STACK_TYPE, ACTION_TYPE, ACTION_USAGE_TYPE } from '@/constants/config/action';
+import { ACTION_COST_OPTION, ACTION_COST_TYPE, ACTION_HIT_TARGET_TYPE, ACTION_HIT_TYPE, ACTION_ITEM_OPTION, ACTION_REQUIRED_ITEM_TYPE, ACTION_STACK_TYPE, ACTION_TYPE, ACTION_USAGE_TYPE, MAX_ACTION_LEVEL } from '@/constants/config/action';
 import type { BaseConfig, ConstantValue, DiceValue } from './base';
-import type { StringRange } from './common';
 import type { Effect } from './effect';
 
 export interface ActionSelectionRule {
   actionIds?: string[];
-  proficiencyIds?: string[];
-  commandLevels?: number[];
+  filterOptions?: {
+    proficiencyIds?: string[];
+    commandLevels?: number[];
+    includeTags?: string[];
+    excludeTags?: string[];
+  };
   numberOfSelections: number;
 }
 
@@ -38,11 +41,16 @@ export interface ActionAttackRollHit {
 export interface ActionDifficultyClassHit {
   type: typeof ACTION_HIT_TYPE.DIFFICULTY_CLASS;
   savingTargetId: string;
-  target?: ActionAimHitTarget | ActionAreaHitTarget;
+  target: ActionAimHitTarget | ActionAreaHitTarget;
 }
 
 export interface ActionSelfHit {
   type: typeof ACTION_HIT_TYPE.SELF;
+}
+
+export interface ActionAlwaysHit {
+  type: typeof ACTION_HIT_TYPE.ALWAYS_HIT;
+  target: ActionAimHitTarget | ActionAreaHitTarget;
 }
 
 ///////////////////
@@ -66,23 +74,30 @@ export interface ActionRestore {
   modifierFormula?: string;
 }
 
+export interface ActionApplyCondition {
+  conditionId: string;
+  overrideDuration?: number;
+  requiredConcentration?: boolean;
+}
+
 export type ActionUsageType = typeof ACTION_USAGE_TYPE[keyof typeof ACTION_USAGE_TYPE];
 export interface BaseActionDetail {
   usage?: {
     type: ActionUsageType;
     maxNumberOfUse: number;
   };
-  focusPointsCost?: number;
+  focusPointsCost?: number | typeof ACTION_COST_OPTION.ALL;
   movementSpeedCost?: number;
   range?: number;
-  hit: ActionAttackRollHit | ActionDifficultyClassHit | ActionSelfHit;
+  hit: ActionAttackRollHit | ActionDifficultyClassHit | ActionSelfHit | ActionAlwaysHit;
   armorClass?: ActionArmorClass;
   damage?: ActionDamage[];
   restore?: ActionRestore[];
+  applyCondition?: ActionApplyCondition[];
   effects?: Effect[];
 }
 export interface ItemActionDetail extends Omit<BaseActionDetail, 'armorClass' | 'damage' | 'restore' | 'range'> {
-  durabilityPointsCost: number;
+  durabilityPointsCost?: number;
   range?: number | typeof ACTION_ITEM_OPTION.RANGE;
   armorClass?: ActionArmorClass | typeof ACTION_ITEM_OPTION.ARMOR_CLASS | typeof ACTION_ITEM_OPTION.ARMOR_CLASS_VALUE_ONLY;
   armorClassModifier?: ActionArmorClass;
@@ -99,6 +114,7 @@ export interface CommandActionDetail extends BaseActionDetail {
 // Action Config //
 ///////////////////
 
+export type ActionLevel = typeof MAX_ACTION_LEVEL[number];
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
 export type ActionStackType = typeof ACTION_STACK_TYPE[keyof typeof ACTION_STACK_TYPE];
 export type ActionCostType = typeof ACTION_COST_TYPE[keyof typeof ACTION_COST_TYPE];
@@ -114,9 +130,12 @@ export interface BaseActionConfig extends BaseConfig {
 
   actionCost?: ActionCostType;
 
+  overrideActionId?: string;
+  isBasic?: boolean;
   isSystem: boolean;
 
-  level: Record<StringRange<1, 2>, BaseActionDetail>;
+  limitLevel?: number;
+  level?: Partial<Record<ActionLevel, BaseActionDetail>>;
 }
 
 export interface ItemActionConfig extends Omit<BaseActionConfig, 'level'> {
@@ -127,14 +146,14 @@ export interface ItemActionConfig extends Omit<BaseActionConfig, 'level'> {
 
   proficiencyId?: string | typeof ACTION_ITEM_OPTION.PROFICIENCY;
 
-  level: Record<StringRange<1, 2>, ItemActionDetail>;
+  level?: Record<Extract<ActionLevel, 1>, ItemActionDetail>;
 }
 
 export interface CommandActionConfig extends BaseActionConfig {
   type: typeof ACTION_TYPE.COMMAND;
-  commandLevel: number;
+  commandLevel?: number;
 
-  level: Record<StringRange<1, 6>, CommandActionDetail>;
+  level?: Partial<Record<ActionLevel, CommandActionDetail>>;
 }
 
 export type ActionConfig = 

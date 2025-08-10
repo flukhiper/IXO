@@ -21,6 +21,12 @@ const ActionRestoreSchema = new mongoose.Schema({
   modifierFormula: { type: String }
 }, { _id: false });
 
+const ActionApplyConditionSchema = new mongoose.Schema({
+  conditionId: { type: String, required: true },
+  overrideDuration: { type: Number },
+  requiredConcentration: { type: Boolean }
+}, { _id: false });
+
 const BaseActionDetailSchema = new mongoose.Schema({
   usage: {
     type: {
@@ -29,13 +35,14 @@ const BaseActionDetailSchema = new mongoose.Schema({
     },
     maxNumberOfUse: { type: Number }
   },
-  focusPointsCost: { type: Number },
+  focusPointsCost: { type: mongoose.Schema.Types.Mixed },
   movementSpeedCost: { type: Number },
   range: { type: mongoose.Schema.Types.Mixed },
   hit: { type: mongoose.Schema.Types.Mixed, required: true },
   armorClass: { type: ActionArmorClassSchema },
   damage: { type: [ ActionDamageSchema ] },
   restore: { type: [ ActionRestoreSchema ] },
+  applyCondition: { type: [ ActionApplyConditionSchema ] },
   effects: { type: [ EffectConfigSchema ], default: [] }
 }, { _id: false });
 
@@ -58,7 +65,9 @@ const baseFields = {
   proficiencyId: { type: String },
   type: { type: String, enum: Object.values(ACTION_TYPE), required: true },
   actionCost: { type: String, enum: Object.values(ACTION_COST_TYPE) },
-  isSystem: { type: Boolean, required: true }
+  isSystem: { type: Boolean, required: true },
+  isBasic: { type: Boolean },
+  limitLevel: { type: Number }
 };
 
 // Discriminator schemas for each action type
@@ -70,14 +79,14 @@ const ItemActionConfigSchema = new mongoose.Schema({
   requiredItemId: { type: String },
   requiredItemProficiency: { type: Boolean },
   proficiencyId: { type: String },
-  level: { type: Map, of: BaseActionDetailSchema, required: true }
+  level: { type: Map, of: BaseActionDetailSchema }
 });
 
 const CommandActionConfigSchema = new mongoose.Schema({
   ...baseFields,
   type: { type: String, enum: [ ACTION_TYPE.COMMAND ], required: true },
   commandLevel: { type: Number, required: true },
-  level: { type: Map, of: BaseActionDetailSchema, required: true }
+  level: { type: Map, of: BaseActionDetailSchema }
 });
 
 // Main ActionConfig schema using discriminators

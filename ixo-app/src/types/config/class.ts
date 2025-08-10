@@ -1,23 +1,20 @@
-import { CLASS_ROLE_TYPE, MAX_CLASS_GAIN_LEVEL } from '@/constants/config/class';
+import { CLASS_ROLE_TYPE, CLASS_STAT_MODIFIER_OPTION, MAX_CLASS_GAIN_LEVEL } from '@/constants/config/class';
 import type { BaseConfig } from './base';
-import type { StringRange } from './common';
 import type { SkillSelectionRule } from './skill';
 
 export type ClassGain = {
   proficiencyPoints?: number;
   statModifierChoice?: {
-    statIds?: string[];
+    statIds?: string[] | typeof CLASS_STAT_MODIFIER_OPTION.ALL;
     numberOfSelections: number;
   };
-  skillSelectionRule?: SkillSelectionRule;
+  skillSelectionRule?: SkillSelectionRule[];
 };
 
-const _maxClassGainLevel = MAX_CLASS_GAIN_LEVEL + 1;
-
-export type ClassGainLevel = StringRange<1, typeof _maxClassGainLevel>;
-export type ClassRole = keyof typeof CLASS_ROLE_TYPE;
+export type ClassGainLevel = typeof MAX_CLASS_GAIN_LEVEL[number];
+export type ClassRole = typeof CLASS_ROLE_TYPE[keyof typeof CLASS_ROLE_TYPE];
 
 export interface ClassConfig extends BaseConfig {
-  role: ClassRole;
+  roles: ClassRole[];
   gain: Record<ClassGainLevel, ClassGain>;
 }

@@ -32,5 +32,5 @@ export type DowntimeDuration = typeof DOWNTIME_DURATION[keyof typeof DOWNTIME_DU
 export interface DowntimeConfig extends BaseConfig {
   isSystem: boolean;
 
-  duration: Record<DowntimeDuration, DowntimeDetail>;
+  duration: Partial<Record<DowntimeDuration, DowntimeDetail>>;
 }

@@ -13,7 +13,7 @@ const OriginConfigSchema = new mongoose.Schema<OriginConfig>({
   createdAt: { type: Date },
   updatedAt: { type: Date },
   gameSystemId: { type: String, required: true },
-  effects: { type: [ EffectConfigSchema ], default: [] }
+  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
 }, { versionKey: false, timestamps: true });
 
 OriginConfigSchema.index({ id: 1 }, { unique: true });

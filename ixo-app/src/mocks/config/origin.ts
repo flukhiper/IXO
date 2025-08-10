@@ -1,463 +1,447 @@
 import type { OriginConfig } from '@/types/config/origin';
-import { KEYWORD_TYPE } from '@/constants/config/base';
+import { TALENT_EFFECT_TYPE } from '@/constants/config/effect';
 
-export const mock: OriginConfig[] = [
+export const mockOrigins: OriginConfig[] = [
   {
-    id: 'origin-primordia',
+    id: 'origin-wraith',
     name: {
-      en: 'Primordia',
-      th: 'พริมอร์เดีย'
+      th: 'มิติแห่ง Wraith – "แดนคำราม (Roaring Expanse)"',
+      en: 'Dimension of Wraith – "Roaring Expanse"'
     },
     description: {
-      en: 'You are a child of the chaotic, untamed nexus. Growing up where reality itself is unstable has forced you to become adaptable above all else. Your senses are honed to perceive the slightest disturbance, and your mind is a flexible tool, ready to learn whatever skill is necessary to survive the impossible.',
-      th: 'คุณเป็นลูกของจุดเชื่อมต่อที่วุ่นวายและป่าเถื่อน การเติบโตในที่ที่ความเป็นจริงไม่เสถียรบังคับให้คุณต้องปรับตัวเหนือสิ่งอื่นใด ประสาทสัมผัสของคุณได้รับการฝึกฝนให้รับรู้การรบกวนที่เล็กที่สุด และจิตใจของคุณเป็นเครื่องมือที่ยืดหยุ่น พร้อมที่จะเรียนรู้ทักษะใดๆ ที่จำเป็นสำหรับการอยู่รอดในสิ่งที่เป็นไปไม่ได้'
+      th: 'โลกถูกแผดเผาด้วยลาวา, หินแหลมคม, พายุเพลิง และเถ้าถ่านพัดผ่านทุกอณู ภูมิประเทศดูเหมือนผ่านสงครามมานานนับพันปี — ทุกอย่างบิดเบี้ยวจากความเดือดดาลของ Wraith ท้องฟ้ามืดครึ้ม, แสงอาทิตย์ทะลุผ่านเมฆแดงได้เพียงเลือนราง สิ่งมีชีวิตในที่นี่ถูกปรับสภาพให้ทนทาน แข็งแกร่ง และดุร้ายเพื่อความอยู่รอด',
+      en: 'A world scorched by lava, sharp rocks, firestorms, and pervasive ashes. The landscape appears to have endured millennia of war, everything distorted by Wraith\'s fury. The sky is dark, with only faint sunlight penetrating red clouds. Life here is adapted to be tough, strong, and fierce for survival.'
     },
-    tags: [ 'homeland', 'chaos', 'adaptable' ],
-    icon: 'primordia-icon',
-    specialty: {
-      name: {
-        en: 'Reality Sense',
-        th: 'ประสาทสัมผัสแห่งความเป็นจริง'
-      },
-      description: {
-        en: 'Your upbringing in the unstable nexus has given you an uncanny ability to sense disturbances in reality itself.',
-        th: 'การเติบโตในจุดเชื่อมต่อที่ไม่เสถียรทำให้คุณมีความสามารถพิเศษในการรับรู้การรบกวนในความเป็นจริงเอง'
-      }
-    },
-    effects: [
+    icon: '/icons/wraith-icon.png',
+    thumbnail: '/thumbnails/wraith-thumbnail.jpg',
+    tags: [ 'combat', 'endurance', 'physical' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:00:00Z',
+    updatedAt: '2025-07-29T13:00:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Detection Gifted',
-          th: 'พรสวรรค์การตรวจจับ'
-        },
-        description: {
-          en: 'You are naturally gifted at detecting hidden things and sensing danger.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการตรวจจับสิ่งซ่อนเร้นและรับรู้อันตราย'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'detection'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Adaptive Learning',
-          th: 'การเรียนรู้แบบปรับตัว'
-        },
-        description: {
-          en: 'Choose any skill check to become gifted in.',
-          th: 'เลือกการตรวจสอบทักษะใดๆ เพื่อให้มีความสามารถพิเศษ'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-power'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'any',
-            numberOfAttributes: 1
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-endurance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-intimidation'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-sprint'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-acrobatics'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-instinct'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-symphonia-varis',
+    id: 'origin-lust',
     name: {
-      en: 'Symphonia Varis',
-      th: 'ซิมโฟเนีย วาริส'
+      th: 'มิติแห่ง Lust – "แดนฝันหวาน (Velvet Mirage)"',
+      en: 'Dimension of Lust – "Velvet Mirage"'
     },
     description: {
-      en: 'You hail from a realm where every moment is a performance. Life in Symphonia Varis is a dance, a song, a spectacle. You learned to move with a performer\'s grace and agility, captivating onlookers and navigating the wondrous, ever-shifting stage of your world with dazzling acrobatic feats.',
-      th: 'คุณมาจากอาณาจักรที่ทุกช่วงเวลาคือการแสดง ชีวิตในซิมโฟเนีย วาริสคือการเต้นรำ เพลง และการแสดง คุณเรียนรู้ที่จะเคลื่อนไหวด้วยความสง่างามและความคล่องแคล่วของนักแสดง ดึงดูดผู้ชมและนำทางเวทีมหัศจรรย์ที่เปลี่ยนแปลงตลอดเวลาของโลกด้วยการแสดงกายกรรมที่ตระการตา'
+      th: 'โลกที่เต็มไปด้วยทิวทัศน์แสนงดงามราวความฝัน — ทุ่งดอกไม้ที่ไม่มีวันโรยรา เมืองลอยฟ้าเรืองแสง ดนตรีอ่อนหวานล่องลอยในอากาศ ทุกสิ่งถูกออกแบบมาเพื่อให้รู้สึก "สบาย" และ "พอใจ" ไม่มีสิ่งใดดูอันตราย... แต่มักมีบางอย่างผิดแปลกหากมองนานเกินไป เบื้องหลังความงามคือโครงสร้างลวงตา ผู้ควบคุมมิตินี้ในปัจจุบัน ไม่ใช่ Lust แต่เป็นผู้อื่น ที่แอบควบคุมโลกฝันในนามของเธอ',
+      en: 'A world full of dreamlike beautiful scenery - eternal flower fields, glowing floating cities, sweet music drifting through the air. Everything is designed to feel \'comfortable\' and \'satisfied,\' nothing seems dangerous... but something often feels off if stared at for too long. Behind the beauty is an illusory structure. The current controller of this dimension is not Lust, but another, secretly manipulating the dream world in her name.'
     },
-    tags: [ 'homeland', 'performance', 'grace' ],
-    icon: 'symphonia-varis-icon',
-    specialty: {
-      name: {
-        en: 'Stage Presence',
-        th: 'การปรากฏตัวบนเวที'
-      },
-      description: {
-        en: 'Your natural charisma and stage presence make you a natural performer and leader.',
-        th: 'เสน่ห์และการปรากฏตัวบนเวทีตามธรรมชาติทำให้คุณเป็นนักแสดงและผู้นำโดยธรรมชาติ'
-      }
-    },
-    effects: [
+    icon: '/icons/lust-icon.png',
+    thumbnail: '/thumbnails/lust-thumbnail.jpg',
+    tags: [ 'social', 'charm', 'illusion' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:05:00Z',
+    updatedAt: '2025-07-29T13:05:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Performance Gifted',
-          th: 'พรสวรรค์การแสดง'
-        },
-        description: {
-          en: 'You are naturally gifted at performing arts and entertainment.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการแสดงศิลปะและความบันเทิง'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'performance'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Acrobatics Gifted',
-          th: 'พรสวรรค์กายกรรม'
-        },
-        description: {
-          en: 'You are naturally gifted at acrobatic movements and physical agility.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการเคลื่อนไหวกายกรรมและความคล่องแคล่วทางกาย'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-persuasion'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'acrobatics'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-performance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-insight'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deception'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-acrobatics'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-gaea-libris',
+    id: 'origin-greed',
     name: {
-      en: 'Gaea Libris',
-      th: 'เกีย ลิบริส'
+      th: 'มิติแห่ง Greed – "นครขั้นบันได (The Gilded Steps)"',
+      en: 'Dimension of Greed – "The Gilded Steps"'
     },
     description: {
-      en: 'Raised in a world where knowledge grows like trees, your mind was shaped by observation and logic. You learned to spot the subtle clues hidden within the living wilderness and connect them, deducing the patterns of nature and the secrets of the ancient, interwoven lore.',
-      th: 'เติบโตในโลกที่ความรู้เติบโตเหมือนต้นไม้ จิตใจของคุณถูกหล่อหลอมด้วยการสังเกตและตรรกะ คุณเรียนรู้ที่จะค้นพบเบาะแสที่ซ่อนเร้นในป่าที่มีชีวิตและเชื่อมโยงพวกมันเข้าด้วยกัน อนุมานรูปแบบของธรรมชาติและความลับของตำนานโบราณที่สานต่อกัน'
+      th: 'มิติแห่งนี้คือเมืองสูงตระหง่านที่แบ่งเป็น "ชั้น" ตามลำดับชนชั้น — ยิ่งอยู่สูง ยิ่งมั่งคั่ง ยิ่งมีอำนาจ อาคารชั้นบนหรูหราราวพระราชวังทองคำ ส่วนชั้นล่างคือเขาวงกตของตลาดมืด, ท่อระบายน้ำ, และเหล่าผู้สิ้นหวัง กฎหมาย, ศีลธรรม และความยุติธรรมถูกตีความผ่านผลประโยชน์ — "ถูก" คือสิ่งที่ทำให้ได้กำไรมากที่สุด ทุกสิ่งเป็นสัญญา — ทุกความสัมพันธ์, ทุกความฝัน, ทุกชีวิต',
+      en: 'This dimension is a towering city divided into \'levels\' according to social class - the higher one is, the wealthier and more powerful. Upper-level buildings are luxurious like golden palaces, while lower levels are a labyrinth of black markets, sewers, and desperate souls. Law, morality, and justice are interpreted through self-interest - \'right\' is whatever yields the most profit. Everything is a contract - every relationship, every dream, every life.'
     },
-    tags: [ 'homeland', 'knowledge', 'nature' ],
-    icon: 'gaea-libris-icon',
-    specialty: {
-      name: {
-        en: 'Natural Scholar',
-        th: 'นักวิชาการแห่งธรรมชาติ'
-      },
-      description: {
-        en: 'Your connection to the living knowledge of Gaea Libris gives you unique insights into natural phenomena.',
-        th: 'การเชื่อมโยงกับความรู้ที่มีชีวิตของเกีย ลิบริสทำให้คุณมีมุมมองเฉพาะเกี่ยวกับปรากฏการณ์ทางธรรมชาติ'
-      }
-    },
-    effects: [
+    icon: '/icons/greed-icon.png',
+    thumbnail: '/thumbnails/greed-thumbnail.jpg',
+    tags: [ 'strategy', 'negotiation', 'manipulation' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:10:00Z',
+    updatedAt: '2025-07-29T13:10:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Deduction Gifted',
-          th: 'พรสวรรค์การอนุมาน'
-        },
-        description: {
-          en: 'You are naturally gifted at logical reasoning and solving puzzles.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการใช้เหตุผลทางตรรกะและการแก้ปริศนา'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'deduction'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Perception Gifted',
-          th: 'พรสวรรค์การรับรู้'
-        },
-        description: {
-          en: 'You are naturally gifted at noticing details and observing your surroundings.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการสังเกตรายละเอียดและการรับรู้สภาพแวดล้อม'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deception'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'perception'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-analyze'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-persuasion'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-recall'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-insight'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deduction'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-artificium',
+    id: 'origin-gluttony',
     name: {
-      en: 'Artificium',
-      th: 'อาร์ติฟิเซียม'
+      th: 'มิติแห่ง Gluttony – "แดนล้นปัญญา (Overflowing Sanctum)"',
+      en: 'Dimension of Gluttony – "Overflowing Sanctum"'
     },
     description: {
-      en: 'Life in the sky-islands of Artificium is a complex equation of commerce and invention. To succeed, you learned not only how to build and repair intricate devices, but also how to study them—analyzing their functions and weaknesses to innovate or exploit them for profit and power.',
-      th: 'ชีวิตในเกาะลอยฟ้าของอาร์ติฟิเซียมคือสมการที่ซับซ้อนของการค้าและการประดิษฐ์ เพื่อให้ประสบความสำเร็จ คุณเรียนรู้ไม่เพียงแค่การสร้างและซ่อมแซมอุปกรณ์ที่ซับซ้อน แต่ยังเรียนรู้วิธีการศึกษาพวกมัน—วิเคราะห์ฟังก์ชันและจุดอ่อนเพื่อนวัตกรรมหรือใช้ประโยชน์เพื่อกำไรและอำนาจ'
+      th: 'ภูมิประเทศผสมผสานระหว่างสถาปัตยกรรมล้ำยุค, หอคอยทดลองที่พุ่งสูงสู่ท้องฟ้า และเส้นทางพลังงานที่ไหลเวียนไปทั่ว สิ่งประดิษฐ์ทุกชนิด, สิ่งมีชีวิตดัดแปลง, และภูมิศาสตร์ที่ไม่สมเหตุสมผล — ทั้งหมดคือผลลัพธ์จากการทดลองไม่หยุดยั้ง ผู้คนในมิตินี้อาศัยอยู่ในเมืองทดลอง, โดมพลังงาน, หรือลอยอยู่ในโครงข่ายของเครื่องจักรที่เปลี่ยนแปลงตลอดเวลา แต่บางมุมของโลก เริ่มมี "คราบเงาดำ" คลานเข้ามา — สิ่งแปลกประหลาดที่ไร้ชื่อเรียก, ไม่มีใครควบคุม และไม่ควรมีอยู่',
+      en: 'The landscape blends futuristic architecture, towering experimental spires reaching for the sky, and pulsating energy pathways throughout. All manner of artifacts, mutated creatures, and illogical geography—all are results of ceaseless experimentation. People in this dimension live in experimental cities, energy domes, or float within an ever-changing network of machinery. But in some corners of the world, \'dark stains\' begin to crawl in—strange, nameless entities, uncontrolled by anyone, and shouldn\'t exist.'
     },
-    tags: [ 'homeland', 'technology', 'commerce' ],
-    icon: 'artificium-icon',
-    specialty: {
-      name: {
-        en: 'Innovation',
-        th: 'นวัตกรรม'
-      },
-      description: {
-        en: 'Your understanding of technology and commerce allows you to create and improve devices.',
-        th: 'ความเข้าใจในเทคโนโลยีและการค้าของคุณช่วยให้คุณสร้างและปรับปรุงอุปกรณ์ได้'
-      }
-    },
-    effects: [
+    icon: '/icons/gluttony-icon.png',
+    thumbnail: '/thumbnails/gluttony-thumbnail.jpg',
+    tags: [ 'intellect', 'innovation', 'technology' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:15:00Z',
+    updatedAt: '2025-07-29T13:15:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Analyze Gifted',
-          th: 'พรสวรรค์การวิเคราะห์'
-        },
-        description: {
-          en: 'You are naturally gifted at analyzing and understanding complex systems.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการวิเคราะห์และเข้าใจระบบที่ซับซ้อน'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'analyze'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Tinker Gifted',
-          th: 'พรสวรรค์การซ่อมแซม'
-        },
-        description: {
-          en: 'You are naturally gifted at repairing and modifying mechanical devices.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการซ่อมแซมและปรับแต่งอุปกรณ์กลไก'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-tinker'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'tinker'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deduction'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-analyze'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-operate'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-recall'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-finesse'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-doloria',
+    id: 'origin-envy',
     name: {
-      en: 'Doloria',
-      th: 'โดโลเรีย'
+      th: 'มิติแห่ง Envy – "แดนเงาซ้อน (Mirror Abyss)"',
+      en: 'Dimension of Envy – "Mirror Abyss"'
     },
     description: {
-      en: 'Doloria taught you that survival is a physical contest. In its harsh and desolate landscapes, you learned to push your body past its limits, enduring incredible hardship. More importantly, you learned that sometimes the only way to survive is to run—to sprint faster than whatever was hunting you.',
-      th: 'โดโลเรียสอนคุณว่าการอยู่รอดคือการแข่งขันทางกายภาพ ในภูมิประเทศที่โหดร้ายและรกร้าง คุณเรียนรู้ที่จะผลักดันร่างกายเกินขีดจำกัด ทนต่อความยากลำบากที่เหลือเชื่อ สิ่งที่สำคัญกว่านั้นคือคุณเรียนรู้ว่าบางครั้งวิธีเดียวที่จะอยู่รอดคือการวิ่ง—วิ่งให้เร็วกว่าสิ่งที่กำลังล่าคุณ'
+      th: 'เคยเป็นโลกธรรมดา… กระทั่ง Envy ค่อย ๆ เปลี่ยนมันทีละน้อย ปัจจุบัน มิตินี้เต็มไปด้วยสิ่งที่ "เหมือนจะดี" แต่กลับไม่มีชีวิตชีวา: เมืองไร้ความฝัน, ผู้คนไร้เป้าหมาย, การดำรงอยู่แบบเชื่องช้า ทุกสิ่งถูกจัดสรรให้ง่ายดาย — ไม่มีใครต้องตัดสินใจหรือแบกรับภาระ เพราะ Envy ทำทุกอย่างให้หมด ภูมิทัศน์สะท้อนซ้อนกันราวกับภาพในกระจก แตกเป็นลายเส้นร้าวของอดีตที่ถูกขังไว้ ท้องฟ้าเหมือนกระจกแตกปริ — แสงสลัวที่สะท้อนจากโลกอื่นมาถึงที่นี่จางลงเรื่อย ๆ',
+      en: 'Once an ordinary world... until Envy slowly changed it. Currently, this dimension is filled with things that \'seem good\' but lack vitality: dreamless cities, aimless people, slow existence. Everything is made easy - no one has to decide or bear burdens, because Envy does everything. The landscape reflects itself like a shattered mirror, broken lines of a past trapped within. The sky is like fractured glass - dim light reflecting from other worlds fades here.'
     },
-    tags: [ 'homeland', 'survival', 'endurance' ],
-    icon: 'doloria-icon',
-    specialty: {
-      name: {
-        en: 'Survival Instinct',
-        th: 'สัญชาตญาณการอยู่รอด'
-      },
-      description: {
-        en: 'Your harsh upbringing has given you an unbreakable will and survival instinct.',
-        th: 'การเติบโตที่โหดร้ายทำให้คุณมีจิตใจที่แข็งแกร่งและสัญชาตญาณการอยู่รอดที่ไม่ย่อท้อ'
-      }
-    },
-    effects: [
+    icon: '/icons/envy-icon.png',
+    thumbnail: '/thumbnails/envy-thumbnail.jpg',
+    tags: [ 'subterfuge', 'observation', 'adaptation' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:20:00Z',
+    updatedAt: '2025-07-29T13:20:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Sprint Gifted',
-          th: 'พรสวรรค์การวิ่งเร็ว'
-        },
-        description: {
-          en: 'You are naturally gifted at running and sprinting at high speeds.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการวิ่งและวิ่งเร็วด้วยความเร็วสูง'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'sprint'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Athletics Gifted',
-          th: 'พรสวรรค์กีฬา'
-        },
-        description: {
-          en: 'You are naturally gifted at physical activities and athletic feats.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการทำกิจกรรมทางกายและความสำเร็จทางกีฬา'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deception'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'athletics'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-insight'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-stealth'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-finesse'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-perception'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-instinct'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-aethelgard',
+    id: 'origin-lazy',
     name: {
-      en: 'Aethelgard',
-      th: 'เอเธลการ์ด'
+      th: 'มิติแห่ง Lazy – "แดนหมอกนิรันดร์ (Fogveil Expanse)"',
+      en: 'Dimension of Lazy – "Fogveil Expanse"'
     },
     description: {
-      en: 'In the realm of knights and magicians, history is power. Your upbringing in Aethelgard, with its strict codes and ancient lineage, taught you the value of knowing the past—recalling laws, treaties, and histories—and using that knowledge to persuade others in the complex political landscape of the court.',
-      th: 'ในอาณาจักรของอัศวินและนักเวทมนตร์ ประวัติศาสตร์คืออำนาจ การเติบโตในเอเธลการ์ด ด้วยกฎเกณฑ์ที่เข้มงวดและเชื้อสายโบราณ สอนคุณถึงคุณค่าของการรู้จักอดีต—การจดจำกฎหมาย สนธิสัญญา และประวัติศาสตร์—และการใช้ความรู้เหล่านั้นเพื่อโน้มน้าวผู้อื่นในภูมิทัศน์ทางการเมืองที่ซับซ้อนของราชสำนัก'
+      th: 'ดินแดนอันกว้างใหญ่ที่มีทรัพยากรเพียงพอ ทุกสิ่งดูถูกสร้างมาเพื่อให้ดำรงอยู่ได้อย่างง่ายดาย สภาพภูมิประเทศหลากหลาย: ป่าดึกดำบรรพ์, หุบเขาเงียบสงบ, บึงนิ่ง, ทะเลหมอก ไม่มีเทคโนโลยีล้ำสมัยหรือเวทมนตร์ซับซ้อน — ทุกอย่างใช้ธรรมชาติเป็นฐาน เช่น การเพาะปลูกร่วมกับวิญญาณดิน, การเดินทางตามร่องแสงดวงจันทร์ ผู้คนที่นี่ใช้ชีวิต ช้า, ง่าย, สงบ — ไม่แข่งขัน ไม่เร่งรีบ',
+      en: 'A vast land with abundant resources, where everything seems designed for effortless existence. Diverse landscapes: ancient forests, tranquil valleys, still bogs, seas of fog. No advanced technology or complex magic - everything is nature-based, such as cultivating with earth spirits or navigating by moonlight. People here live slow, simple, peaceful lives - no competition, no rush.'
     },
-    tags: [ 'homeland', 'nobility', 'history' ],
-    icon: 'aethelgard-icon',
-    specialty: {
-      name: {
-        en: 'Noble Heritage',
-        th: 'มรดกแห่งขุนนาง'
-      },
-      description: {
-        en: 'Your noble upbringing gives you access to courtly knowledge and political connections.',
-        th: 'การเติบโตแบบขุนนางทำให้คุณเข้าถึงความรู้ของราชสำนักและการเชื่อมโยงทางการเมือง'
-      }
-    },
-    effects: [
+    icon: '/icons/lazy-icon.png',
+    thumbnail: '/thumbnails/lazy-thumbnail.jpg',
+    tags: [ 'survival', 'nature', 'stealth' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:25:00Z',
+    updatedAt: '2025-07-29T13:25:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Persuasion Gifted',
-          th: 'พรสวรรค์การโน้มน้าว'
-        },
-        description: {
-          en: 'You are naturally gifted at convincing and persuading others.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการโน้มน้าวและชักจูงผู้อื่น'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'persuasion'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Recall Gifted',
-          th: 'พรสวรรค์การจดจำ'
-        },
-        description: {
-          en: 'You are naturally gifted at remembering and recalling information.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการจดจำและเรียกคืนข้อมูล'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-stealth'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'recall'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-perception'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-endurance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-instinct'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-insight'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-acrobatics'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-bellarax',
+    id: 'origin-pride',
     name: {
-      en: 'Bellarax',
-      th: 'เบลลารักซ์'
+      th: 'มิติแห่ง Pride – "หอคอยนิรันดร์ (The Eternal Spire)"',
+      en: 'Dimension of Pride – "The Eternal Spire"'
     },
     description: {
-      en: 'Bellarax is a world of endless war where strength is paramount—but brute force alone is not enough. You learned that true dominance comes from projecting power to intimidate your rivals and weaving clever lies to misdirect your enemies, ensuring victory before the first blow is even struck.',
-      th: 'เบลลารักซ์เป็นโลกแห่งสงครามที่ไม่มีที่สิ้นสุดที่ความแข็งแกร่งเป็นสิ่งสำคัญ—แต่พลังดิบเพียงอย่างเดียวไม่เพียงพอ คุณเรียนรู้ว่าการครอบงำที่แท้จริงมาจากการแสดงพลังเพื่อข่มขู่คู่แข่งและการสร้างเรื่องโกหกที่ฉลาดเพื่อเบี่ยงเบนศัตรูของคุณ รับประกันชัยชนะก่อนที่จะมีการโจมตีครั้งแรกเสียอีก'
+      th: 'โลกในมิตินี้ถูกออกแบบเหมือน "หอคอย" ที่ไม่มีที่สิ้นสุด — แต่ละชั้นของหอคอยคือดินแดนแห่งชนชั้นและความสำเร็จ ชั้นล่างเป็นเหมือนเมืองสามัญ, ชนชั้นแรงงาน, ผู้เริ่มต้นชีวิต ยิ่งสูงขึ้น ยิ่งใกล้ "แสงนิรันดร์" ที่เชื่อกันว่าเป็นจุดสูงสุดของการมีตัวตน ไม่มีใครรู้ว่าบนสุดของหอคอยมีอะไร แต่ทุกคนถูกสอนให้ ปีนขึ้นไป — และปีนด้วย "คุณค่าในตนเอง" โครงสร้างทั้งหมดดูหรูหรา, คมกริบ, สมมาตร, เต็มไปด้วยสัญลักษณ์ของความยิ่งใหญ่ (รูปปั้น, ภาพจารึก, คำคมบนผนัง ฯลฯ)',
+      en: 'The world in this dimension is designed like an endless \'spire\' - each floor of the spire is a land of class and achievement. The lower floors are like common cities, working class, life beginners. The higher one goes, the closer to \'eternal light\' believed to be the pinnacle of existence. No one knows what is at the very top of the spire, but everyone is taught to climb - and to climb with \'self-worth.\' The entire structure looks luxurious, sharp, symmetrical, filled with symbols of greatness (statues, carvings, quotes on walls, etc.).'
     },
-    tags: [ 'homeland', 'war', 'intimidation' ],
-    icon: 'bellarax-icon',
-    specialty: {
-      name: {
-        en: 'Warrior\'s Cunning',
-        th: 'ความฉลาดของนักรบ'
-      },
-      description: {
-        en: 'Your experience in endless conflict has taught you both physical and psychological warfare.',
-        th: 'ประสบการณ์ในการขัดแย้งที่ไม่มีที่สิ้นสุดสอนคุณทั้งการสงครามทางกายภาพและจิตวิทยา'
-      }
-    },
-    effects: [
+    icon: '/icons/pride-icon.png',
+    thumbnail: '/thumbnails/pride-thumbnail.jpg',
+    tags: [ 'ambition', 'self-improvement', 'leadership' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:30:00Z',
+    updatedAt: '2025-07-29T13:30:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Deception Gifted',
-          th: 'พรสวรรค์การหลอกลวง'
-        },
-        description: {
-          en: 'You are naturally gifted at lying and deceiving others.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการโกหกและหลอกลวงผู้อื่น'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'deception'
-          }
-        ]
-      },
-      {
-        name: {
-          en: 'Intimidation Gifted',
-          th: 'พรสวรรค์การข่มขู่'
-        },
-        description: {
-          en: 'You are naturally gifted at intimidating and frightening others.',
-          th: 'คุณมีความสามารถพิเศษตามธรรมชาติในการข่มขู่และทำให้ผู้อื่นกลัว'
-        },
-        keywords: [
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-intimidation'
+          },
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_GIFTED,
-            skillCheckAttributeId: 'intimidation'
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-performance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-persuasion'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-power'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-endurance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-deduction'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.PROMISING,
+            attributeId: 'skill-analyze'
           }
-        ]
+        ],
+        numberOfSelections: 2
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   },
   {
-    id: 'origin-wanderer',
+    id: 'origin-cosmos',
     name: {
-      en: 'The Wanderer',
-      th: 'ผู้เดินทาง'
+      th: 'มิติแห่ง Cosmos – "ศูนย์กลางแห่งความจริงที่แตกร้าว" (Realm of Resonance)',
+      en: 'Dimension of Cosmos – "Fractured Core of Reality" (Realm of Resonance)'
     },
     description: {
-      en: 'You do not belong to any single realm. Perhaps you were born in the void between worlds, are the sole survivor of a forgotten community, or have simply traveled so extensively that no one place can claim you. Your identity is a mosaic of experiences, making you uniquely versatile and self-made.',
-      th: 'คุณไม่ได้เป็นของอาณาจักรใดอาณาจักรหนึ่ง บางทีคุณอาจเกิดในช่องว่างระหว่างโลก เป็นผู้รอดชีวิตเพียงคนเดียวของชุมชนที่ถูกลืม หรือเพียงแค่เดินทางอย่างกว้างขวางจนไม่มีที่ไหนสามารถอ้างสิทธิ์คุณได้ ตัวตนของคุณคือการรวมกันของประสบการณ์ ทำให้คุณมีความหลากหลายและสร้างตัวเองขึ้นมาโดยเฉพาะ'
+      th: '"โลกเดิมแตกสลายที่นี่ ที่แห่งนี้จึงไม่เหมือนมิติไหน… เพราะมันคือ \'ทุกมิติ\' และ \'ไม่มีมิติ\' ในเวลาเดียวกัน" เป็นมิติที่ สลับซับซ้อนและเหนือการคาดเดา เหตุการณ์ประหลาดเกิดขึ้นอยู่ตลอด — ท้องฟ้าที่เปลี่ยนสีเอง, กฎแรงโน้มถ่วงที่สลับด้าน, เวลาไหลย้อน ความฝันของคนคนหนึ่งอาจกลายเป็นเมืองที่ผู้คนอยู่จริงได้ ดินแดนบางส่วนดูเหมือนหลุดมาจากมิติอื่น: ป่าร้อนแรงคล้าย Wraith, ปราสาทแสนเย้ายวนของ Lust, เขตวิจัยที่ไร้ผู้คนคล้าย Gluttony — ทั้งหมดปะปนกันโดยไร้แบบแผน ไม่มีแผนที่ตายตัว — ทิศทางและขนาดของพื้นที่เปลี่ยนไปตลอดเวลา มีสิ่งก่อสร้างจากโลกเดิมปะปนกับสิ่งแปลกประหลาดอย่าง "น้ำตกที่ไหลขึ้นฟ้า" หรือ "ป่าแห่งเสียงกระซิบ" อากาศ, แสง, เวลา, และความเป็นจริงแปรผันตลอดเวลา เหมือนฝันที่กำลังสร้างตัวเองตลอดเวลา',
+      en: '\'The original world shattered here. This place is unlike any other dimension... because it is \'all dimensions\' and \'no dimension\' at the same time.\' It is a complex and unpredictable dimension where strange events occur constantly - skies that change color on their own, inverted gravity, time flowing backward. One person\'s dream can become a city where people actually live. Some parts of the land look like they came from other dimensions: fiery forests similar to Wraith, alluring castles of Lust, deserted research areas like Gluttony - all mixed chaotically. No fixed map - direction and size of areas constantly change. Contains structures from the original world mixed with strange phenomena like \'waterfalls flowing upwards\' or \'forests of whispers.\' Air, light, time, and reality fluctuate constantly, like a dream building itself.'
     },
-    tags: [ 'special', 'versatile', 'self-made' ],
-    icon: 'wanderer-icon',
-    specialty: {
-      name: {
-        en: 'Adaptive Experience',
-        th: 'ประสบการณ์ที่ปรับตัวได้'
-      },
-      description: {
-        en: 'Your diverse experiences allow you to adapt to any situation and learn quickly.',
-        th: 'ประสบการณ์ที่หลากหลายของคุณช่วยให้คุณปรับตัวกับสถานการณ์ใดๆ และเรียนรู้ได้อย่างรวดเร็ว'
-      }
-    },
-    effects: [
+    icon: '/icons/cosmos-icon.png',
+    thumbnail: '/thumbnails/cosmos-thumbnail.jpg',
+    tags: [ 'adaptation', 'reality-bending', 'perception' ],
+    ownerId: 'user-system',
+    createdAt: '2025-07-29T13:35:00Z',
+    updatedAt: '2025-07-29T13:35:00Z',
+    gameSystemId: 'system-core',
+    effectSelectionRule: [
       {
-        name: {
-          en: 'Versatile Learning',
-          th: 'การเรียนรู้ที่หลากหลาย'
-        },
-        description: {
-          en: 'Choose any three different skill checks to become learned in.',
-          th: 'เลือกการตรวจสอบทักษะที่แตกต่างกันสามอย่างเพื่อให้มีความรู้'
-        },
-        keywords: [
+        effects: [
           {
-            type: KEYWORD_TYPE.SKILL_CHECK_LEARNED,
-            skillCheckAttributeId: 'any',
-            numberOfAttributes: 3
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-power'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-endurance'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-stealth'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-acrobatics'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-sprint'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-perception'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-insight'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-instinct'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-tinker'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-operate'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-finesse'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-recall'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-deduction'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-analyze'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-persuasion'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-deception'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-intimidation'
+          },
+          {
+            type: TALENT_EFFECT_TYPE.LEARNED,
+            attributeId: 'skill-performance'
           }
-        ]
+        ],
+        numberOfSelections: 4
       }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    ]
   }
-]; 
+];
+
+export default mockOrigins;

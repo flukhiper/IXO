@@ -21,31 +21,30 @@ const baseFields = {
   stackId: { type: String, required: true },
   stackType: { type: String, enum: Object.values(SKILL_STACK_TYPE), required: true },
   stackPriority: { type: Number },
-  isGeneral: { type: Boolean, required: true },
-  actionSelectionRule: { type: ActionSelectionRuleSchema, default: undefined },
-  downtimeSelectionRule: { type: DowntimeSelectionRuleSchema, default: undefined },
-  effects: { type: [ EffectConfigSchema ], default: [] }
+  actionSelectionRule: { type: [ ActionSelectionRuleSchema ], default: undefined },
+  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ], default: undefined },
+  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
 };
 
 // Discriminator schemas for each skill type
 const GeneralSkillSchema = new mongoose.Schema({
   ...baseFields,
   type: { type: String, enum: [ SKILL_TYPE.GENERAL ], required: true },
-  tier: { type: Number, enum: Array.from({ length: MAX_SKILL_TIER }, (_, i) => i + 1), required: true }
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
 });
 
 const ClassSkillSchema = new mongoose.Schema({
   ...baseFields,
   type: { type: String, enum: [ SKILL_TYPE.CLASS ], required: true },
   classIds: { type: [ String ], required: true },
-  tier: { type: Number, enum: Array.from({ length: MAX_SKILL_TIER }, (_, i) => i + 1), required: true }
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
 });
 
 const RoleSkillSchema = new mongoose.Schema({
   ...baseFields,
   type: { type: String, enum: [ SKILL_TYPE.ROLE ], required: true },
   role: { type: String, enum: Object.keys(CLASS_ROLE_TYPE), required: true },
-  tier: { type: Number, enum: Array.from({ length: MAX_SKILL_TIER }, (_, i) => i + 1), required: true }
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
 });
 
 // Main SkillConfig schema using discriminators

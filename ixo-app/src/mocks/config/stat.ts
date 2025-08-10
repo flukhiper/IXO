@@ -1,8 +1,6 @@
 import type { StatConfig } from '@/types/config/stat';
-import { STAT_TYPE } from '@/constants/config/stat';
 
-export const mock: StatConfig[] = [
-  // Primary Stats
+export const mockStats: StatConfig[] = [
   {
     id: 'stat-strength',
     name: {
@@ -10,34 +8,38 @@ export const mock: StatConfig[] = [
       th: 'ความแข็งแกร่ง'
     },
     description: {
-      en: 'Primary stat that defines combat identity and core physical expression. Governs HP, Damage Reduction, STR-based Damage, and Carrying Capacity.',
-      th: 'สถิติหลักที่กำหนดเอกลักษณ์การต่อสู้และการแสดงออกทางกายภาพหลัก ควบคุม HP การลดความเสียหาย ความเสียหายแบบ STR และความสามารถในการแบก'
+      en: 'Power, Durability - Represents your raw physical power and ability to endure damage.',
+      th: 'พลัง ความทนทาน - แสดงถึงพลังทางกายภาพดิบๆ และความสามารถในการทนต่อความเสียหาย'
     },
+    icon: 'muscle',
+    thumbnail: 'strength-stat.jpg',
+    tags: [ 'physical', 'combat', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     abbreviation: 'STR',
-    tags: [ 'primary', 'physical', 'combat' ],
-    icon: 'strength-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'stat-agility',
+    id: 'stat-speed',
     name: {
-      en: 'Agility',
-      th: 'ความคล่องแคล่ว'
+      en: 'Speed',
+      th: 'ความเร็ว'
     },
     description: {
-      en: 'Primary stat that defines movement and evasion capabilities. Governs Movement, Armor Class, and physical coordination.',
-      th: 'สถิติหลักที่กำหนดความสามารถในการเคลื่อนไหวและการหลบหลีก ควบคุมการเคลื่อนไหว Armor Class และการประสานงานทางกายภาพ'
+      en: 'Reflexes, Mobility - Represents your agility, reflexes, and ability to move quickly.',
+      th: 'ปฏิกิริยา การเคลื่อนไหว - แสดงถึงความคล่องแคล่ว ปฏิกิริยาตอบสนอง และความสามารถในการเคลื่อนไหวอย่างรวดเร็ว'
     },
-    abbreviation: 'AGI',
-    tags: [ 'primary', 'physical', 'movement' ],
-    icon: 'agility-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    icon: 'lightning',
+    thumbnail: 'speed-stat.jpg',
+    tags: [ 'physical', 'mobility', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    abbreviation: 'SPD',
+    isSystem: true
   },
   {
     id: 'stat-sense',
@@ -46,18 +48,39 @@ export const mock: StatConfig[] = [
       th: 'ประสาทสัมผัส'
     },
     description: {
-      en: 'Primary stat that defines mystical awareness and perception. Governs Fractal Points (FP), Initiative, and sensory acuity.',
-      th: 'สถิติหลักที่กำหนดการรับรู้ทางจิตวิญญาณและการรับรู้ ควบคุม Fractal Points (FP) Initiative และความเฉียบคมของประสาทสัมผัส'
+      en: 'Perception, reaction, initiative - Represents your awareness, perception, and ability to react to threats.',
+      th: 'การรับรู้ ปฏิกิริยา การริเริ่ม - แสดงถึงความตระหนัก การรับรู้ และความสามารถในการตอบสนองต่อภัยคุกคาม'
     },
+    icon: 'eye',
+    thumbnail: 'sense-stat.jpg',
+    tags: [ 'physical', 'perception', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     abbreviation: 'SEN',
-    tags: [ 'primary', 'mental', 'mystical' ],
-    icon: 'sense-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
-  // Secondary Stats
+  {
+    id: 'stat-knowledge',
+    name: {
+      en: 'Knowledge',
+      th: 'ความรู้'
+    },
+    description: {
+      en: 'Learning, stored intellect - Represents your accumulated knowledge, memory, and intellectual capacity.',
+      th: 'การเรียนรู้ ความรู้ที่สะสม - แสดงถึงความรู้ที่สะสม ความจำ และความสามารถทางสติปัญญา'
+    },
+    icon: 'book',
+    thumbnail: 'knowledge-stat.jpg',
+    tags: [ 'mental', 'intelligence', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    abbreviation: 'KNW',
+    isSystem: true
+  },
   {
     id: 'stat-technique',
     name: {
@@ -65,34 +88,18 @@ export const mock: StatConfig[] = [
       th: 'เทคนิค'
     },
     description: {
-      en: 'Secondary stat that enhances mechanical finesse and precision. Governs Weapon Accuracy, Gear Bonus (Dmg/AC), and technical skills.',
-      th: 'สถิติรองที่เพิ่มความแม่นยำและความชำนาญทางกลไก ควบคุมความแม่นยำของอาวุธ Gear Bonus (Dmg/AC) และทักษะทางเทคนิค'
+      en: 'Applied skill, precision - Represents your ability to apply knowledge and perform precise actions.',
+      th: 'ทักษะที่ประยุกต์ ความแม่นยำ - แสดงถึงความสามารถในการประยุกต์ความรู้และปฏิบัติการที่แม่นยำ'
     },
+    icon: 'target',
+    thumbnail: 'technique-stat.jpg',
+    tags: [ 'mental', 'skill', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     abbreviation: 'TEC',
-    tags: [ 'secondary', 'technical', 'precision' ],
-    icon: 'technique-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  {
-    id: 'stat-intelligence',
-    name: {
-      en: 'Intelligence',
-      th: 'สติปัญญา'
-    },
-    description: {
-      en: 'Secondary stat that enhances tactical sharpness and cognitive abilities. Governs Skill Efficiency and analytical thinking.',
-      th: 'สถิติรองที่เพิ่มความเฉียบคมทางยุทธวิธีและความสามารถทางปัญญา ควบคุมประสิทธิภาพของทักษะและการคิดวิเคราะห์'
-    },
-    abbreviation: 'INT',
-    tags: [ 'secondary', 'mental', 'tactical' ],
-    icon: 'intelligence-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
     id: 'stat-presence',
@@ -101,15 +108,19 @@ export const mock: StatConfig[] = [
       th: 'การปรากฏตัว'
     },
     description: {
-      en: 'Secondary stat that enhances social influence and charisma. Governs Buff/Debuff Duration for skills, actions, and commands.',
-      th: 'สถิติรองที่เพิ่มอิทธิพลทางสังคมและเสน่ห์ ควบคุมระยะเวลาของ Buff/Debuff สำหรับทักษะ การกระทำ และคำสั่ง'
+      en: 'Influence, charisma, emotional force - Represents your ability to influence others and project your will.',
+      th: 'อิทธิพล คาริสมา แรงทางอารมณ์ - แสดงถึงความสามารถในการมีอิทธิพลต่อผู้อื่นและแสดงเจตจำนง'
     },
+    icon: 'crown',
+    thumbnail: 'presence-stat.jpg',
+    tags: [ 'mental', 'social', 'core-stat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     abbreviation: 'PRE',
-    tags: [ 'secondary', 'social', 'influence' ],
-    icon: 'presence-icon',
-    type: STAT_TYPE.CORE,
-    isSystem: true,
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   }
-]; 
+];
+
+export default mockStats;

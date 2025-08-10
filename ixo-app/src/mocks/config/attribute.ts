@@ -1,567 +1,918 @@
 import type { AnyAttributeConfig } from '@/types/config/attribute';
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import { PHASE_TYPE, VALUE_TYPE } from '@/constants/config/base';
+import { VALUE_TYPE } from '@/constants/config/base';
 
-export const mock: AnyAttributeConfig[] = [
+export const mockAttributes: AnyAttributeConfig[] = [
   // Resource Attributes
   {
-    id: 'attribute-hit-points',
-    name: {
-      en: 'Hit Points',
-      th: 'พลังชีวิต'
-    },
-    description: {
-      en: 'Health pool, reduced by damage. Represents your character\'s physical well-being and ability to withstand harm.',
-      th: 'พูลสุขภาพ ลดลงด้วยความเสียหาย แสดงถึงความเป็นอยู่ทางกายภาพของตัวละครและความสามารถในการทนต่ออันตราย'
-    },
+    id: 'attr-hit-points',
+    name: { en: 'Hit Points', th: 'แต้มชีวิต' },
+    description: { en: 'Your character\'s health.', th: 'สุขภาพของตัวละคร' },
+    icon: 'heart',
+    thumbnail: 'hp-attribute.jpg',
+    tags: [ 'resource', 'health', 'core' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'HP',
-    tags: [ 'health', 'survival', 'combat' ],
-    icon: 'hp-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 8 },
+    modiferFomular: 'stat-strength + ((8 + stat-strength) * (character-level - 1))',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 10
-    },
-    formula: 'STR',
-    restores: [
-      {
-        phase: PHASE_TYPE.SHORT_DOWNTIME,
-        baseValue: {
-          type: VALUE_TYPE.DICE,
-          formula: '1d6'
-        }
-      },
-      {
-        phase: PHASE_TYPE.FULL_DOWNTIME,
-        baseValue: {
-          type: VALUE_TYPE.FULL
-        }
-      }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'HP'
   },
   {
-    id: 'attribute-temporary-hp',
-    name: {
-      en: 'Temporary HP',
-      th: 'พลังชีวิตชั่วคราว'
-    },
-    description: {
-      en: 'Bonus HP lost before base HP. Provides temporary protection that is lost first when taking damage.',
-      th: 'พลังชีวิตโบนัสที่สูญเสียก่อนพลังชีวิตพื้นฐาน ให้การป้องกันชั่วคราวที่สูญเสียก่อนเมื่อได้รับความเสียหาย'
-    },
+    id: 'attr-temp-hit-points',
+    name: { en: 'Temporary Hit Points', th: 'แต้มชีวิตชั่วคราว' },
+    description: { en: 'A temporary buffer of health.', th: 'เกราะป้องกันสุขภาพชั่วคราว' },
+    icon: 'shield',
+    thumbnail: 'temp-hit-points-attribute.jpg',
+    tags: [ 'resource', 'temporary', 'health' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'Temp HP',
-    tags: [ 'temporary', 'protection' ],
-    icon: 'temp-hp-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 0
-    },
-    restores: [],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'Temp HP'
   },
   {
-    id: 'attribute-fractal-points',
-    name: {
-      en: 'Fractal Points',
-      th: 'จุดแฟร็กทัล'
-    },
-    description: {
-      en: 'Powers Commands. The mystical energy used to cast magical abilities and supernatural powers.',
-      th: 'พลังคำสั่ง พลังงานลึกลับที่ใช้ในการร่ายมนตร์และพลังเหนือธรรมชาติ'
-    },
+    id: 'attr-focus-points',
+    name: { en: 'Focus Points', th: 'แต้มโฟกัส' },
+    description: { en: 'Fuel for special abilities and Commands.', th: 'เชื้อเพลิงสำหรับความสามารถพิเศษและคำสั่ง' },
+    icon: 'brain',
+    thumbnail: 'fp-attribute.jpg',
+    tags: [ 'resource', 'focus', 'abilities' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'FP',
-    tags: [ 'magical', 'casting', 'energy' ],
-    icon: 'fp-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 5 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 3
-    },
-    formula: 'SEN',
-    restores: [
-      {
-        phase: PHASE_TYPE.SHORT_DOWNTIME,
-        baseValue: {
-          type: VALUE_TYPE.DICE,
-          formula: '1d4'
-        }
-      },
-      {
-        phase: PHASE_TYPE.FULL_DOWNTIME,
-        baseValue: {
-          type: VALUE_TYPE.HALF
-        }
-      }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'FP'
   },
   {
-    id: 'attribute-action-points',
-    name: {
-      en: 'Action Points',
-      th: 'จุดการกระทำ'
-    },
-    description: {
-      en: '2 AP per turn; spent on actions. The currency for performing actions during combat.',
-      th: '2 AP ต่อเทิร์น ใช้สำหรับการกระทำ สกุลเงินสำหรับการดำเนินการในระหว่างการต่อสู้'
-    },
+    id: 'attr-action-points',
+    name: { en: 'Action Points', th: 'แต้มแอคชั่น' },
+    description: { en: 'Used to perform actions on your turn.', th: 'ใช้เพื่อทำการกระทำในเทิร์นของคุณ' },
+    icon: 'sword',
+    thumbnail: 'ap-attribute.jpg',
+    tags: [ 'resource', 'action', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'AP',
-    tags: [ 'action', 'combat', 'economy' ],
-    icon: 'ap-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 2 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 2
-    },
-    restores: [
-      {
-        phase: PHASE_TYPE.ROUND,
-        baseValue: {
-          type: VALUE_TYPE.FULL
-        }
-      }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'AP'
   },
   {
-    id: 'attribute-action-slots',
-    name: {
-      en: 'Action Slots',
-      th: 'ช่องการกระทำ'
-    },
-    description: {
-      en: 'Determines available Combat/Command Actions. The number of different actions you can perform.',
-      th: 'กำหนดการกระทำการต่อสู้/คำสั่งที่มีอยู่ จำนวนการกระทำที่แตกต่างกันที่คุณสามารถทำได้'
-    },
+    id: 'attr-reaction-points',
+    name: { en: 'Reaction Points', th: 'แต้มปฏิกิริยา' },
+    description: { en: 'Used to perform reactions outside your turn.', th: 'ใช้เพื่อทำปฏิกิริยานอกเทิร์นของคุณ' },
+    icon: 'lightning-bolt',
+    thumbnail: 'rp-attribute.jpg',
+    tags: [ 'resource', 'reaction', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'AS',
-    tags: [ 'action', 'combat', 'slots' ],
-    icon: 'as-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 1 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 3
-    },
-    formula: 'INT',
-    restores: [],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'RP'
   },
   {
-    id: 'attribute-reaction-points',
-    name: {
-      en: 'Reaction Points',
-      th: 'จุดปฏิกิริยา'
-    },
-    description: {
-      en: '1 per round. Used for immediate responses and reactions during combat.',
-      th: '1 ต่อรอบ ใช้สำหรับการตอบสนองทันทีและปฏิกิริยาระหว่างการต่อสู้'
-    },
+    id: 'attr-short-rest-downtime-points',
+    name: { en: 'Short Rest Downtime Points', th: 'แต้มเวลาพักระยะสั้น' },
+    description: { en: 'Used for activities during a short rest.', th: 'ใช้สำหรับกิจกรรมในช่วงเวลาพักสั้น' },
+    icon: 'clock',
+    thumbnail: 'short-downtime-points-attribute.jpg',
+    tags: [ 'resource', 'downtime', 'short' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'RP',
-    tags: [ 'reaction', 'combat' ],
-    icon: 'rp-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 2 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 1
-    },
-    restores: [
-      {
-        phase: PHASE_TYPE.ROUND,
-        baseValue: {
-          type: VALUE_TYPE.FULL
-        }
-      }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // Combat Attributes
-  {
-    id: 'attribute-armor-class',
-    name: {
-      en: 'Armor Class',
-      th: 'เกราะป้องกัน'
-    },
-    description: {
-      en: 'Avoid being hit. Applies to all damage types unless stated. Your ability to dodge and deflect attacks.',
-      th: 'หลีกเลี่ยงการถูกโจมตี ใช้กับความเสียหายทุกประเภทเว้นแต่จะระบุ ความสามารถในการหลบและเบี่ยงเบนการโจมตี'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'AC',
-    tags: [ 'defense', 'dodge', 'armor' ],
-    icon: 'ac-icon',
-    isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 10
-    },
-    formula: 'AGI',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'Short DP'
   },
   {
-    id: 'attribute-damage-reduction',
-    name: {
-      en: 'Damage Reduction',
-      th: 'การลดความเสียหาย'
-    },
-    description: {
-      en: 'Flat damage reduction after armor. Reduces incoming damage by a fixed amount.',
-      th: 'การลดความเสียหายแบบคงที่หลังเกราะ ลดความเสียหายที่เข้ามาด้วยจำนวนคงที่'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'DR',
-    tags: [ 'defense', 'reduction' ],
-    icon: 'dr-icon',
-    isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 0
-    },
-    formula: 'STR / 2',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  {
-    id: 'attribute-movement-speed',
-    name: {
-      en: 'Movement Speed',
-      th: 'ความเร็วการเคลื่อนไหว'
-    },
-    description: {
-      en: 'Meters moved per turn. How far you can move during your turn.',
-      th: 'เมตรที่เคลื่อนไหวต่อเทิร์น คุณสามารถเคลื่อนไหวได้ไกลแค่ไหนในระหว่างเทิร์นของคุณ'
-    },
+    id: 'attr-long-rest-downtime-points',
+    name: { en: 'Long Rest Downtime Points', th: 'แต้มเวลาพักระยะยาว' },
+    description: { en: 'Used for activities during a long rest.', th: 'ใช้สำหรับกิจกรรมในช่วงเวลาพักยาว' },
+    icon: 'calendar',
+    thumbnail: 'long-downtime-points-attribute.jpg',
+    tags: [ 'resource', 'downtime', 'long' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     type: ATTRIBUTE_TYPE.RESOURCE,
-    abbreviation: 'MS',
-    tags: [ 'movement', 'speed' ],
-    icon: 'ms-icon',
+    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 6
-    },
-    formula: 'AGI * 2',
-    restores: [
-      {
-        phase: PHASE_TYPE.ROUND,
-        baseValue: {
-          type: VALUE_TYPE.FULL
-        }
-      }
-    ],
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'Long DP'
   },
   {
-    id: 'attribute-initiative',
-    name: {
-      en: 'Initiative',
-      th: 'การเริ่มต้น'
-    },
-    description: {
-      en: 'Determines turn order. How quickly you can act in combat.',
-      th: 'กำหนดลำดับเทิร์น คุณสามารถกระทำได้เร็วแค่ไหนในการต่อสู้'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'INIT',
-    tags: [ 'initiative', 'order' ],
-    icon: 'init-icon',
+    id: 'attr-movement-speed',
+    name: { en: 'Movement Speed', th: 'ความเร็วเคลื่อนไหว' },
+    description: { en: 'How far you can move in meters.', th: 'ระยะทางที่คุณสามารถเคลื่อนไหวได้เป็นเมตร' },
+    icon: 'running',
+    thumbnail: 'ms-attribute.jpg',
+    tags: [ 'resource', 'movement', 'speed' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.RESOURCE,
+    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
+    modiferFomular: 'stat-speed',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'SEN',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
-  },
-  // attack roll attribute
-  {
-    id: 'attribute-attack-roll',
-    name: {
-      en: 'Attack Roll',
-      th: 'การโจมตี'
-    },
-    description: {
-      en: 'Accuracy for weapon attacks and command attacks. Your skill at hitting targets with weapons or successfully casting magical commands.',
-      th: 'ความแม่นยำสำหรับการโจมตีด้วยอาวุธและการโจมตีด้วยคำสั่ง ทักษะของคุณในการโจมตีเป้าหมายด้วยอาวุธหรือการร่ายมนตร์คำสั่งอย่างสำเร็จ'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'AR',
-    tags: [ 'attack', 'weapon', 'command', 'accuracy' ],
-    icon: 'attack-roll-icon',
-    isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'TEC',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'MS'
   },
   {
-    id: 'attribute-command-dc',
-    name: {
-      en: 'Command DC',
-      th: 'ความยากของคำสั่ง'
-    },
-    description: {
-      en: 'Save DC vs. Commands. The difficulty for enemies to resist your magical commands.',
-      th: 'Save DC ต่อคำสั่ง ความยากสำหรับศัตรูในการต้านทานคำสั่งเวทมนตร์ของคุณ'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'CDC',
-    tags: [ 'command', 'dc', 'magic' ],
-    icon: 'cdc-icon',
+    id: 'attr-carrying-capacity',
+    name: { en: 'Carrying Capacity', th: 'ความสามารถในการแบก' },
+    description: { en: 'How much weight you can carry.', th: 'น้ำหนักที่คุณสามารถแบกได้' },
+    icon: 'weight',
+    thumbnail: 'cc-attribute.jpg',
+    tags: [ 'resource', 'carrying', 'weight' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.RESOURCE,
+    value: { type: VALUE_TYPE.CONSTANT, value: 140 },
+    modiferFomular: 'stat-strength',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 10
-    },
-    formula: 'INT',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'CC'
   },
   {
-    id: 'attribute-buff-debuff-duration',
-    name: {
-      en: 'Buff/Debuff Duration',
-      th: 'ระยะเวลาของบัฟ/ดีบัฟ'
-    },
-    description: {
-      en: 'Affects only skill-, action-, and command-based effects. How long your beneficial and harmful effects last.',
-      th: 'ส่งผลต่อเอฟเฟกต์ที่มาจากทักษะ การกระทำ และคำสั่งเท่านั้น เอฟเฟกต์ที่เป็นประโยชน์และเป็นอันตรายของคุณคงอยู่นานแค่ไหน'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'BDD',
-    tags: [ 'duration', 'buff', 'debuff' ],
-    icon: 'bdd-icon',
+    id: 'attr-action-slots',
+    name: { en: 'Action Slots', th: 'ช่องแอคชั่น' },
+    description: { en: 'How many active actions you can have prepared.', th: 'จำนวนการกระทำที่คุณสามารถเตรียมพร้อมได้' },
+    icon: 'slots',
+    thumbnail: 'as-attribute.jpg',
+    tags: [ 'resource', 'actions', 'slots' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.RESOURCE,
+    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
+    modiferFomular: 'stat-knowledge',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 0
-    },
-    formula: 'PRE',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'AS'
   },
   {
-    id: 'attribute-gear-bonus',
-    name: {
-      en: 'Gear Bonus (Dmg/AC)',
-      th: 'โบนัสอุปกรณ์ (ความเสียหาย/เกราะ)'
-    },
-    description: {
-      en: 'Weapon and armor effectiveness. Bonus damage from weapons and bonus armor class from equipment.',
-      th: 'ประสิทธิภาพของอาวุธและเกราะ ความเสียหายโบนัสจากอาวุธและเกราะป้องกันโบนัสจากอุปกรณ์'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'GB',
-    tags: [ 'gear', 'bonus', 'equipment' ],
-    icon: 'gb-icon',
+    id: 'attr-skill-slots',
+    name: { en: 'Skill Slots', th: 'ช่องทักษะ' },
+    description: { en: 'How many active skills you can have prepared.', th: 'จำนวนทักษะที่คุณสามารถเตรียมพร้อมได้' },
+    icon: 'skill-slots',
+    thumbnail: 'ss-attribute.jpg',
+    tags: [ 'resource', 'skills', 'slots' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.RESOURCE,
+    value: { type: VALUE_TYPE.CONSTANT, value: 5 },
+    modiferFomular: 'floor(stat-knowledge/3)',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 0
-    },
-    formula: 'TEC',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'SS'
   },
   {
-    id: 'attribute-carrying-capacity',
-    name: {
-      en: 'Carrying Capacity',
-      th: 'ความสามารถในการแบก'
-    },
-    description: {
-      en: 'Maximum weight carried before encumbrance. How much weight you can carry without penalties.',
-      th: 'น้ำหนักสูงสุดที่สามารถแบกได้ก่อนการถ่วง การถ่วงน้ำหนักที่คุณสามารถแบกได้โดยไม่มีบทลงโทษ'
-    },
-    type: ATTRIBUTE_TYPE.COMBAT,
-    abbreviation: 'CC',
-    tags: [ 'carrying', 'weight', 'utility' ],
-    icon: 'cc-icon',
+    id: 'attr-death-counter',
+    name: { en: 'Death Counter', th: 'ตัวนับความตาย' },
+    description: { en: 'Used for counting how many times you fail Death saving check.', th: 'ใช้สำหรับนับจำนวนครั้งที่คุณล้มเหลวในการตรวจสอบความตาย' },
+    icon: 'skull',
+    thumbnail: 'death-counter-attribute.jpg',
+    tags: [ 'resource', 'death', 'counter' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.RESOURCE,
+    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.FIXED,
-      value: 140
-    },
-    formula: 'STR * 10',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'Death Counter'
   },
-  // Saving Throw Attributes
+
+  // Constant Attributes
   {
-    id: 'attribute-strength-save',
-    name: {
-      en: 'Strength Save',
-      th: 'การต้านทานความแข็งแกร่ง'
-    },
-    description: {
-      en: 'Resists knockback, fatigue, and physical effects. Your ability to withstand physical force and maintain your position.',
-      th: 'ต้านทานการผลัก การเหนื่อยล้า และเอฟเฟกต์ทางกาย ความสามารถในการทนต่อแรงทางกายและรักษาตำแหน่งของคุณ'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'STR Save',
-    tags: [ 'save', 'strength', 'physical' ],
-    icon: 'str-save-icon',
+    id: 'attr-restore-focus-points',
+    name: { en: 'Restore Focus Points', th: 'ฟื้นฟูแต้มโฟกัส' },
+    description: { en: 'How effective it is when gathering focus.', th: 'ประสิทธิภาพในการรวบรวมโฟกัส' },
+    icon: 'restore',
+    thumbnail: 'res-focus-points-attribute.jpg',
+    tags: [ 'constant', 'focus', 'restore' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'floor(stat-sense/2)',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'STR',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'Res FP'
   },
   {
-    id: 'attribute-agility-save',
-    name: {
-      en: 'Agility Save',
-      th: 'การต้านทานความคล่องแคล่ว'
-    },
-    description: {
-      en: 'Resists AoEs, traps, and area effects. Your ability to dodge and avoid widespread dangers.',
-      th: 'ต้านทานการโจมตีแบบพื้นที่ กับดัก และเอฟเฟกต์พื้นที่ ความสามารถในการหลบและหลีกเลี่ยงอันตรายที่แพร่กระจาย'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'AGI Save',
-    tags: [ 'save', 'agility', 'dodge' ],
-    icon: 'agi-save-icon',
+    id: 'attr-str-based-damage',
+    name: { en: 'STR-based Damage', th: 'ความเสียหายจากความแข็งแกร่ง' },
+    description: { en: 'Bonus damage for Strength-based attacks.', th: 'ความเสียหายเพิ่มเติมสำหรับการโจมตีที่ใช้ความแข็งแกร่ง' },
+    icon: 'sword-damage',
+    thumbnail: 'str-dmg-attribute.jpg',
+    tags: [ 'constant', 'damage', 'strength' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'stat-strength',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'AGI',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'STR Dmg'
   },
   {
-    id: 'attribute-sense-save',
-    name: {
-      en: 'Sense Save',
-      th: 'การต้านทานการรับรู้'
-    },
-    description: {
-      en: 'Resists illusions, psychic effects, and sensory manipulation. Your ability to see through deception and maintain mental clarity.',
-      th: 'ต้านทานภาพลวงตา เอฟเฟกต์ทางจิต และการบิดเบือนการรับรู้ ความสามารถในการมองผ่านการหลอกลวงและรักษาความชัดเจนทางจิต'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'SEN Save',
-    tags: [ 'save', 'sense', 'mental' ],
-    icon: 'sen-save-icon',
+    id: 'attr-tec-based-damage',
+    name: { en: 'TEC-based Damage', th: 'ความเสียหายจากเทคนิค' },
+    description: { en: 'Bonus damage for Technique-based attacks.', th: 'ความเสียหายเพิ่มเติมสำหรับการโจมตีที่ใช้เทคนิค' },
+    icon: 'precision-damage',
+    thumbnail: 'tec-dmg-attribute.jpg',
+    tags: [ 'constant', 'damage', 'technique' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'floor(stat-technique/2)',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'SEN',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'TEC Dmg'
   },
   {
-    id: 'attribute-technique-save',
-    name: {
-      en: 'Technique Save',
-      th: 'การต้านทานเทคนิค'
-    },
-    description: {
-      en: 'Resists tech hazards, mechanical failures, and technological effects. Your ability to handle complex systems and avoid technical mishaps.',
-      th: 'ต้านทานอันตรายทางเทคนิค ความล้มเหลวทางกลไก และเอฟเฟกต์ทางเทคโนโลยี ความสามารถในการจัดการระบบที่ซับซ้อนและหลีกเลี่ยงอุบัติเหตุทางเทคนิค'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'TEC Save',
-    tags: [ 'save', 'technique', 'technical' ],
-    icon: 'tec-save-icon',
+    id: 'attr-difficulty-class',
+    name: { en: 'Difficulty Class', th: 'ระดับความยาก' },
+    description: { en: 'The base DC for effects you create.', th: 'ระดับความยากพื้นฐานสำหรับเอฟเฟกต์ที่คุณสร้าง' },
+    icon: 'target-dc',
+    thumbnail: 'dc-attribute.jpg',
+    tags: [ 'constant', 'dc', 'effects' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 10 },
+    modiferFomular: 'stat-knowledge',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'TEC',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'DC'
   },
   {
-    id: 'attribute-intelligence-save',
-    name: {
-      en: 'Intelligence Save',
-      th: 'การต้านทานสติปัญญา'
-    },
-    description: {
-      en: 'Resists mind control, confusion, and mental manipulation. Your ability to maintain logical thinking and resist mental influence.',
-      th: 'ต้านทานการควบคุมจิตใจ ความสับสน และการบิดเบือนทางจิต ความสามารถในการรักษาการคิดอย่างมีตรรกะและต้านทานอิทธิพลทางจิต'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'INT Save',
-    tags: [ 'save', 'intelligence', 'mental' ],
-    icon: 'int-save-icon',
+    id: 'attr-damage-reduction',
+    name: { en: 'Damage Reduction', th: 'การลดความเสียหาย' },
+    description: { en: 'Reduces incoming damage.', th: 'ลดความเสียหายที่เข้ามา' },
+    icon: 'shield-reduction',
+    thumbnail: 'dr-attribute.jpg',
+    tags: [ 'constant', 'damage-reduction', 'defense' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'floor(stat-strength/2)',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'INT',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'DR'
   },
   {
-    id: 'attribute-presence-save',
-    name: {
-      en: 'Presence Save',
-      th: 'การต้านทานการปรากฏตัว'
-    },
-    description: {
-      en: 'Resists persuasion, fear effects, and social manipulation. Your ability to maintain your will and resist social pressure.',
-      th: 'ต้านทานการโน้มน้าว เอฟเฟกต์ความกลัว และการบิดเบือนทางสังคม ความสามารถในการรักษาความตั้งใจและต้านทานแรงกดดันทางสังคม'
-    },
-    type: ATTRIBUTE_TYPE.SAVING_THROW,
-    abbreviation: 'PRE Save',
-    tags: [ 'save', 'presence', 'social' ],
-    icon: 'pre-save-icon',
+    id: 'attr-armor-class',
+    name: { en: 'Armor Class', th: 'ระดับเกราะ' },
+    description: { en: 'Your base defense against attacks.', th: 'การป้องกันพื้นฐานของคุณต่อการโจมตี' },
+    icon: 'armor',
+    thumbnail: 'ac-attribute.jpg',
+    tags: [ 'constant', 'armor', 'defense' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 10 },
+    modiferFomular: 'stat-speed',
     isSystem: true,
-    isHidden: false,
-    baseValue: {
-      type: VALUE_TYPE.DICE,
-      formula: '1d20'
-    },
-    formula: 'PRE',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    abbreviation: 'AC'
+  },
+  {
+    id: 'attr-armor-block',
+    name: { en: 'Armor Block', th: 'การบล็อกเกราะ' },
+    description: { en: 'Bonus AC when you perform a block.', th: 'AC เพิ่มเติมเมื่อคุณทำการบล็อก' },
+    icon: 'block',
+    thumbnail: 'ab-attribute.jpg',
+    tags: [ 'constant', 'block', 'defense' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'AB'
+  },
+  {
+    id: 'attr-influence-bonus',
+    name: { en: 'Influence Bonus', th: 'โบนัสอิทธิพล' },
+    description: { en: 'Bonus to certain social or healing abilities.', th: 'โบนัสสำหรับความสามารถทางสังคมหรือการรักษา' },
+    icon: 'influence',
+    thumbnail: 'ib-attribute.jpg',
+    tags: [ 'constant', 'influence', 'social' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'floor(stat-presence/2)',
+    isSystem: true,
+    abbreviation: 'IB'
+  },
+  {
+    id: 'attr-speed',
+    name: { en: 'Speed', th: 'ความเร็ว' },
+    description: { en: 'Raw speed value for comparisons.', th: 'ค่าความเร็วดิบสำหรับการเปรียบเทียบ' },
+    icon: 'speed',
+    thumbnail: 'speed-attribute.jpg',
+    tags: [ 'constant', 'speed', 'raw' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
+    modiferFomular: 'stat-speed',
+    isSystem: true,
+    abbreviation: 'Spd'
+  },
+  {
+    id: 'attr-carrying-space-rows',
+    name: { en: 'Carrying Space Rows', th: 'แถวพื้นที่แบก' },
+    description: { en: 'Base inventory grid size.', th: 'ขนาดตารางคลังสินค้าพื้นฐาน' },
+    icon: 'grid-rows',
+    thumbnail: 'carrying-rows-attribute.jpg',
+    tags: [ 'constant', 'inventory', 'grid' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
+    isSystem: true,
+    abbreviation: 'CS Rows'
+  },
+  {
+    id: 'attr-carrying-space-columns',
+    name: { en: 'Carrying Space Columns', th: 'คอลัมน์พื้นที่แบก' },
+    description: { en: 'Base inventory grid size.', th: 'ขนาดตารางคลังสินค้าพื้นฐาน' },
+    icon: 'grid-columns',
+    thumbnail: 'carrying-columns-attribute.jpg',
+    tags: [ 'constant', 'inventory', 'grid' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
+    isSystem: true,
+    abbreviation: 'CS Columns'
+  },
+  {
+    id: 'attr-jump-distance',
+    name: { en: 'Jump Distance', th: 'ระยะการกระโดด' },
+    description: { en: 'How far you can jump.', th: 'ระยะทางที่คุณสามารถกระโดดได้' },
+    icon: 'jump',
+    thumbnail: 'jd-attribute.jpg',
+    tags: [ 'constant', 'jump', 'movement' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
+    modiferFomular: 'stat-strength',
+    isSystem: true,
+    abbreviation: 'JD'
+  },
+  {
+    id: 'attr-climb-distance',
+    name: { en: 'Climb Distance', th: 'ระยะการปีน' },
+    description: { en: 'How far you can climb in one action.', th: 'ระยะทางที่คุณสามารถปีนได้ในหนึ่งการกระทำ' },
+    icon: 'climb',
+    thumbnail: 'cd-attribute.jpg',
+    tags: [ 'constant', 'climb', 'movement' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.CONSTANT,
+    value: { type: VALUE_TYPE.CONSTANT, value: 1 },
+    modiferFomular: 'floor(stat-strength/2)',
+    isSystem: true,
+    abbreviation: 'CD'
+  },
+
+  // Dice Attributes
+  {
+    id: 'attr-initiative',
+    name: { en: 'Initiative', th: 'การริเริ่ม' },
+    description: { en: 'Determines turn order in combat.', th: 'กำหนดลำดับเทิร์นในการต่อสู้' },
+    icon: 'initiative',
+    thumbnail: 'initiative-attribute.jpg',
+    tags: [ 'dice', 'initiative', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.DICE,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-sense',
+    isSystem: true,
+    abbreviation: 'Initiative'
+  },
+  {
+    id: 'attr-attack-roll',
+    name: { en: 'Attack Roll', th: 'การทอยโจมตี' },
+    description: { en: 'Your roll to hit an enemy.', th: 'การทอยของคุณเพื่อโจมตีศัตรู' },
+    icon: 'attack-roll',
+    thumbnail: 'ar-attribute.jpg',
+    tags: [ 'dice', 'attack', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.DICE,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'AR'
   }
-]; 
+];
+
+// Skill Check Attributes
+export const mockSkillChecks: AnyAttributeConfig[] = [
+  {
+    id: 'skill-power',
+    name: { en: 'Power', th: 'พลัง' },
+    description: { en: 'Feats of raw strength like lifting, breaking, or pulling.', th: 'ความสำเร็จของพลังดิบๆ เช่น การยก การทำลาย หรือการดึง' },
+    icon: 'muscle-power',
+    thumbnail: 'power-skill.jpg',
+    tags: [ 'skill-check', 'strength', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-strength',
+    isSystem: true,
+    abbreviation: 'Power'
+  },
+  {
+    id: 'skill-endurance',
+    name: { en: 'Endurance', th: 'ความทนทาน' },
+    description: { en: 'Resisting exhaustion or performing prolonged physical tasks.', th: 'การต้านทานความเหนื่อยล้าหรือการทำงานทางกายภาพที่ยาวนาน' },
+    icon: 'endurance',
+    thumbnail: 'endurance-skill.jpg',
+    tags: [ 'skill-check', 'strength', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-strength',
+    isSystem: true,
+    abbreviation: 'Endurance'
+  },
+  {
+    id: 'skill-stealth',
+    name: { en: 'Stealth', th: 'การหลบซ่อน' },
+    description: { en: 'Moving silently and avoiding detection.', th: 'การเคลื่อนไหวอย่างเงียบๆ และหลีกเลี่ยงการถูกค้นพบ' },
+    icon: 'stealth',
+    thumbnail: 'stealth-skill.jpg',
+    tags: [ 'skill-check', 'speed', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-speed',
+    isSystem: true,
+    abbreviation: 'Stealth'
+  },
+  {
+    id: 'skill-acrobatics',
+    name: { en: 'Acrobatics', th: 'กายกรรม' },
+    description: { en: 'Feats of balance, agility, and bodily control.', th: 'ความสำเร็จของความสมดุล ความคล่องแคล่ว และการควบคุมร่างกาย' },
+    icon: 'acrobatics',
+    thumbnail: 'acrobatics-skill.jpg',
+    tags: [ 'skill-check', 'speed', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-speed',
+    isSystem: true,
+    abbreviation: 'Acrobatics'
+  },
+  {
+    id: 'skill-sprint',
+    name: { en: 'Sprint', th: 'การวิ่งเร็ว' },
+    description: { en: 'Short bursts of speed and athletic maneuvering.', th: 'การระเบิดความเร็วสั้นๆ และการเคลื่อนไหวทางกีฬา' },
+    icon: 'sprint',
+    thumbnail: 'sprint-skill.jpg',
+    tags: [ 'skill-check', 'speed', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-speed',
+    isSystem: true,
+    abbreviation: 'Sprint'
+  },
+  {
+    id: 'skill-perception',
+    name: { en: 'Perception', th: 'การรับรู้' },
+    description: { en: 'Perception through physical senses (sight, hearing, smell, touch).', th: 'การรับรู้ผ่านร่างกาย/ประสาทสัมผัส (การมองเห็น, การได้ยิน, กลิ่น, สัมผัส)' },
+    icon: 'perception',
+    thumbnail: 'perception-skill.jpg',
+    tags: [ 'skill-check', 'sense', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-sense',
+    isSystem: true,
+    abbreviation: 'Perception'
+  },
+  {
+    id: 'skill-insight',
+    name: { en: 'Insight', th: 'ความเข้าใจ' },
+    description: { en: 'Perception through emotions/feelings (understanding intentions, detecting lies, reading emotions).', th: 'การรับรู้ผ่านอารมณ์/ความรู้สึกนึกคิด (การเข้าใจเจตนา, การจับโกหก, การอ่านอารมณ์)' },
+    icon: 'insight',
+    thumbnail: 'insight-skill.jpg',
+    tags: [ 'skill-check', 'sense', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-sense',
+    isSystem: true,
+    abbreviation: 'Insight'
+  },
+  {
+    id: 'skill-instinct',
+    name: { en: 'Instinct', th: 'สัญชาตญาณ' },
+    description: { en: 'Perception through instinct/intuition (sensing danger, predicting situations without clear information, sensing the mysterious).', th: 'การรับรู้ผ่านสัญชาตญาณ/ความรู้สึก (การรับรู้ถึงอันตราย, การคาดเดาสถานการณ์ล่วงหน้าโดยไม่มีข้อมูลชัดเจน, การสัมผัสถึงสิ่งเร้นลับ)' },
+    icon: 'instinct',
+    thumbnail: 'instinct-skill.jpg',
+    tags: [ 'skill-check', 'sense', 'intuition' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-sense',
+    isSystem: true,
+    abbreviation: 'Instinct'
+  },
+  {
+    id: 'skill-tinker',
+    name: { en: 'Tinker', th: 'การซ่อมแซม' },
+    description: { en: 'Working with mechanical objects, including repairing gear.', th: 'การทำงานกับวัตถุทางกล รวมถึงการซ่อมแซมอุปกรณ์' },
+    icon: 'tinker',
+    thumbnail: 'tinker-skill.jpg',
+    tags: [ 'skill-check', 'technique', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'Tinker'
+  },
+  {
+    id: 'skill-operate',
+    name: { en: 'Operate', th: 'การควบคุม' },
+    description: { en: 'Controlling complex machinery or vehicles.', th: 'การควบคุมเครื่องจักรหรือยานพาหนะที่ซับซ้อน' },
+    icon: 'operate',
+    thumbnail: 'operate-skill.jpg',
+    tags: [ 'skill-check', 'technique', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'Operate'
+  },
+  {
+    id: 'skill-finesse',
+    name: { en: 'Finesse', th: 'ความประณีต' },
+    description: { en: 'Performing delicate tasks requiring precise manual dexterity.', th: 'การทำงานที่ละเอียดอ่อนที่ต้องการความคล่องแคล่วของมือที่แม่นยำ' },
+    icon: 'finesse',
+    thumbnail: 'finesse-skill.jpg',
+    tags: [ 'skill-check', 'technique', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'Finesse'
+  },
+  {
+    id: 'skill-recall',
+    name: { en: 'Recall', th: 'การระลึก' },
+    description: { en: 'Remembering information you have previously learned.', th: 'การจำข้อมูลที่คุณได้เรียนรู้มาก่อนหน้านี้' },
+    icon: 'recall',
+    thumbnail: 'recall-skill.jpg',
+    tags: [ 'skill-check', 'knowledge', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-knowledge',
+    isSystem: true,
+    abbreviation: 'Recall'
+  },
+  {
+    id: 'skill-deduction',
+    name: { en: 'Deduction', th: 'การอนุมาน' },
+    description: { en: 'Drawing logical conclusions from evidence.', th: 'การสรุปผลทางตรรกะจากหลักฐาน' },
+    icon: 'deduction',
+    thumbnail: 'deduction-skill.jpg',
+    tags: [ 'skill-check', 'knowledge', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-knowledge',
+    isSystem: true,
+    abbreviation: 'Deduction'
+  },
+  {
+    id: 'skill-analyze',
+    name: { en: 'Analyze', th: 'การวิเคราะห์' },
+    description: { en: 'Scrutinizing an object or situation to understand its properties.', th: 'การตรวจสอบวัตถุหรือสถานการณ์อย่างละเอียดเพื่อเข้าใจคุณสมบัติของมัน' },
+    icon: 'analyze',
+    thumbnail: 'analyze-skill.jpg',
+    tags: [ 'skill-check', 'knowledge', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-knowledge',
+    isSystem: true,
+    abbreviation: 'Analyze'
+  },
+  {
+    id: 'skill-persuasion',
+    name: { en: 'Persuasion', th: 'การโน้มน้าว' },
+    description: { en: 'Convincing others with charm, reason, or etiquette.', th: 'การโน้มน้าวผู้อื่นด้วยเสน่ห์ เหตุผล หรือมารยาท' },
+    icon: 'persuasion',
+    thumbnail: 'persuasion-skill.jpg',
+    tags: [ 'skill-check', 'presence', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-presence',
+    isSystem: true,
+    abbreviation: 'Persuasion'
+  },
+  {
+    id: 'skill-deception',
+    name: { en: 'Deception', th: 'การหลอกลวง' },
+    description: { en: 'Misleading others through lies or disguises.', th: 'การทำให้ผู้อื่นเข้าใจผิดผ่านการโกหกหรือการปลอมตัว' },
+    icon: 'deception',
+    thumbnail: 'deception-skill.jpg',
+    tags: [ 'skill-check', 'presence', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-presence',
+    isSystem: true,
+    abbreviation: 'Deception'
+  },
+  {
+    id: 'skill-intimidation',
+    name: { en: 'Intimidation', th: 'การข่มขู่' },
+    description: { en: 'Influencing others through threats or shows of force.', th: 'การมีอิทธิพลต่อผู้อื่นผ่านการข่มขู่หรือการแสดงพลัง' },
+    icon: 'intimidation',
+    thumbnail: 'intimidation-skill.jpg',
+    tags: [ 'skill-check', 'presence', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-presence',
+    isSystem: true,
+    abbreviation: 'Intimidation'
+  },
+  {
+    id: 'skill-performance',
+    name: { en: 'Performance', th: 'การแสดง' },
+    description: { en: 'Entertaining or captivating an audience.', th: 'การให้ความบันเทิงหรือดึงดูดผู้ชม' },
+    icon: 'performance',
+    thumbnail: 'performance-skill.jpg',
+    tags: [ 'skill-check', 'presence', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-presence',
+    isSystem: true,
+    abbreviation: 'Performance'
+  },
+  {
+    id: 'skill-utility',
+    name: { en: 'Utility', th: 'การใช้งาน' },
+    description: { en: 'A general check for using common tools or items.', th: 'การตรวจสอบทั่วไปสำหรับการใช้เครื่องมือหรือไอเทมทั่วไป' },
+    icon: 'utility',
+    thumbnail: 'utility-skill.jpg',
+    tags: [ 'skill-check', 'general', 'utility' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    isSystem: true,
+    abbreviation: 'Utility'
+  }
+];
+
+// Saving Throw Attributes
+export const mockSavingThrows: AnyAttributeConfig[] = [
+  {
+    id: 'saving-strength',
+    name: { en: 'Strength', th: 'การเซฟความแข็งแกร่ง' },
+    description: { en: 'Resisting effects that would physically move or restrain you.', th: 'การต้านทานเอฟเฟกต์ที่อาจเคลื่อนย้ายหรือจำกัดคุณทางกายภาพ' },
+    icon: 'saving-strength',
+    thumbnail: 'strength-saving.jpg',
+    tags: [ 'saving-check', 'strength', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-strength',
+    isSystem: true,
+    abbreviation: 'Strength'
+  },
+  {
+    id: 'saving-speed',
+    name: { en: 'Speed', th: 'การเซฟความเร็ว' },
+    description: { en: 'Dodging out of the way of area effects or moving quickly to safety.', th: 'การหลบหลีกจากเอฟเฟกต์พื้นที่หรือการเคลื่อนไหวอย่างรวดเร็วไปยังที่ปลอดภัย' },
+    icon: 'save-speed',
+    thumbnail: 'speed-save.jpg',
+    tags: [ 'saving-check', 'speed', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-speed',
+    isSystem: true,
+    abbreviation: 'Speed'
+  },
+  {
+    id: 'saving-sense',
+    name: { en: 'Sense', th: 'การเซฟประสาทสัมผัส' },
+    description: { en: 'Resisting effects that target your awareness or perception.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่ความตระหนักหรือการรับรู้ของคุณ' },
+    icon: 'save-sense',
+    thumbnail: 'sense-save.jpg',
+    tags: [ 'saving-check', 'sense', 'physical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-sense',
+    isSystem: true,
+    abbreviation: 'Sense'
+  },
+  {
+    id: 'saving-knowledge',
+    name: { en: 'Knowledge', th: 'การเซฟความรู้' },
+    description: { en: 'Resisting effects that target your intellect or memory.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่สติปัญญาหรือความจำของคุณ' },
+    icon: 'save-knowledge',
+    thumbnail: 'knowledge-save.jpg',
+    tags: [ 'saving-check', 'knowledge', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-knowledge',
+    isSystem: true,
+    abbreviation: 'Knowledge'
+  },
+  {
+    id: 'saving-technique',
+    name: { en: 'Technique', th: 'การเซฟเทคนิค' },
+    description: { en: 'Resisting effects that disrupt your skills or precision.', th: 'การต้านทานเอฟเฟกต์ที่รบกวนทักษะหรือความแม่นยำของคุณ' },
+    icon: 'save-technique',
+    thumbnail: 'technique-save.jpg',
+    tags: [ 'saving-check', 'technique', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-technique',
+    isSystem: true,
+    abbreviation: 'Technique'
+  },
+  {
+    id: 'saving-presence',
+    name: { en: 'Presence', th: 'การเซฟการปรากฏตัว' },
+    description: { en: 'Resisting effects that target your force of will, such as charms or fear.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่แรงแห่งเจตจำนงของคุณ เช่น การเสน่ห์หรือความกลัว' },
+    icon: 'save-presence',
+    thumbnail: 'presence-save.jpg',
+    tags: [ 'saving-check', 'presence', 'mental' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    modiferFomular: 'stat-presence',
+    isSystem: true,
+    abbreviation: 'Presence'
+  },
+  {
+    id: 'saving-death',
+    name: { en: 'Death', th: 'การเซฟความตาย' },
+    description: { en: 'A special save made when you are Downed to avoid dying.', th: 'การเซฟพิเศษที่ทำเมื่อคุณถูกทำให้ล้มลงเพื่อหลีกเลี่ยงความตาย' },
+    icon: 'save-death',
+    thumbnail: 'death-save.jpg',
+    tags: [ 'saving-check', 'death', 'special' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
+    type: ATTRIBUTE_TYPE.SAVING_CHECK,
+    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
+    isSystem: true,
+    abbreviation: 'Death'
+  }
+];
+
+// Combined export for all attributes
+export const mockAllAttributes = [
+  ...mockAttributes,
+  ...mockSkillChecks,
+  ...mockSavingThrows
+];
+
+export default mockAllAttributes;

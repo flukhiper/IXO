@@ -1,3 +1,8 @@
+export const EFFECT_ID_OPTION = {
+  ALL_SKILL: 'all-skill',
+  ALL_SAVING: 'all-saving'
+} as const;
+
 export const EFFECT_TARGET_TYPE = {
   ATTRIBUTE: 'attribute',
   STAT: 'stat'
@@ -10,7 +15,6 @@ export const TALENT_EFFECT_TYPE = {
   LEARNED: 'learned',
   PROMISING: 'promising',
   EXPERT: 'expert',
-  GIFTED: 'gifted',
   PRODIGIOUS: 'prodigious',
   GOD: 'god'
 } as const;
@@ -25,6 +29,10 @@ export const ADVANTAGE_EFFECT_TYPE = {
 
 export const DISADVANTAGE_EFFECT_TYPE = {
   DISADVANTAGE: 'disadvantage'
+} as const;
+
+export const DAMAGE_BOOST_EFFECT_TYPE = {
+  DAMAGE_BOOST: 'damage-boost'
 } as const;
 
 export const SPECIALTY_EFFECT_TYPE = {

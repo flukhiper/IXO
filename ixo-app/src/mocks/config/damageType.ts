@@ -1,124 +1,246 @@
 import type { DamageTypeConfig } from '@/types/config/damageType';
 
-export const mock: DamageTypeConfig[] = [
+export const mockDamageTypes: DamageTypeConfig[] = [
   {
-    id: 'bludgeoning',
-    name: { en: 'Bludgeoning', th: 'ทุบตี' },
-    description: { en: 'Blunt force damage from impacts, hammers, or falls.', th: 'ความเสียหายจากแรงกระแทก เช่น ค้อน หรือตกจากที่สูง' },
+    id: 'damage-type-bludgeoning',
+    name: {
+      en: 'Bludgeoning',
+      th: 'การทุบตี'
+    },
+    description: {
+      en: 'Damage from blunt force trauma, such as hammers, clubs, or falling objects.',
+      th: 'ความเสียหายจากการบาดเจ็บจากแรงกระแทก เช่น ค้อน ไม้ หรือวัตถุที่ตกลงมา'
+    },
+    icon: 'hammer',
+    thumbnail: 'bludgeoning-damage.jpg',
+    tags: [ 'physical', 'blunt', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: true,
-    tags: [ 'physical' ],
-    icon: 'bludgeoning-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'piercing',
-    name: { en: 'Piercing', th: 'แทงทะลุ' },
-    description: { en: 'Damage from stabbing or puncturing, such as spears or arrows.', th: 'ความเสียหายจากการแทงหรือเจาะ เช่น หอกหรือธนู' },
+    id: 'damage-type-piercing',
+    name: {
+      en: 'Piercing',
+      th: 'การเจาะ'
+    },
+    description: {
+      en: 'Damage from sharp, pointed objects that penetrate, such as arrows, spears, or bullets.',
+      th: 'ความเสียหายจากวัตถุแหลมคมที่เจาะทะลุ เช่น ลูกศร หอก หรือกระสุน'
+    },
+    icon: 'arrow',
+    thumbnail: 'piercing-damage.jpg',
+    tags: [ 'physical', 'sharp', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: true,
-    tags: [ 'physical' ],
-    icon: 'piercing-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'slashing',
-    name: { en: 'Slashing', th: 'ฟันเฉือน' },
-    description: { en: 'Damage from cutting or slicing, such as swords or axes.', th: 'ความเสียหายจากการฟันหรือเฉือน เช่น ดาบหรือขวาน' },
+    id: 'damage-type-slashing',
+    name: {
+      en: 'Slashing',
+      th: 'การตัด'
+    },
+    description: {
+      en: 'Damage from sharp-edged weapons that cut, such as swords, axes, or claws.',
+      th: 'ความเสียหายจากอาวุธมีดคมที่ตัด เช่น ดาบ ขวาน หรือกรงเล็บ'
+    },
+    icon: 'sword',
+    thumbnail: 'slashing-damage.jpg',
+    tags: [ 'physical', 'sharp', 'combat' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: true,
-    tags: [ 'physical' ],
-    icon: 'slashing-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'fire',
-    name: { en: 'Fire', th: 'ไฟ' },
-    description: { en: 'Burning damage from flames or heat.', th: 'ความเสียหายจากไฟหรือความร้อน' },
+    id: 'damage-type-fire',
+    name: {
+      en: 'Fire',
+      th: 'ไฟ'
+    },
+    description: {
+      en: 'Damage from heat and flames, such as fireballs, explosions, or burning.',
+      th: 'ความเสียหายจากความร้อนและเปลวไฟ เช่น ลูกไฟ การระเบิด หรือการเผาไหม้'
+    },
+    icon: 'fire',
+    thumbnail: 'fire-damage.jpg',
+    tags: [ 'elemental', 'heat', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'elemental' ],
-    icon: 'fire-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'cold',
-    name: { en: 'Cold', th: 'เย็น' },
-    description: { en: 'Damage from freezing or extreme cold.', th: 'ความเสียหายจากความเย็นจัดหรือการแช่แข็ง' },
+    id: 'damage-type-cold',
+    name: {
+      en: 'Cold',
+      th: 'ความเย็น'
+    },
+    description: {
+      en: 'Damage from extreme cold and ice, such as frost spells, freezing temperatures, or ice shards.',
+      th: 'ความเสียหายจากความเย็นจัดและน้ำแข็ง เช่น เวทมนตร์น้ำแข็ง อุณหภูมิเยือกแข็ง หรือเศษน้ำแข็ง'
+    },
+    icon: 'snowflake',
+    thumbnail: 'cold-damage.jpg',
+    tags: [ 'elemental', 'cold', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'elemental' ],
-    icon: 'cold-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'lightning',
-    name: { en: 'Lightning', th: 'สายฟ้า' },
-    description: { en: 'Damage from electrical shocks or lightning.', th: 'ความเสียหายจากไฟฟ้าหรือสายฟ้า' },
+    id: 'damage-type-lightning',
+    name: {
+      en: 'Lightning',
+      th: 'สายฟ้า'
+    },
+    description: {
+      en: 'Damage from electrical energy, such as lightning bolts, electric shocks, or thunder.',
+      th: 'ความเสียหายจากพลังงานไฟฟ้า เช่น สายฟ้า ไฟฟ้าช็อต หรือฟ้าร้อง'
+    },
+    icon: 'lightning',
+    thumbnail: 'lightning-damage.jpg',
+    tags: [ 'elemental', 'electric', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'elemental' ],
-    icon: 'lightning-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'acid',
-    name: { en: 'Acid', th: 'กรด' },
-    description: { en: 'Corrosive damage from acids or caustic substances.', th: 'ความเสียหายจากกรดหรือสารกัดกร่อน' },
+    id: 'damage-type-acid',
+    name: {
+      en: 'Acid',
+      th: 'กรด'
+    },
+    description: {
+      en: 'Damage from corrosive substances that burn and dissolve, such as acid sprays or chemical burns.',
+      th: 'ความเสียหายจากสารกัดกร่อนที่เผาและละลาย เช่น การพ่นกรดหรือแผลไฟไหม้จากสารเคมี'
+    },
+    icon: 'acid',
+    thumbnail: 'acid-damage.jpg',
+    tags: [ 'chemical', 'corrosive', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'elemental' ],
-    icon: 'acid-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'poison',
-    name: { en: 'Poison', th: 'พิษ' },
-    description: { en: 'Toxic damage from poisons or venoms.', th: 'ความเสียหายจากพิษหรือสารพิษ' },
+    id: 'damage-type-poison',
+    name: {
+      en: 'Poison',
+      th: 'พิษ'
+    },
+    description: {
+      en: 'Damage from toxic substances that harm the body, such as venom, toxins, or poisonous gases.',
+      th: 'ความเสียหายจากสารพิษที่ทำร้ายร่างกาย เช่น พิษ สารพิษ หรือก๊าซพิษ'
+    },
+    icon: 'poison',
+    thumbnail: 'poison-damage.jpg',
+    tags: [ 'chemical', 'toxic', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'toxic' ],
-    icon: 'poison-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'psychic',
-    name: { en: 'Psychic', th: 'จิตวิญญาณ' },
-    description: { en: 'Mental or spiritual damage, such as telepathy or fear.', th: 'ความเสียหายทางจิตใจหรือวิญญาณ เช่น พลังจิตหรือความกลัว' },
+    id: 'damage-type-psychic',
+    name: {
+      en: 'Psychic',
+      th: 'จิต'
+    },
+    description: {
+      en: 'Damage that targets the mind and consciousness, such as mental attacks, psychic energy, or mind control.',
+      th: 'ความเสียหายที่มุ่งเป้าไปที่จิตใจและสติสัมปชัญญะ เช่น การโจมตีทางจิต พลังจิต หรือการควบคุมจิตใจ'
+    },
+    icon: 'brain',
+    thumbnail: 'psychic-damage.jpg',
+    tags: [ 'mental', 'psychic', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'mental' ],
-    icon: 'psychic-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'luminous',
-    name: { en: 'Luminous', th: 'แสงสว่าง' },
-    description: { en: 'Damage from radiant or holy light.', th: 'ความเสียหายจากแสงศักดิ์สิทธิ์หรือแสงสว่าง' },
+    id: 'damage-type-luminous',
+    name: {
+      en: 'Luminous',
+      th: 'แสงสว่าง'
+    },
+    description: {
+      en: 'Damage from pure light energy, such as holy light, radiant energy, or divine power.',
+      th: 'ความเสียหายจากพลังงานแสงบริสุทธิ์ เช่น แสงศักดิ์สิทธิ์ พลังงานเรืองแสง หรือพลังศักดิ์สิทธิ์'
+    },
+    icon: 'sun',
+    thumbnail: 'luminous-damage.jpg',
+    tags: [ 'divine', 'light', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'radiant' ],
-    icon: 'luminous-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'void',
-    name: { en: 'Void', th: 'ความว่างเปล่า' },
-    description: { en: 'Damage from void, entropy, or nothingness.', th: 'ความเสียหายจากความว่างเปล่าหรือความเสื่อมสลาย' },
+    id: 'damage-type-void',
+    name: {
+      en: 'Void',
+      th: 'ความว่างเปล่า'
+    },
+    description: {
+      en: 'Damage from the absence of existence, such as void energy, anti-matter, or reality distortion.',
+      th: 'ความเสียหายจากการไม่มีอยู่จริง เช่น พลังงานความว่างเปล่า สสารปฏิปักษ์ หรือการบิดเบือนความเป็นจริง'
+    },
+    icon: 'void',
+    thumbnail: 'void-damage.jpg',
+    tags: [ 'cosmic', 'void', 'magical' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'cosmic' ],
-    icon: 'void-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   },
   {
-    id: 'force',
-    name: { en: 'Force', th: 'แรงกระแทก' },
-    description: { en: 'Pure magical or kinetic force.', th: 'ความเสียหายจากพลังเวทมนตร์หรือแรงกระแทก' },
+    id: 'damage-type-force',
+    name: {
+      en: 'Force',
+      th: 'พลัง'
+    },
+    description: {
+      en: 'Damage from pure magical force, such as force fields, telekinetic energy, or raw magical power.',
+      th: 'ความเสียหายจากพลังเวทมนตร์บริสุทธิ์ เช่น แรงสนามพลัง พลังจิต หรือพลังเวทมนตร์ดิบๆ'
+    },
+    icon: 'force',
+    thumbnail: 'force-damage.jpg',
+    tags: [ 'magical', 'force', 'pure' ],
+    ownerId: 'admin-user-1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-15T12:30:00.000Z',
+    gameSystemId: 'game-system-1',
     isPhysical: false,
-    tags: [ 'force' ],
-    icon: 'force-icon',
-    gameSystemId: 'game-system-ixo',
-    ownerId: 'system'
+    isSystem: true
   }
-]; 
+];
+
+export default mockDamageTypes;

@@ -14,9 +14,9 @@ const TraitConfigSchema = new mongoose.Schema<TraitConfig>({
   updatedAt: { type: Date },
   gameSystemId: { type: String, required: true },
   value: { type: Number, enum: [ 1, 2 ], required: true },
-  actionSelectionRule: { type: ActionSelectionRuleSchema, default: undefined },
-  downtimeSelectionRule: { type: DowntimeSelectionRuleSchema, default: undefined },
-  effects: { type: [ EffectConfigSchema ], default: [] }
+  actionSelectionRule: { type: [ ActionSelectionRuleSchema ], default: undefined },
+  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ], default: undefined },
+  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
 }, { versionKey: false, timestamps: true });
 
 TraitConfigSchema.index({ id: 1 }, { unique: true });

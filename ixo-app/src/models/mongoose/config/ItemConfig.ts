@@ -23,12 +23,12 @@ const WeaponPropertySchema = new mongoose.Schema({
   thrown: { type: Boolean, required: true },
   twoHanded: { type: Boolean, required: true },
   versatile: { type: ItemDamageSchema },
-  refined: { type: Number, enum: Array.from({ length: MAX_ITEM_REFINED_LEVEL }, (_, i) => i + 1) }
+  refined: { type: Number, enum: MAX_ITEM_REFINED_LEVEL }
 }, { _id: false });
 
 const ArmorPropertySchema = new mongoose.Schema({
   type: { type: String, enum: Object.values(ITEM_ARMOR_TYPE), required: true },
-  refined: { type: Number, enum: Array.from({ length: MAX_ITEM_REFINED_LEVEL }, (_, i) => i + 1) }
+  refined: { type: Number, enum: MAX_ITEM_REFINED_LEVEL }
 }, { _id: false });
 
 // Base fields for all items

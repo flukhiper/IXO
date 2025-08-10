@@ -6,8 +6,4 @@ export class ItemConfigService extends BaseService<ItemConfig, ItemConfigReposit
   constructor () {
     super(new ItemConfigRepository());
   }
-
-  async getByGameSystemId (gameSystemId: string) {
-    return this.repository.getAllByFilter({ gameSystemId });
-  }
 } 

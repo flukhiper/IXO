@@ -1,8 +1,7 @@
 import { MAX_SKILL_TIER, SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
 import type { BaseConfig } from './base';
 import type { ClassRole } from './class';
-import type { NumberRange } from './common';
-import type { Effect } from './effect';
+import type { EffectSelectionRule } from './effect';
 import type { ActionSelectionRule } from './action';
 import type { DowntimeSelectionRule } from './downtime';
 
@@ -19,9 +18,8 @@ export interface SkillSelectionRule {
   numberOfSelections: number;
 }
 
-const _maxSkillTier = MAX_SKILL_TIER + 1;
 export type SkillStackType = typeof SKILL_STACK_TYPE[keyof typeof SKILL_STACK_TYPE];
-export type SkillTier = NumberRange<1, typeof _maxSkillTier>;
+export type SkillTier = typeof MAX_SKILL_TIER[number];
 export type SkillType = typeof SKILL_TYPE[keyof typeof SKILL_TYPE];
 export interface BaseSkillConfig extends BaseConfig {
   type: SkillType;
@@ -31,11 +29,9 @@ export interface BaseSkillConfig extends BaseConfig {
   stackType: SkillStackType;
   stackPriority?: number;
   
-  isGeneral: boolean;
-  
-  actionSelectionRule?: ActionSelectionRule;
-  downtimeSelectionRule?: DowntimeSelectionRule;
-  effects?: Effect[];
+  actionSelectionRule?: ActionSelectionRule[];
+  downtimeSelectionRule?: DowntimeSelectionRule[];
+  effectSelectionRule?: EffectSelectionRule[];
 }
 
 export interface GeneralSkillConfig extends BaseSkillConfig {

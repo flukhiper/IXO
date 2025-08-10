@@ -17,6 +17,7 @@ const baseFields = {
   gameSystemId: { type: String, required: true },
   type: { type: String, enum: Object.values(ATTRIBUTE_TYPE), required: true },
   modiferFomular: { type: String },
+  abbreviation: { type: String, required: true },
   isSystem: { type: Boolean, required: true }
 };
 

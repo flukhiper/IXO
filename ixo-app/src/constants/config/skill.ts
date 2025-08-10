@@ -10,4 +10,4 @@ export const SKILL_STACK_TYPE = {
   OVERWRITE: 'overwrite'
 } as const;
 
-export const MAX_SKILL_TIER = 3;
+export const MAX_SKILL_TIER = [ 1, 2, 3 ] as const;

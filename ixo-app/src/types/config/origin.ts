@@ -1,6 +1,6 @@
 import type { BaseConfig } from './base';
-import type { Effect } from './effect';
+import type { EffectSelectionRule } from './effect';
 
 export interface OriginConfig extends BaseConfig {
-  effects?: Effect[];
+  effectSelectionRule?: EffectSelectionRule[];
 }

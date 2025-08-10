@@ -11,7 +11,7 @@ export const ITEM_RARITY = {
   COMMON: 'common',
   UNCOMMON: 'uncommon',
   RARE: 'rare',
-  VERY_RARE: 'very_rare',
+  VERY_RARE: 'very-rare',
   LEGENDARY: 'legendary'
 } as const;
 
@@ -25,9 +25,10 @@ export const ITEM_EQUIPPED_SLOT = {
 } as const;
 
 export const ITEM_ARMOR_TYPE = {
+  CLOTHING: 'clothing',
   LIGHT: 'light',
   MEDIUM: 'medium',
   HEAVY: 'heavy'
 } as const;
 
-export const MAX_ITEM_REFINED_LEVEL = 3;
+export const MAX_ITEM_REFINED_LEVEL = [ 1, 2, 3 ] as const;

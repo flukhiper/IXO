@@ -9,27 +9,34 @@ export const ACTION_ITEM_OPTION = {
   PROFICIENCY: 'item-proficiency'
 } as const;
 
+export const ACTION_COST_OPTION = {
+  ALL: 'all'
+} as const;
+
 export const ACTION_USAGE_TYPE = {
   COMBAT: 'combat',
-  DOWNTIME: 'downtime',
-  LONG_DOWNTIME: 'long downtime'
+  REST: 'rest',
+  LONG_REST: 'long-rest'
 } as const;
 
 export const ACTION_HIT_TYPE = {
   ATTACK_ROLL: 'attack-roll',
   DIFFICULTY_CLASS: 'difficulty-class',
-  SELF: 'self'
+  SELF: 'self',
+  ALWAYS_HIT: 'always-hit'
 } as const;
 
 export const ACTION_HIT_TARGET_TYPE = {
   AIM: 'aim',
-  CLONE: 'clone'
+  CLONE: 'clone',
+  SPHERE: 'sphere'
 } as const;
 
 export const ACTION_REQUIRED_ITEM_TYPE = {
   MAIN_HANDED: 'main-handed',
   OFF_HANDED: 'off-handed',
-  ARMOUR: 'armour',
+  ARMOR: 'armor',
+  SHIELD: 'shield',
   ANY: 'any'
 } as const;
 
@@ -51,3 +58,5 @@ export const ACTION_TYPE = {
   UTILITY: 'utility',
   SPECIAL: 'special'
 } as const;
+
+export const MAX_ACTION_LEVEL = [ 1, 2, 3, 4, 5 ] as const;

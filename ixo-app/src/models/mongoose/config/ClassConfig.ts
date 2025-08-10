@@ -10,12 +10,11 @@ const ClassGainSchema = new mongoose.Schema({
     statIds: { type: [ String ], default: undefined },
     numberOfSelections: { type: Number, required: true }
   },
-  skillSelectionRule: { type: SkillSelectionRuleSchema, default: undefined }
+  skillSelectionRule: { type: [ SkillSelectionRuleSchema ], default: undefined }
 }, { _id: false });
 
 // ClassGainLevel: "1" to "12" as string keys
-const gainKeys = Array.from({ length: MAX_CLASS_GAIN_LEVEL }, (_, i) => `${i + 1}`);
-const gainShape = Object.fromEntries(gainKeys.map(key => [ key, { type: ClassGainSchema, default: undefined } ]));
+const gainShape = Object.fromEntries(MAX_CLASS_GAIN_LEVEL.map(key => [ key, { type: ClassGainSchema, default: undefined } ]));
 
 const ClassConfigSchema = new mongoose.Schema<ClassConfig>({
   id: { type: String, required: true, unique: true },
@@ -24,7 +23,7 @@ const ClassConfigSchema = new mongoose.Schema<ClassConfig>({
   tags: { type: [ String ], default: [] },
   icon: { type: String },
   thumbnail: { type: String },
-  role: { type: String, enum: Object.keys(CLASS_ROLE_TYPE), required: true },
+  roles: { type: [ String ], enum: Object.keys(CLASS_ROLE_TYPE), required: true, default: [] },
   gain: { type: gainShape, required: true },
   gameSystemId: { type: String, required: true },
   ownerId: { type: String, required: true },
