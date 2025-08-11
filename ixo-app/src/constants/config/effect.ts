@@ -8,7 +8,8 @@ export const EFFECT_TARGET_TYPE = {
   STAT: 'stat'
 } as const;
 
-export const TALENT_EFFECT_TYPE = {
+export const EFFECT_TYPE = {
+  // Talent
   TERRIBLE: 'terrible',
   UNFAVORED: 'unfavored',
   AVERAGE: 'average',
@@ -16,25 +17,20 @@ export const TALENT_EFFECT_TYPE = {
   PROMISING: 'promising',
   EXPERT: 'expert',
   PRODIGIOUS: 'prodigious',
-  GOD: 'god'
-} as const;
+  GOD: 'god',
 
-export const BONUS_EFFECT_TYPE = {
-  BONUS: 'bonus'
-} as const;
+  // Bonus
+  BONUS: 'bonus',
 
-export const ADVANTAGE_EFFECT_TYPE = {
-  ADVANTAGE: 'advantage'
-} as const;
+  // Advantage
+  ADVANTAGE: 'advantage',
 
-export const DISADVANTAGE_EFFECT_TYPE = {
-  DISADVANTAGE: 'disadvantage'
-} as const;
+  // Damage Boost
+  DAMAGE_BOOST: 'damage-boost',
 
-export const DAMAGE_BOOST_EFFECT_TYPE = {
-  DAMAGE_BOOST: 'damage-boost'
-} as const;
+  // Specialty
+  SPECIAL: 'special',
 
-export const SPECIALTY_EFFECT_TYPE = {
-  SPECIALTY: 'specialty'
+  // Condition
+  CONDITION: 'condition'
 } as const;

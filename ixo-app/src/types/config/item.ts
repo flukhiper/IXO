@@ -3,7 +3,7 @@ import type { Effect } from './effect';
 import { ITEM_ARMOR_TYPE, ITEM_EQUIPPED_SLOT, ITEM_RARITY, ITEM_TYPE, MAX_ITEM_REFINED_LEVEL } from '@/constants/config/item';
 
 export interface ItemDamage {
-  type: string;
+  damageTypeId: string;
   value: ConstantValue | DiceValue;
   modifierFormula?: string;
 }

@@ -3,7 +3,7 @@ import type { BaseConfig, ConstantValue, DiceValue } from './base';
 import type { Effect } from './effect';
 
 export interface ConditionDamage {
-  type: string; 
+  damageTypeId: string; 
   value: ConstantValue | DiceValue; 
   modifierFormula?: string;
 }
@@ -16,11 +16,11 @@ export interface ConditionRestore {
 
 export type ConditionStackType = typeof CONDITION_STACK_TYPE[keyof typeof CONDITION_STACK_TYPE];
 export interface ConditionConfig extends BaseConfig {
-  isSystem: boolean;
-  
-  stackId: string;
-  stackType: ConditionStackType;
-  stackPriority?: number;
+  stack: {
+    type: ConditionStackType;
+    id: string;
+    priority?: number;
+  };
 
   duration?: number;
   damage?: ConditionDamage[];

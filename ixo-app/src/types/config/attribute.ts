@@ -7,10 +7,8 @@ export interface BaseAttributeConfig extends BaseConfig {
   type: AttributeType;
   
   value: ConstantValue | DiceValue;
-  modiferFomular?: string;
   abbreviation: string;
-
-  isSystem: boolean;
+  modiferFomular?: string;
 }
 
 export interface ResourceAttributeConfig extends BaseAttributeConfig {

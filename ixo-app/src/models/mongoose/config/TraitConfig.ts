@@ -1,25 +1,16 @@
 import mongoose from 'mongoose';
 import type { TraitConfig } from '@/types/config/trait';
-import { ActionSelectionRuleSchema, DowntimeSelectionRuleSchema, EffectConfigSchema, LocalizeTextSchema } from './common';
+import { ActionSelectionRuleSchema, baseConfigFields, DowntimeSelectionRuleSchema, EffectSelectionRuleSchema } from './common';
+import { MAX_TRAIT_VALUE } from '@/constants/config/trait';
 
 const TraitConfigSchema = new mongoose.Schema<TraitConfig>({
-  id: { type: String, required: true, unique: true },
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema },
-  icon: { type: String },
-  thumbnail: { type: String },
-  tags: { type: [ String ], default: [] },
-  ownerId: { type: String, required: true },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  gameSystemId: { type: String, required: true },
-  value: { type: Number, enum: [ 1, 2 ], required: true },
-  actionSelectionRule: { type: [ ActionSelectionRuleSchema ], default: undefined },
-  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ], default: undefined },
-  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
+  ...baseConfigFields,
+  value: { type: Number, enum: MAX_TRAIT_VALUE, required: true },
+  effectSelectionRule: { type: [ EffectSelectionRuleSchema ] },
+  actionSelectionRule: { type: [ ActionSelectionRuleSchema ] },
+  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ] }
 }, { versionKey: false, timestamps: true });
 
-TraitConfigSchema.index({ id: 1 }, { unique: true });
 TraitConfigSchema.index({ gameSystemId: 1 });
 TraitConfigSchema.index({ ownerId: 1 });
 

@@ -575,3 +575,5 @@ export const mockProficiencies: ProficiencyConfig[] = [
     }
   }
 ];
+
+export default mockProficiencies;

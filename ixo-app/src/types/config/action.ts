@@ -1,12 +1,14 @@
-import { ACTION_COST_OPTION, ACTION_COST_TYPE, ACTION_HIT_TARGET_TYPE, ACTION_HIT_TYPE, ACTION_ITEM_OPTION, ACTION_REQUIRED_ITEM_TYPE, ACTION_STACK_TYPE, ACTION_TYPE, ACTION_USAGE_TYPE, MAX_ACTION_LEVEL } from '@/constants/config/action';
+import { ACTION_ARCHETYPE, ACTION_COST_TYPE, ACTION_HIT_TARGET_TYPE, ACTION_HIT_TYPE, ACTION_OPTION, ACTION_RANGE_TYPE, ACTION_REQUIRED_ITEM_TYPE, ACTION_STACK_TYPE, ACTION_TYPE, ACTION_USAGE_TYPE, MAX_ACTION_LEVEL } from '@/constants/config/action';
 import type { BaseConfig, ConstantValue, DiceValue } from './base';
 import type { Effect } from './effect';
 
 export interface ActionSelectionRule {
   actionIds?: string[];
   filterOptions?: {
+    types?: ActionType[];
+    archetypes?: ActionArchetype[];
+    commandLevels?: ActionLevel[];
     proficiencyIds?: string[];
-    commandLevels?: number[];
     includeTags?: string[];
     excludeTags?: string[];
   };
@@ -58,13 +60,15 @@ export interface ActionAlwaysHit {
 ///////////////////
 
 export interface ActionArmorClass {
-  value: ConstantValue;
+  type: typeof ACTION_OPTION.ACTION_ARMOR_CLASS | typeof ACTION_OPTION.ITEM_ARMOR_CLASS | typeof ACTION_OPTION.ITEM_ARMOR_CLASS_VALUE_ONLY;
+  value?: number;
   modifierFormula?: string;
 }
 
 export interface ActionDamage {
-  type: string; 
-  value: ConstantValue | DiceValue; 
+  type: typeof ACTION_OPTION.ACTION_DAMAGE | typeof ACTION_OPTION.ITEM_DAMAGE | typeof ACTION_OPTION.ITEM_DAMAGE_VALUE_ONLY; 
+  damageTypeId?: string;
+  value?: ConstantValue | DiceValue; 
   modifierFormula?: string;
 }
 
@@ -74,37 +78,21 @@ export interface ActionRestore {
   modifierFormula?: string;
 }
 
-export interface ActionApplyCondition {
-  conditionId: string;
-  overrideDuration?: number;
-  requiredConcentration?: boolean;
-}
-
 export type ActionUsageType = typeof ACTION_USAGE_TYPE[keyof typeof ACTION_USAGE_TYPE];
+export type ActionRangeType = typeof ACTION_RANGE_TYPE[keyof typeof ACTION_RANGE_TYPE];
 export interface BaseActionDetail {
-  usage?: {
-    type: ActionUsageType;
-    maxNumberOfUse: number;
+  focusPointsCost?: number | typeof ACTION_OPTION.ALL_COST;
+  movementSpeedCost?: number | typeof ACTION_OPTION.ALL_COST;
+  durabilityPointsCost?: number | typeof ACTION_OPTION.ALL_COST;
+  range: {
+    type: ActionRangeType | typeof ACTION_OPTION.ITEM_RANGE;
+    value?: number;
   };
-  focusPointsCost?: number | typeof ACTION_COST_OPTION.ALL;
-  movementSpeedCost?: number;
-  range?: number;
   hit: ActionAttackRollHit | ActionDifficultyClassHit | ActionSelfHit | ActionAlwaysHit;
   armorClass?: ActionArmorClass;
   damage?: ActionDamage[];
   restore?: ActionRestore[];
-  applyCondition?: ActionApplyCondition[];
   effects?: Effect[];
-}
-export interface ItemActionDetail extends Omit<BaseActionDetail, 'armorClass' | 'damage' | 'restore' | 'range'> {
-  durabilityPointsCost?: number;
-  range?: number | typeof ACTION_ITEM_OPTION.RANGE;
-  armorClass?: ActionArmorClass | typeof ACTION_ITEM_OPTION.ARMOR_CLASS | typeof ACTION_ITEM_OPTION.ARMOR_CLASS_VALUE_ONLY;
-  armorClassModifier?: ActionArmorClass;
-  damage?: ActionDamage[] | typeof ACTION_ITEM_OPTION.DAMAGE | typeof ACTION_ITEM_OPTION.DAMAGE_VALUE_ONLY;
-  damageModifier?: ActionDamage[];
-  restore?: ActionRestore[] | typeof ACTION_ITEM_OPTION.RESTORE | typeof ACTION_ITEM_OPTION.RESTORE_VALUE_ONLY;
-  restoreModifier?: ActionRestore[];
 }
 export interface CommandActionDetail extends BaseActionDetail {
   focusPointsCost: number;
@@ -116,47 +104,57 @@ export interface CommandActionDetail extends BaseActionDetail {
 
 export type ActionLevel = typeof MAX_ACTION_LEVEL[number];
 export type ActionType = typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
+export type ActionArchetype = typeof ACTION_ARCHETYPE[keyof typeof ACTION_ARCHETYPE];
 export type ActionStackType = typeof ACTION_STACK_TYPE[keyof typeof ACTION_STACK_TYPE];
 export type ActionCostType = typeof ACTION_COST_TYPE[keyof typeof ACTION_COST_TYPE];
-export type RequiredItemType = typeof ACTION_REQUIRED_ITEM_TYPE[keyof typeof ACTION_REQUIRED_ITEM_TYPE];
+
+export type ActionRequiredItemType = typeof ACTION_REQUIRED_ITEM_TYPE[keyof typeof ACTION_REQUIRED_ITEM_TYPE];
 export interface BaseActionConfig extends BaseConfig {
   type: ActionType;
-  usedSlots?: number;
-  stackId: string;
-  stackType: ActionStackType;
-  stackPriority?: number;
+  archetype: ActionArchetype;
+  stack: {
+    type: ActionStackType;
+    id: string;
+    priority?: number;
+  };
 
-  proficiencyId?: string;
+  usedSlots?: number;
+
+  requiredItem?: {
+    type: ActionRequiredItemType;
+    id?: string;
+    proficiency: boolean;
+  };
+
+  usage?: {
+    type: ActionUsageType;
+    maxNumberOfUse: number;
+  };
+  
+  proficiencyId?: string | typeof ACTION_OPTION.ITEM_PROFICIENCY;
 
   actionCost?: ActionCostType;
+  requiredConcentration: boolean;
 
-  overrideActionId?: string;
-  isBasic?: boolean;
-  isSystem: boolean;
-
-  limitLevel?: number;
-  level?: Partial<Record<ActionLevel, BaseActionDetail>>;
+  level: Partial<Record<ActionLevel, BaseActionDetail>>;
 }
 
-export interface ItemActionConfig extends Omit<BaseActionConfig, 'level'> {
-  type: typeof ACTION_TYPE.ITEM;
-  requiredItem: RequiredItemType;
-  requiredItemId?: string;
-  requiredItemProficiency?: boolean;
+export interface CombatArtActionConfig extends BaseActionConfig {
+  type: typeof ACTION_TYPE.COMBAT_ART;
+  usedSlots: number;
 
-  proficiencyId?: string | typeof ACTION_ITEM_OPTION.PROFICIENCY;
-
-  level?: Record<Extract<ActionLevel, 1>, ItemActionDetail>;
+  level: Partial<Record<ActionLevel, BaseActionDetail>>;
 }
 
 export interface CommandActionConfig extends BaseActionConfig {
   type: typeof ACTION_TYPE.COMMAND;
-  commandLevel?: number;
+  usedSlots: number;
+  commandLevel: number;
 
-  level?: Partial<Record<ActionLevel, CommandActionDetail>>;
+  level: Partial<Record<ActionLevel, CommandActionDetail>>;
 }
 
 export type ActionConfig = 
  | BaseActionConfig 
- | ItemActionConfig 
+ | CombatArtActionConfig 
  | CommandActionConfig;

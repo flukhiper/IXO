@@ -1,62 +1,56 @@
 import mongoose from 'mongoose';
-import type { ClassSkillConfig, GeneralSkillConfig, RoleSkillConfig, SkillConfig } from '@/types/config/skill';
-import { MAX_SKILL_TIER, SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
-import { CLASS_ROLE_TYPE } from '@/constants/config/class';
-import { ActionSelectionRuleSchema, DowntimeSelectionRuleSchema, EffectConfigSchema, LocalizeTextSchema } from './common';
+import type { ClassSkillConfig, CombatSkillConfig, GeneralSkillConfig, SkillConfig } from '@/types/config/skill';
+import { ActionSelectionRuleSchema, baseConfigFields, DowntimeSelectionRuleSchema, EffectSchema } from './common';
+import { MAX_SKILL_TIER, SKILL_ARCHETYPE, SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
+
+const SkillStackSchema = new mongoose.Schema({
+  type: { type: String, enum: Object.values(SKILL_STACK_TYPE), required: true },
+  id: { type: String, required: true },
+  priority: { type: Number }
+}, { _id: false });
 
 // Base fields for all skills
-const baseFields = {
-  id: { type: String, required: true, unique: true },
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema },
-  icon: { type: String },
-  thumbnail: { type: String },
-  tags: { type: [ String ], default: [] },
-  ownerId: { type: String, required: true },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  gameSystemId: { type: String, required: true },
-  type: { type: String, enum: Object.values(SKILL_TYPE), required: true },
-  usedSlots: { type: Number, required: true },
-  stackId: { type: String, required: true },
-  stackType: { type: String, enum: Object.values(SKILL_STACK_TYPE), required: true },
-  stackPriority: { type: Number },
-  actionSelectionRule: { type: [ ActionSelectionRuleSchema ], default: undefined },
-  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ], default: undefined },
-  effectSelectionRule: { type: [ EffectConfigSchema ], default: undefined }
+const baseSkillFields = {
+  ...baseConfigFields,
+  archetype: { type: String, enum: Object.values(SKILL_ARCHETYPE), required: true },
+  stack: { type: SkillStackSchema, required: true },
+
+  usedSlots: { type: Number },
+
+  actionSelectionRule: { type: [ ActionSelectionRuleSchema ] },
+  downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ] },
+  effectSelectionRule: { type: [ EffectSchema ] }
 };
 
 // Discriminator schemas for each skill type
 const GeneralSkillSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ SKILL_TYPE.GENERAL ], required: true },
-  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
+  ...baseSkillFields,
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true },
+  usedSlots: { type: Number, required: true }
 });
 
 const ClassSkillSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ SKILL_TYPE.CLASS ], required: true },
+  ...baseSkillFields,
   classIds: { type: [ String ], required: true },
-  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true },
+  usedSlots: { type: Number, required: true }
 });
 
-const RoleSkillSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ SKILL_TYPE.ROLE ], required: true },
-  role: { type: String, enum: Object.keys(CLASS_ROLE_TYPE), required: true },
-  tier: { type: Number, enum: MAX_SKILL_TIER, required: true }
+const CombatSkillSchema = new mongoose.Schema({
+  ...baseSkillFields,
+  tier: { type: Number, enum: MAX_SKILL_TIER, required: true },
+  usedSlots: { type: Number, required: true }
 });
 
 // Main SkillConfig schema using discriminators
-const SkillConfigSchema = new mongoose.Schema(baseFields, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
+const SkillConfigSchema = new mongoose.Schema<SkillConfig>(baseSkillFields, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
 
-SkillConfigSchema.index({ id: 1 }, { unique: true });
 SkillConfigSchema.index({ gameSystemId: 1 });
 SkillConfigSchema.index({ ownerId: 1 });
 
 export const SkillConfigModel = mongoose.models.SkillConfig || mongoose.model<SkillConfig>('SkillConfig', SkillConfigSchema);
 
 // Attach and export discriminators
-export const GeneralSkillModel = SkillConfigModel.discriminator<GeneralSkillConfig>('general', GeneralSkillSchema);
-export const ClassSkillModel = SkillConfigModel.discriminator<ClassSkillConfig>('class', ClassSkillSchema);
-export const RoleSkillModel = SkillConfigModel.discriminator<RoleSkillConfig>('role', RoleSkillSchema);
+export const GeneralSkillModel = SkillConfigModel.discriminator<GeneralSkillConfig>(SKILL_TYPE.GENERAL, GeneralSkillSchema);
+export const ClassSkillModel = SkillConfigModel.discriminator<ClassSkillConfig>(SKILL_TYPE.CLASS, ClassSkillSchema);
+export const CombatSkillModel = SkillConfigModel.discriminator<CombatSkillConfig>(SKILL_TYPE.COMBAT, CombatSkillSchema);

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import type { AccessoryItemConfig, ArmorItemConfig, BackpackItemConfig, ItemConfig, ShieldItemConfig, UtilityItemConfig, WeaponItemConfig } from '@/types/config/item';
 import { ITEM_TYPE, ITEM_RARITY, ITEM_EQUIPPED_SLOT, ITEM_ARMOR_TYPE, MAX_ITEM_REFINED_LEVEL } from '@/constants/config/item';
-import { EffectConfigSchema, LocalizeTextSchema } from './common';
+import { baseConfigFields, EffectSchema } from './common';
 
 // Sub-schemas for nested objects
 const ItemDamageSchema = new mongoose.Schema({
-  type: { type: String, required: true },
+  damageTypeId: { type: String, required: true },
   value: { type: mongoose.Schema.Types.Mixed, required: true },
   modifierFormula: { type: String }
 }, { _id: false });
@@ -32,18 +32,8 @@ const ArmorPropertySchema = new mongoose.Schema({
 }, { _id: false });
 
 // Base fields for all items
-const baseFields = {
-  id: { type: String, required: true, unique: true },
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema },
-  icon: { type: String },
-  thumbnail: { type: String },
-  tags: { type: [ String ], default: [] },
-  ownerId: { type: String, required: true },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  gameSystemId: { type: String, required: true },
-  type: { type: String, enum: Object.values(ITEM_TYPE), required: true },
+const baseItemFields = {
+  ...baseConfigFields,
   rarity: { type: String, enum: Object.values(ITEM_RARITY), required: true },
   weight: { type: Number, required: true },
   price: { type: Number, required: true },
@@ -55,13 +45,12 @@ const baseFields = {
   armor: { type: ItemArmorSchema },
   actionIds: { type: [ String ] },
   downtimeActivityIds: { type: [ String ] },
-  effects: { type: [ EffectConfigSchema ], default: [] }
+  effects: { type: [ EffectSchema ] }
 };
 
 // Discriminator schemas for each item type
 const WeaponItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.WEAPON ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.MAIN_HANDED, ITEM_EQUIPPED_SLOT.OFF_HANDED ], required: true },
   durabilityPoints: { type: Number, required: true },
   damage: { type: ItemDamageSchema, required: true },
@@ -70,8 +59,7 @@ const WeaponItemSchema = new mongoose.Schema({
 });
 
 const ArmorItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.ARMOR ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.ARMOR ], required: true },
   durabilityPoints: { type: Number, required: true },
   armor: { type: ItemArmorSchema, required: true },
@@ -80,8 +68,7 @@ const ArmorItemSchema = new mongoose.Schema({
 });
 
 const ShieldItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.SHIELD ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.MAIN_HANDED, ITEM_EQUIPPED_SLOT.OFF_HANDED ], required: true },
   durabilityPoints: { type: Number, required: true },
   armor: { type: ItemArmorSchema, required: true },
@@ -90,38 +77,34 @@ const ShieldItemSchema = new mongoose.Schema({
 });
 
 const AccessoryItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.ACCESSORY ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.ACCESSORY ], required: true },
   utilitySlots: { type: Number }
 });
 
 const BackpackItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.BACKPACK ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.BACKPACK ], required: true },
   space: { type: [ Number ], required: true }
 });
 
 const UtilityItemSchema = new mongoose.Schema({
-  ...baseFields,
-  type: { type: String, enum: [ ITEM_TYPE.UTILITY ], required: true },
+  ...baseItemFields,
   equippedSlot: { type: String, enum: [ ITEM_EQUIPPED_SLOT.UTILITY ], required: true }
 });
 
 // Main ItemConfig schema using discriminators
-const ItemConfigSchema = new mongoose.Schema(baseFields, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
+const ItemConfigSchema = new mongoose.Schema<ItemConfig>(baseItemFields, { versionKey: false, timestamps: true, discriminatorKey: 'type' });
 
-ItemConfigSchema.index({ id: 1 }, { unique: true });
 ItemConfigSchema.index({ gameSystemId: 1 });
 ItemConfigSchema.index({ ownerId: 1 });
 
 export const ItemConfigModel = mongoose.models.ItemConfig || mongoose.model<ItemConfig>('ItemConfig', ItemConfigSchema);
 
 // Attach and export discriminators
-export const WeaponItemModel = ItemConfigModel.discriminator<WeaponItemConfig>('weapon', WeaponItemSchema);
-export const ArmorItemModel = ItemConfigModel.discriminator<ArmorItemConfig>('armor', ArmorItemSchema);
-export const ShieldItemModel = ItemConfigModel.discriminator<ShieldItemConfig>('shield', ShieldItemSchema);
-export const AccessoryItemModel = ItemConfigModel.discriminator<AccessoryItemConfig>('accessory', AccessoryItemSchema);
-export const BackpackItemModel = ItemConfigModel.discriminator<BackpackItemConfig>('backpack', BackpackItemSchema);
-export const UtilityItemModel = ItemConfigModel.discriminator<UtilityItemConfig>('utility', UtilityItemSchema);
+export const WeaponItemModel = ItemConfigModel.discriminator<WeaponItemConfig>(ITEM_TYPE.WEAPON, WeaponItemSchema);
+export const ArmorItemModel = ItemConfigModel.discriminator<ArmorItemConfig>(ITEM_TYPE.ARMOR, ArmorItemSchema);
+export const ShieldItemModel = ItemConfigModel.discriminator<ShieldItemConfig>(ITEM_TYPE.SHIELD, ShieldItemSchema);
+export const AccessoryItemModel = ItemConfigModel.discriminator<AccessoryItemConfig>(ITEM_TYPE.ACCESSORY, AccessoryItemSchema);
+export const BackpackItemModel = ItemConfigModel.discriminator<BackpackItemConfig>(ITEM_TYPE.BACKPACK, BackpackItemSchema);
+export const UtilityItemModel = ItemConfigModel.discriminator<UtilityItemConfig>(ITEM_TYPE.UTILITY, UtilityItemSchema);

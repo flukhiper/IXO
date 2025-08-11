@@ -1,22 +1,31 @@
-export const ACTION_ITEM_OPTION = {
-  RANGE: 'item-range',
-  ARMOR_CLASS: 'item-armor-class',
-  ARMOR_CLASS_VALUE_ONLY: 'item-armor-class-value-only',
-  DAMAGE: 'item-damage',
-  DAMAGE_VALUE_ONLY: 'item-damage-value-only',
-  RESTORE: 'item-restore',
-  RESTORE_VALUE_ONLY: 'item-restore-value-only',
-  PROFICIENCY: 'item-proficiency'
-} as const;
+export const ACTION_OPTION = {
+  // Item
+  ITEM_RANGE: 'item-range',
+  ITEM_ARMOR_CLASS: 'item-armor-class',
+  ITEM_ARMOR_CLASS_VALUE_ONLY: 'item-armor-class-value-only',
+  ITEM_DAMAGE: 'item-damage',
+  ITEM_DAMAGE_VALUE_ONLY: 'item-damage-value-only',
+  ITEM_PROFICIENCY: 'item-proficiency',
+  
+  // Damage
+  ACTION_DAMAGE: 'action-damage',
 
-export const ACTION_COST_OPTION = {
-  ALL: 'all'
+  // Armor Class
+  ACTION_ARMOR_CLASS: 'action-armor-class',
+
+  // Cost
+  ALL_COST: -1
 } as const;
 
 export const ACTION_USAGE_TYPE = {
-  COMBAT: 'combat',
-  REST: 'rest',
-  LONG_REST: 'long-rest'
+  PER_COMBAT: 'per-combat',
+  PER_REST: 'per-rest',
+  PER_LONG_REST: 'per-long-rest'
+} as const;
+
+export const ACTION_RANGE_TYPE = {
+  MELEE: 'melee',
+  RANGE: 'range'
 } as const;
 
 export const ACTION_HIT_TYPE = {
@@ -52,11 +61,17 @@ export const ACTION_STACK_TYPE = {
   OVERWRITE: 'overwrite'
 } as const;
 
+export const ACTION_ARCHETYPE = {
+  ATTACK: 'attack',
+  DEFENSE: 'defense',
+  SUPPORT: 'support',
+  UTILITY: 'utility'
+} as const;
+
 export const ACTION_TYPE = {
-  COMMAND: 'command',
-  ITEM: 'item',
-  UTILITY: 'utility',
-  SPECIAL: 'special'
+  COMMON: 'common',
+  COMBAT_ART: 'combat-art',
+  COMMAND: 'command'
 } as const;
 
 export const MAX_ACTION_LEVEL = [ 1, 2, 3, 4, 5 ] as const;

@@ -1,10 +1,16 @@
 import mongoose from 'mongoose';
 import type { ConditionConfig } from '@/types/config/condition';
-import { LocalizeTextSchema } from './common';
+import { baseConfigFields, EffectSchema } from './common';
 import { CONDITION_STACK_TYPE } from '@/constants/config/condition';
 
+const ConditionStackSchema = new mongoose.Schema({
+  type: { type: String, enum: Object.values(CONDITION_STACK_TYPE), required: true },
+  id: { type: String, required: true },
+  priority: { type: Number }
+}, { _id: false });
+
 const ConditionDamageSchema = new mongoose.Schema({
-  type: { type: String, required: true },
+  damageTypeId: { type: String, required: true },
   value: { type: mongoose.Schema.Types.Mixed, required: true },
   modifierFormula: { type: String }
 }, { _id: false });
@@ -16,27 +22,14 @@ const ConditionRestoreSchema = new mongoose.Schema({
 }, { _id: false });
 
 const ConditionConfigSchema = new mongoose.Schema<ConditionConfig>({
-  id: { type: String, required: true, unique: true },
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema },
-  icon: { type: String },
-  thumbnail: { type: String },
-  tags: { type: [ String ], default: [] },
-  ownerId: { type: String, required: true },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  gameSystemId: { type: String, required: true },
-  isSystem: { type: Boolean, required: true },
-  stackId: { type: String, required: true },
-  stackType: { type: String, enum: Object.values(CONDITION_STACK_TYPE), required: true },
-  stackPriority: { type: Number },
+  ...baseConfigFields,
+  stack: { type: ConditionStackSchema, required: true },
   duration: { type: Number },
-  damage: { type: [ ConditionDamageSchema ], default: [] },
-  restore: { type: [ ConditionRestoreSchema ], default: [] },
-  effects: { type: [ mongoose.Schema.Types.Mixed ], default: [] }
+  damage: { type: [ ConditionDamageSchema ] },
+  restore: { type: [ ConditionRestoreSchema ] },
+  effects: { type: [ EffectSchema ] }
 }, { versionKey: false, timestamps: true });
 
-ConditionConfigSchema.index({ id: 1 }, { unique: true });
 ConditionConfigSchema.index({ gameSystemId: 1 });
 ConditionConfigSchema.index({ ownerId: 1 }); 
 

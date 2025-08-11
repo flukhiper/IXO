@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import type { GameSystem } from '@/types/config/gameSystem';
-import { LocalizeTextSchema } from './common';
+import { baseConfigFields } from './common';
 
 const CharacterBuildingRuleSchema = new mongoose.Schema({
   startingTraitValue: { type: Number, required: true },
@@ -20,22 +20,13 @@ const GamePlayRuleSchema = new mongoose.Schema({
 }, { _id: false });
 
 const GameSystemConfigSchema = new mongoose.Schema<GameSystem>({
-  id: { type: String, required: true, unique: true },
-  name: { type: LocalizeTextSchema, required: true },
-  description: { type: LocalizeTextSchema },
-  icon: { type: String },
-  thumbnail: { type: String },
-  tags: { type: [ String ], default: [] },
-  ownerId: { type: String, required: true },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
+  ...baseConfigFields,
   isPublic: { type: Boolean, required: true },
   characterBuildingRule: { type: CharacterBuildingRuleSchema, required: true },
   gamePlayRule: { type: GamePlayRuleSchema, required: true }
 }, { versionKey: false, timestamps: true });
 
 // Indexes for efficient queries
-GameSystemConfigSchema.index({ id: 1 }, { unique: true });
 GameSystemConfigSchema.index({ ownerId: 1 });
 GameSystemConfigSchema.index({ isPublic: 1 });
 

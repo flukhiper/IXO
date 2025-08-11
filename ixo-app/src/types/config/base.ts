@@ -14,6 +14,8 @@ export interface BaseModel {
   ownerId: string; // User ID of the creator
   createdAt?: string;
   updatedAt?: string;
+
+  isSystem: boolean;
 }
 export interface BaseConfig extends BaseModel {
   gameSystemId: string; // Reference to GameSystem

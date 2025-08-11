@@ -1,0 +1,1 @@
+export const MAX_TRAIT_VALUE = [ 1, 2 ] as const;
