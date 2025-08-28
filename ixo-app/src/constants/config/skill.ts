@@ -17,4 +17,10 @@ export const SKILL_ARCHETYPE = {
   UTILITY: 'utility'
 } as const;
 
+export const SKILL_USAGE_TYPE = {
+  PER_COMBAT: 'per-combat',
+  PER_REST: 'per-rest',
+  PER_LONG_REST: 'per-long-rest'
+} as const;
+
 export const MAX_SKILL_TIER = [ 1, 2, 3 ] as const;

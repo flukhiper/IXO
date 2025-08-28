@@ -6,6 +6,7 @@ import type { EffectSelectionRule } from './effect';
 
 export interface TraitConfig extends BaseConfig {
   value: typeof MAX_TRAIT_VALUE[number];
+  proficiencyPoints?: number;
   actionSelectionRule?: ActionSelectionRule[];
   downtimeSelectionRule?: DowntimeSelectionRule[];
   effectSelectionRule?: EffectSelectionRule[];

@@ -6,6 +6,7 @@ import { MAX_TRAIT_VALUE } from '@/constants/config/trait';
 const TraitConfigSchema = new mongoose.Schema<TraitConfig>({
   ...baseConfigFields,
   value: { type: Number, enum: MAX_TRAIT_VALUE, required: true },
+  proficiencyPoints: { type: Number },
   effectSelectionRule: { type: [ EffectSelectionRuleSchema ] },
   actionSelectionRule: { type: [ ActionSelectionRuleSchema ] },
   downtimeSelectionRule: { type: [ DowntimeSelectionRuleSchema ] }

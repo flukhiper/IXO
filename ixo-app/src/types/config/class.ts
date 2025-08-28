@@ -20,5 +20,5 @@ export type ClassGain = {
 export type ClassGainLevel = typeof MAX_CLASS_GAIN_LEVEL[number];
 
 export interface ClassConfig extends BaseConfig {
-  gain: Record<ClassGainLevel, ClassGain>;
+  gain: Partial<Record<ClassGainLevel, ClassGain>>;
 }

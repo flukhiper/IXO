@@ -1,4 +1,4 @@
-import { MAX_SKILL_TIER, SKILL_ARCHETYPE, SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
+import { MAX_SKILL_TIER, SKILL_ARCHETYPE, SKILL_STACK_TYPE, SKILL_TYPE, SKILL_USAGE_TYPE } from '@/constants/config/skill';
 import type { BaseConfig } from './base';
 import type { EffectSelectionRule } from './effect';
 import type { ActionSelectionRule } from './action';
@@ -21,6 +21,7 @@ export type SkillStackType = typeof SKILL_STACK_TYPE[keyof typeof SKILL_STACK_TY
 export type SkillTier = typeof MAX_SKILL_TIER[number];
 export type SkillType = typeof SKILL_TYPE[keyof typeof SKILL_TYPE];
 export type SkillArchetype = typeof SKILL_ARCHETYPE[keyof typeof SKILL_ARCHETYPE];
+export type SkillUsageType = typeof SKILL_USAGE_TYPE[keyof typeof SKILL_USAGE_TYPE];
 export interface BaseSkillConfig extends BaseConfig {
   type: SkillType;
   archetype: SkillArchetype;
@@ -31,6 +32,11 @@ export interface BaseSkillConfig extends BaseConfig {
   };
 
   usedSlots?: number;
+
+  usage?: {
+    type: SkillUsageType;
+    maxNumberOfUse: number;
+  };
   
   actionSelectionRule?: ActionSelectionRule[];
   downtimeSelectionRule?: DowntimeSelectionRule[];

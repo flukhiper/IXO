@@ -71,7 +71,8 @@ export const ACTION_ARCHETYPE = {
 export const ACTION_TYPE = {
   COMMON: 'common',
   COMBAT_ART: 'combat-art',
-  COMMAND: 'command'
+  COMMAND: 'command',
+  SPECIAL: 'special'
 } as const;
 
 export const MAX_ACTION_LEVEL = [ 1, 2, 3, 4, 5 ] as const;

@@ -1,4 +1,4 @@
-import { EFFECT_ID_OPTION, EFFECT_TARGET_TYPE, EFFECT_TYPE } from '@/constants/config/effect';
+import { EFFECT_ID_OPTION, EFFECT_PROFICIENCY_LEVEL, EFFECT_TARGET_TYPE, EFFECT_TYPE } from '@/constants/config/effect';
 import type { LocalizeText } from './common';
 import type { ConstantValue, DiceValue } from './base';
 
@@ -14,18 +14,18 @@ export interface BaseEffect {
   type: EffectType;
 }
 
-export type TalentEffectType = 
-  | typeof EFFECT_TYPE.TERRIBLE
-  | typeof EFFECT_TYPE.UNFAVORED
-  | typeof EFFECT_TYPE.AVERAGE
-  | typeof EFFECT_TYPE.LEARNED
-  | typeof EFFECT_TYPE.PROMISING
-  | typeof EFFECT_TYPE.EXPERT
-  | typeof EFFECT_TYPE.PRODIGIOUS
-  | typeof EFFECT_TYPE.GOD;
-export interface TalentEffect extends BaseEffect {
-  type: TalentEffectType;
+export type ProficiencyLevel = 
+  | typeof EFFECT_PROFICIENCY_LEVEL.TERRIBLE
+  | typeof EFFECT_PROFICIENCY_LEVEL.UNFAVORED
+  | typeof EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+  | typeof EFFECT_PROFICIENCY_LEVEL.EXPERT
+  | typeof EFFECT_PROFICIENCY_LEVEL.MASTER
+  | typeof EFFECT_PROFICIENCY_LEVEL.GENIUS;
+
+export interface ProficiencyEffect extends BaseEffect {
+  type: typeof EFFECT_TYPE.PROFICIENCY;
   attributeId: string | typeof EFFECT_ID_OPTION.ALL_SKILL | typeof EFFECT_ID_OPTION.ALL_SAVING;
+  level: ProficiencyLevel;
 }
 
 export interface BonusEffect extends BaseEffect {
@@ -61,7 +61,7 @@ export interface SpecialtyEffect extends BaseEffect {
 }
 
 export type Effect = 
-| TalentEffect
+| ProficiencyEffect
 | BonusEffect
 | AdvantageEffect
 | DamageBoostEffect

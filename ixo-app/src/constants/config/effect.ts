@@ -8,16 +8,18 @@ export const EFFECT_TARGET_TYPE = {
   STAT: 'stat'
 } as const;
 
-export const EFFECT_TYPE = {
-  // Talent
+export const EFFECT_PROFICIENCY_LEVEL = {
   TERRIBLE: 'terrible',
   UNFAVORED: 'unfavored',
-  AVERAGE: 'average',
-  LEARNED: 'learned',
-  PROMISING: 'promising',
+  PROFICIENCY: 'proficiency',
   EXPERT: 'expert',
-  PRODIGIOUS: 'prodigious',
-  GOD: 'god',
+  MASTER: 'master',
+  GENIUS: 'genius'
+};
+
+export const EFFECT_TYPE = {
+  // Proficiency
+  PROFICIENCY: 'proficiency',
 
   // Bonus
   BONUS: 'bonus',
