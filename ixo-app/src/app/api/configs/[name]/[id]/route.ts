@@ -17,7 +17,7 @@ import { ActionConfigService } from '@/services/config/ActionConfigService';
 import { AttributeConfigService } from '@/services/config/AttributeConfigService';
 import { ConditionConfigService } from '@/services/config/ConditionConfigService';
 import { CreatureConfigService } from '@/services/config/CreatureConfigService';
-import { OriginConfigService } from '@/services/config/OriginConfigService';
+import { OriginConfigService } from '@/services/config/FactionConfigService';
 
 const serviceMap = {
   character: new CharacterConfigService(),

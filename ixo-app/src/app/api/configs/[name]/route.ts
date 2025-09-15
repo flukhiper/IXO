@@ -8,7 +8,6 @@ import * as itemController from './controllers/item';
 import * as traitController from './controllers/trait';
 import * as proficiencyController from './controllers/proficiency';
 import * as statController from './controllers/stat';
-import * as classController from './controllers/class';
 import * as skillController from './controllers/skill';
 import * as actionController from './controllers/action';
 // ...add more as needed
@@ -20,7 +19,6 @@ const controllerMap = {
   trait: traitController,
   proficiency: proficiencyController,
   stat: statController,
-  class: classController,
   skill: skillController,
   action: actionController
   // ...add more as needed

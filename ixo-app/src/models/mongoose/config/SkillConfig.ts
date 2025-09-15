@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { ClassSkillConfig, CombatSkillConfig, GeneralSkillConfig, SkillConfig } from '@/types/config/skill';
+import type { CombatSkillConfig, GeneralSkillConfig, SkillConfig, SignatureSkillConfig } from '@/types/config/skill';
 import { ActionSelectionRuleSchema, baseConfigFields, DowntimeSelectionRuleSchema, EffectSchema } from './common';
 import { MAX_SKILL_TIER, SKILL_ARCHETYPE, SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
 
@@ -29,10 +29,8 @@ const GeneralSkillSchema = new mongoose.Schema({
   usedSlots: { type: Number, required: true }
 });
 
-const ClassSkillSchema = new mongoose.Schema({
+const SignatureSkillSchema = new mongoose.Schema({
   ...baseSkillFields,
-  classIds: { type: [ String ], required: true },
-  tier: { type: Number, enum: MAX_SKILL_TIER, required: true },
   usedSlots: { type: Number, required: true }
 });
 
@@ -52,5 +50,5 @@ export const SkillConfigModel = mongoose.models.SkillConfig || mongoose.model<Sk
 
 // Attach and export discriminators
 export const GeneralSkillModel = SkillConfigModel.discriminator<GeneralSkillConfig>(SKILL_TYPE.GENERAL, GeneralSkillSchema);
-export const ClassSkillModel = SkillConfigModel.discriminator<ClassSkillConfig>(SKILL_TYPE.CLASS, ClassSkillSchema);
+export const SignatureSkillModel = SkillConfigModel.discriminator<SignatureSkillConfig>(SKILL_TYPE.SIGNATURE, SignatureSkillSchema);
 export const CombatSkillModel = SkillConfigModel.discriminator<CombatSkillConfig>(SKILL_TYPE.COMBAT, CombatSkillSchema);

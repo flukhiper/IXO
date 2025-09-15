@@ -7,7 +7,6 @@ import { initMongo, disconnectMongo } from '@/libs/mongodb';
 import { TraitConfigService } from '@/services/config/TraitConfigService';
 import { SkillConfigService } from '@/services/config/SkillConfigService';
 import { ItemConfigService } from '@/services/config/ItemConfigService';
-import { ClassConfigService } from '@/services/config/ClassConfigService';
 import { StatConfigService } from '@/services/config/StatConfigService';
 import { ProficiencyConfigService } from '@/services/config/ProficiencyConfigService';
 import { GameSystemConfigService } from '@/services/config/GameSystemConfigService';
@@ -17,12 +16,11 @@ import { DamageScaleConfigService } from '@/services/config/DamageScaleConfigSer
 import { ActionConfigService } from '@/services/config/ActionConfigService';
 import { AttributeConfigService } from '@/services/config/AttributeConfigService';
 import { ConditionConfigService } from '@/services/config/ConditionConfigService';
-import { OriginConfigService } from '@/services/config/OriginConfigService';
+import { OriginConfigService } from '@/services/config/FactionConfigService';
 
 import * as trait from '@/mocks/config/trait';
 import * as skill from '@/mocks/config/skill';
 import * as item from '@/mocks/config/item';
-import * as classConfig from '@/mocks/config/class';
 import * as stat from '@/mocks/config/stat';
 import * as proficiency from '@/mocks/config/proficiency';
 import * as gameSystem from '@/mocks/config/gameSystem';
@@ -32,7 +30,7 @@ import * as damageScale from '@/mocks/config/damageScale';
 import * as action from '@/mocks/config/action';
 import * as attribute from '@/mocks/config/attribute';
 import * as condition from '@/mocks/config/condition';
-import * as origin from '@/mocks/config/origin';
+import * as origin from '@/mocks/config/faction';
 
 function getData (mod: any) {
   return mod.default || mod?.mock;
@@ -42,7 +40,6 @@ const configMap = [
   { service: new TraitConfigService(), data: getData(trait) },
   { service: new SkillConfigService(), data: getData(skill) },
   { service: new ItemConfigService(), data: getData(item) },
-  { service: new ClassConfigService(), data: getData(classConfig) },
   { service: new StatConfigService(), data: getData(stat) },
   { service: new ProficiencyConfigService(), data: getData(proficiency) },
   { service: new GameSystemConfigService(), data: getData(gameSystem) },

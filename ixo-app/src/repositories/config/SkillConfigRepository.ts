@@ -1,21 +1,21 @@
 import { BaseRepository } from '../BaseRepository';
-import { SkillConfigModel, GeneralSkillModel, ClassSkillModel, RoleSkillModel } from '@/models/mongoose/config/SkillConfig';
-import type { SkillConfig, GeneralSkillConfig, ClassSkillConfig, RoleSkillConfig } from '@/types/config/skill';
+import { SkillConfigModel, GeneralSkillModel, CombatSkillModel, SignatureSkillModel } from '@/models/mongoose/config/SkillConfig';
+import type { SkillConfig, GeneralSkillConfig, CombatSkillConfig, SignatureSkillConfig } from '@/types/config/skill';
 import type { Model } from 'mongoose';
 import { SKILL_TYPE } from '@/constants/config/skill';
 
 export class SkillConfigRepository extends BaseRepository<SkillConfig> {
   protected generalSkillModel: Model<GeneralSkillConfig>;
 
-  protected classSkillModel: Model<ClassSkillConfig>;
+  protected signatureSkillModel: Model<SignatureSkillConfig>;
 
-  protected roleSkillModel: Model<RoleSkillConfig>;
+  protected combatSkillModel: Model<CombatSkillConfig>;
 
   constructor () {
     super(SkillConfigModel);
     this.generalSkillModel = GeneralSkillModel;
-    this.classSkillModel = ClassSkillModel;
-    this.roleSkillModel = RoleSkillModel;
+    this.signatureSkillModel = SignatureSkillModel;
+    this.combatSkillModel = CombatSkillModel;
   }
 
   async saveOne (item: SkillConfig) {
@@ -23,11 +23,11 @@ export class SkillConfigRepository extends BaseRepository<SkillConfig> {
       case SKILL_TYPE.GENERAL:
         await this.generalSkillModel.updateOne({ id: item.id }, { $set: item }, { upsert: true });
         break;
-      case SKILL_TYPE.CLASS:
-        await this.classSkillModel.updateOne({ id: item.id }, { $set: item }, { upsert: true });
+      case SKILL_TYPE.SIGNATURE:
+        await this.signatureSkillModel.updateOne({ id: item.id }, { $set: item }, { upsert: true });
         break;
-      case SKILL_TYPE.ROLE:
-        await this.roleSkillModel.updateOne({ id: item.id }, { $set: item }, { upsert: true });
+      case SKILL_TYPE.COMBAT:
+        await this.combatSkillModel.updateOne({ id: item.id }, { $set: item }, { upsert: true });
         break;
       default:
         await super.saveOne(item);
@@ -40,11 +40,11 @@ export class SkillConfigRepository extends BaseRepository<SkillConfig> {
       case SKILL_TYPE.GENERAL:
         await this.generalSkillModel.updateOne({ id }, { $set: update });
         break;
-      case SKILL_TYPE.CLASS:
-        await this.classSkillModel.updateOne({ id }, { $set: update });
+      case SKILL_TYPE.SIGNATURE:
+        await this.signatureSkillModel.updateOne({ id }, { $set: update });
         break;
-      case SKILL_TYPE.ROLE:
-        await this.roleSkillModel.updateOne({ id }, { $set: update });
+      case SKILL_TYPE.COMBAT:
+        await this.combatSkillModel.updateOne({ id }, { $set: update });
         break;
       default:
         await super.updateOne(id, update);
@@ -74,8 +74,8 @@ export class SkillConfigRepository extends BaseRepository<SkillConfig> {
             }))
           );
           break;
-        case SKILL_TYPE.CLASS:
-          await this.classSkillModel.bulkWrite(
+        case SKILL_TYPE.SIGNATURE:
+          await this.signatureSkillModel.bulkWrite(
             group.map(item => ({
               updateOne: {
                 filter: { id: item.id },
@@ -85,8 +85,8 @@ export class SkillConfigRepository extends BaseRepository<SkillConfig> {
             }))
           );
           break;
-        case SKILL_TYPE.ROLE:
-          await this.roleSkillModel.bulkWrite(
+        case SKILL_TYPE.COMBAT:
+          await this.combatSkillModel.bulkWrite(
             group.map(item => ({
               updateOne: {
                 filter: { id: item.id },

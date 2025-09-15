@@ -17,9 +17,11 @@ export const EFFECT_PROFICIENCY_LEVEL = {
   GENIUS: 'genius'
 };
 
+export const EFFECT_ACTIVATE_ON = {
+  ON_ATTRIBUTE_CHANGE: 'on-attribute-change'
+};
+
 export const EFFECT_TYPE = {
-  // Proficiency
-  PROFICIENCY: 'proficiency',
 
   // Bonus
   BONUS: 'bonus',
@@ -30,9 +32,21 @@ export const EFFECT_TYPE = {
   // Damage Boost
   DAMAGE_BOOST: 'damage-boost',
 
-  // Specialty
-  SPECIAL: 'special',
-
   // Condition
-  CONDITION: 'condition'
+  CONDITION: 'condition',
+
+  // Proficiency
+  PROFICIENCY: 'proficiency',
+
+  // Gain
+  GAIN: 'gain',
+
+  // Activate
+  ACTIVATE: 'activate',
+
+  // Prevent Condition
+  PREVENT_CONDITION: 'prevent-condition',
+
+  // Special
+  SPECIAL: 'special'
 } as const;

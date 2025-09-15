@@ -11,7 +11,10 @@ const CharacterBuildingRuleSchema = new mongoose.Schema({
   startingGolds: { type: Number, required: true },
   startingActionIds: { type: [ String ], required: true },
   startingDamageResistanceScaleId: { type: String, required: true },
-  characterMaxLevel: { type: Number, required: true }
+  startSignatureSkill: { type: Number, required: true },
+  startCharacterArchetype: { type: Number, required: true },
+  characterMaxLevel: { type: Number, required: true },
+  characterGain: { type: [ mongoose.Schema.Types.Mixed ], required: true }
 }, { _id: false });
 
 const GamePlayRuleSchema = new mongoose.Schema({

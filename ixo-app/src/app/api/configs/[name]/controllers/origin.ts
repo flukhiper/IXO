@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OriginConfigService } from '@/services/config/OriginConfigService';
+import { OriginConfigService } from '@/services/config/FactionConfigService';
 
 const service = new OriginConfigService();
 

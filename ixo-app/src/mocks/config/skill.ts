@@ -1,689 +1,958 @@
-import { EFFECT_PROFICIENCY_LEVEL, EFFECT_TARGET_TYPE, EFFECT_TYPE } from '@/constants/config/effect';
-import { SKILL_ARCHETYPE, SKILL_STACK_TYPE, SKILL_TYPE, SKILL_USAGE_TYPE } from '@/constants/config/skill';
-import type { SkillConfig } from '@/types/config/skill';
+import { EFFECT_ACTIVATE_ON, EFFECT_PROFICIENCY_LEVEL, EFFECT_TARGET_TYPE, EFFECT_TYPE } from '@/constants/config/effect';
+import { SKILL_STACK_TYPE, SKILL_TYPE } from '@/constants/config/skill';
+import type { FactionSkillConfig, SkillConfig, TraitSkillConfig } from '@/types/config/skill';
 
-export const mockSkills: SkillConfig[] = [];
-
-export const mockAttackSkills: SkillConfig[] = [
-  // Tier 1
+export const mockFactionSkills: FactionSkillConfig[] = [
   {
-    id: 'skill-quick-reaction',
+    id: 'skill-drifter-versatility',
     name: {
-      en: 'Quick Reaction',
-      th: 'การตอบสนองรวดเร็ว'
+      en: 'Drifter Versatility',
+      th: 'ความเชี่ยวชาญสารพัดของคนพเนจร'
     },
     description: {
-      en: 'You can react to an attack before it happens.',
-      th: 'คุณสามารถตอบสนองต่อการโจมตีก่อนที่จะเกิดขึ้น'
+      en: 'You are a master of adaptability. Every new journey, every new face, every new challenge adds a layer to your skill set, making you a jack-of-all-trades and a master of your own survival.',
+      th: 'เจ้าคือยอดนักปรับตัว ทุกการเดินทางครั้งใหม่ ทุกใบหน้าใหม่ ทุกความท้าทายใหม่ ล้วนเพิ่มพูนความสามารถของเจ้า ทำให้เจ้าเป็นผู้เชี่ยวชาญในทุกสิ่งและเป็นนายเหนือชีวิตรอดของตัวเอง'
     },
-    icon: 'skill-quick-reaction',
-    thumbnail: 'skill-quick-reaction',
-    tags: [ 'combat', 'attack' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: true,
-    type: SKILL_TYPE.COMBAT,
-    archetype: SKILL_ARCHETYPE.ATTACK,
+    type: SKILL_TYPE.FACTION,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'quick-reaction',
+      id: 'drifter-versatility',
       priority: 1
     },
-    tier: 1,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
           {
-            type: EFFECT_TYPE.BONUS,
-            target: EFFECT_TARGET_TYPE.ATTRIBUTE,
-            id: 'attribute-initiative',
-            modifierFormula: '2'
+            effects: [
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-power',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-endurance',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-stealth',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-acrobatics',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-sprint',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-perception',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-insight',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-instinct',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-tinker',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-operate',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-finesse',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-recall',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-deduction',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-analyze',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-persuasion',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-deception',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-intimidation',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'skill-check-performance',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              }
+            ],
+            numberOfSelections: 2
+          },
+          {
+            effects: [
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-strength',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-speed',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-sense',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-knowledge',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-technique',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              },
+              {
+                type: EFFECT_TYPE.PROFICIENCY,
+                attributeId: 'saving-check-presence',
+                level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+              }
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
   }
 ];
 
-export const mockDefenseSkills: SkillConfig[] = [
-  // Tier 2
+export const mockTraitSkills: TraitSkillConfig[] = [
+  // Dracari trait
   {
-    id: 'skill-vigilant',
-    name: { 
-      en: 'vigilant', 
-      th: 'เฝ้าระวัง' 
+    id: 'skill-blood-of-wrath',
+    name: {
+      en: 'Blood of Wrath',
+      th: 'เลือดแห่งโทสะ'
     },
-    description: { 
-      th: 'คุณไม่เคยปล่อยให้ตัวเองตกอยู่ในสภาพไร้การป้องกัน ดวงตาและสัญชาตญาณของคุณเฝ้าจับตามองทุกสิ่งรอบตัวอยู่เสมอ', 
-      en: 'You never let yourself be in a vulnerable position. Your eyes and instincts are always watching everything around you.'
+    description: {
+      en: 'When angry or injured, the body gains immense power like an awakened dragon.',
+      th: 'เมื่อโกรธหรือบาดเจ็บ ร่างกายจะเสริมพลังมหาศาลเหมือนพลังมังกรตื่น'
     },
-    icon: 'skill-vigilant',
-    thumbnail: 'skill-vigilant',
-    tags: [ 'special', 'defense' ],
-    ownerId: 'admin',
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'blood-of-wrath',
+      priority: 1
+    },
     gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
     isSystem: true,
-    type: SKILL_TYPE.COMBAT,
-    archetype: SKILL_ARCHETYPE.DEFENSE,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [
+              {
+                type: EFFECT_TYPE.ACTIVATE,
+                on: EFFECT_ACTIVATE_ON.ON_ATTRIBUTE_CHANGE,
+                attributeId: 'attribute-hit-points',
+                operator: '<',
+                formula: 'max(attribute-hit-points) / 2',
+                effects: [
+                  {
+                    type: EFFECT_TYPE.BONUS,
+                    target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                    id: 'attribute-str-based-damage',
+                    modifierFormula: 'ceil(character-level / 4) * 2'
+                  }
+                ]
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-scales-of-endurance',
+    name: {
+      th: 'เกล็ดแห่งความทนทาน',
+      en: 'Scales of Endurance'
+    },
+    description: {
+      th: 'เกล็ดป้องกันพลังเวทและการโจมตีทางกายภาพได้เหนือกว่ามนุษย์ทั่วไป',
+      en: 'Scales provide superior protection against magical and physical attacks compared to ordinary humans.'
+    },
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'vigilant',
+      id: 'scales-of-endurance',
       priority: 1
     },
-    tier: 2,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
-          {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'You cannot be surprised.',
-              th: 'คุณไม่สามารถถูกโจมตีแบบที่เผลอได้'
-            }
-          }
-        ],
-        numberOfSelections: 1
-      }
-    ]
-  },
-  // Tier 3
-  {
-    id: 'skill-sixth-sense',
-    name: { 
-      en: 'Sixth Sense', 
-      th: 'สัมผัสพิเศษ' 
-    },
-    description: { 
-      th: 'สัมผัสพิเศษที่ไม่น่าเป็นไปได้ บอกคุณล่วงหน้าว่าภัยกำลังมา แม้ก่อนที่ศัตรูจะขยับตัว', 
-      en: 'A heightened, improbable sense tells you in advance that danger is coming, even before an enemy moves.'
-    },
-    icon: 'skill-sixth-sense',
-    thumbnail: 'skill-sixth-sense',
-    tags: [ 'special', 'defense' ],
-    ownerId: 'admin',
     gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
     isSystem: true,
-    type: SKILL_TYPE.COMBAT,
-    archetype: SKILL_ARCHETYPE.DEFENSE,
-    stack: {
-      type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'sixth-sense',
-      priority: 1
-    },
-    tier: 3,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gain: {
+      1: {
+        effectSelectionRule: [
           {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'Whenever you are targeted by an attack roll, the attacker must roll with disadvantage.',
-              th: 'ทุกครั้งที่มีการทอยโจมตีที่มีเป้าหมายเป็นคุณ ให้ผู้โจมตีทอยด้วย ความเสียเปรียบ'
-            }
+            effects: [
+              {
+                type: EFFECT_TYPE.BONUS,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'attribute-damage-reduction',
+                modifierFormula: 'ceil(character-level / 4)'
+              }
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
-  }
-];
-
-export const mockGeneralSkills: SkillConfig[] = [
-  // Proficiency Skills
+    }
+  },
   {
-    id: 'skill-proficiency-skill',
+    id: 'skill-breath-of-dracari',
     name: {
-      en: 'Proficiency Skill',
-      th: 'ทักษะเชี่ยวชาญ'
+      th: 'ลมหายใจแห่งดราคาริ',
+      en: 'Breath of Dracari'
     },
     description: {
-      en: 'You have a proficiency in a skill.',
-      th: 'คุณมีความเชี่ยวชาญในทักษะหนึ่ง'
+      th: 'ลมหายใจของดราคาริสามารถปลดปล่อยเปลวเพลิงหรือคลื่นพลังทำลายล้าง',
+      en: 'Dracari breaths can unleash flames or destructive energy waves.'
     },
-    icon: 'skill-proficiency-skill',
-    thumbnail: 'skill-proficiency-skill',
-    tags: [ 'general' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.GENERAL,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'proficiency',
+      id: 'breath-of-dracari',
       priority: 1
     },
-    tier: 1,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
           {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-power',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-endurance',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-stealth',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-acrobatics',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-sprint',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-perception',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-insight',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-instinct',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-tinker',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-operate',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-finesse',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-recall',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deduction',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-analyze',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-persuasion',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deception',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-intimidation',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-performance',
-            level: EFFECT_PROFICIENCY_LEVEL.PROFICIENCY
+            actionIds: [ 
+              'action-fire-breath',
+              'action-frost-breath',
+              'action-lightning-breath',
+              'action-acid-breath',
+              'action-poison-breath'
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
   },
+  
+  // Syralis trait
   {
-    id: 'skill-expert-skill',
+    id: 'skill-syralis-charm',
     name: {
-      en: 'Expert Skill',
-      th: 'ทักษะผู้เชี่ยวชาญ'
+      th: 'เสียงแห่งความปรารถนา',
+      en: 'Echo of Desire'
     },
     description: {
-      en: 'You have an expertise in a skill.',
-      th: 'คุณมีความเชี่ยวชาญสูงสุดในทักษะหนึ่ง'
+      th: 'เสียงร้องหรือเสียงพูดมีผลสะกดใจ ทำให้ผู้ฟังคล้อยตามได้ง่าย',
+      en: 'Voice or speech has a mesmerizing effect, making listeners easily swayed.'
     },
-    icon: 'skill-expert-skill',
-    thumbnail: 'skill-expert-skill',
-    tags: [ 'general' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.GENERAL,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'proficiency',
-      priority: 2
+      id: 'echo-of-desire',
+      priority: 1
     },
-    tier: 2,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
           {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-power',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-endurance',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-stealth',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-acrobatics',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-sprint',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-perception',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-insight',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-instinct',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-tinker',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-operate',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-finesse',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-recall',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deduction',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-analyze',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-persuasion',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deception',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-intimidation',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-performance',
-            level: EFFECT_PROFICIENCY_LEVEL.EXPERT
+            actionIds: [ 'action-luring-song' ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
   },
   {
-    id: 'skill-master-skill',
+    id: 'skill-tideform',
     name: {
-      en: 'Master Skill',
-      th: 'ทักษะผู้เชี่ยวชาญสูงสุด'
+      th: 'รูปลักษณ์แห่งน้ำ',
+      en: 'Tideform'
     },
     description: {
-      en: 'You have a mastery in a skill.',
-      th: 'คุณมีความสามารถสูงสุดในทักษะหนึ่ง'
+      th: 'สามารถควบคุมสภาพน้ำรอบตัวเพื่ออำพราง',
+      en: 'Can control water conditions around them for concealment.'
     },
-    icon: 'skill-master-skill',
-    thumbnail: 'skill-master-skill',
-    tags: [ 'general' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.GENERAL,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'proficiency',
-      priority: 3
+      id: 'tideform',
+      priority: 1
     },
-    tier: 3,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
           {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-power',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-endurance',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-stealth',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-acrobatics',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-sprint',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-perception',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-insight',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-instinct',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-tinker',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-operate',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-finesse',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-recall',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deduction',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-analyze',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-persuasion',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-deception',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-intimidation',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
-          },
-          {
-            type: EFFECT_TYPE.PROFICIENCY,
-            attributeId: 'skill-check-performance',
-            level: EFFECT_PROFICIENCY_LEVEL.MASTER
+            actionIds: [ 'action-water-cloak' ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
+  },
+  {
+    id: 'skill-alluring-presence',
+    name: {
+      th: 'เสน่ห์ดึงดูดใจ',
+      en: 'Alluring Presence'
+    },
+    description: {
+      th: 'ร่างกายและบุคลิกมีแรงดึงดูดเหนือธรรมชาติ สร้างความหลงใหลแม้ไม่ตั้งใจ',
+      en: 'Body and personality have supernatural allure, creating fascination even unintentionally.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'alluring-presence',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'เสน่ห์ดึงดูดใจ',
+                  en: 'Alluring Presence'
+                },
+                flavorText: {
+                  th: 'ร่างกายและบุคลิกมีแรงดึงดูดเหนือธรรมชาติ สร้างความหลงใหลแม้ไม่ตั้งใจ',
+                  en: 'Body and personality have supernatural allure, creating fascination even unintentionally.'
+                }
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
   },
 
-  // Tier 1
+  // Elvarin trait
   {
-    id: 'skill-jack-of-all-trades',
-    name: { 
-      en: 'Jack of All Trades', 
-      th: 'สารพัดช่าง' 
+    id: 'skill-endless-vitality',
+    name: {
+      th: 'พลังชีวิตไม่สิ้นสุด',
+      en: 'Endless Vitality'
     },
-    description: { 
-      th: 'คุณอาจไม่ใช่ผู้เชี่ยวชาญ แต่ก็ไม่เคยปล่อยให้ตัวเองไร้ความสามารถในเรื่องใด คุณพร้อมหยิบใช้ทักษะที่จำเป็นในทุกสถานการณ์ แม้จะไม่ใช่ในระดับสูงสุดก็ตาม', 
-      en: 'You may not be an expert, but you have never let yourself be without a skill in any situation. You are ready to use the skills you need in every situation, even if they are not at the highest level.'
+    description: {
+      th: 'ร่างกายไม่เสื่อมถอย ไม่แก่ชรา ไม่โรยรา รักษาสภาพเยาว์วัยและความแข็งแกร่งไว้ตลอดกาล',
+      en: 'The body does not decay, age, or wither, maintaining youth and strength for eternity.'
     },
-    icon: 'skill-jack-of-all-trades',
-    thumbnail: 'skill-jack-of-all-trades',
-    tags: [ 'special', 'general' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.GENERAL,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'jack-of-all-trades',
+      id: 'endless-vitality',
       priority: 1
     },
-    tier: 1,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
           {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'You get a bonus equal to the level of highest class / 3 rounded down to any roll using a skill you do not have proficiency in.',
-              th: 'คุณได้รับโบนัสเท่ากับ เลเวลคลาสสูงสุด / 3 ปัดลง ในการทอยที่ใช้ทักษะใดๆ ที่คุณไม่มีความเชี่ยวชาญ'
-            }
+            effects: [ 
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'พลังชีวิตไม่สิ้นสุด',
+                  en: 'Endless Vitality'
+                },
+                flavorText: {
+                  th: 'ร่างกายไม่เสื่อมถอย ไม่แก่ชรา ไม่โรยรา รักษาสภาพเยาว์วัยและความแข็งแกร่งไว้ตลอดกาล',
+                  en: 'The body does not decay, age, or wither, maintaining youth and strength for eternity.'
+                }
+              }
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
-  }
-];
+    }
+  },
+  {
+    id: 'skill-timeless-memory',
+    name: {
+      th: 'ความทรงจำนิรันดร์',
+      en: 'Timeless Memory'
+    },
+    description: {
+      th: 'ความทรงจำทั้งหมดคงอยู่ ไม่สูญหายแม้กาลเวลาผ่านไป สามารถจดจำทุกประสบการณ์และบทเรียนได้อย่างสมบูรณ์',
+      en: 'All memories remain intact, never lost even as time passes. Can remember every experience and lesson perfectly.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'timeless-memory',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [ 
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'ความทรงจำนิรันดร์',
+                  en: 'Timeless Memory'
+                },
+                flavorText: {
+                  th: 'ความทรงจำทั้งหมดคงอยู่ ไม่สูญหายแม้กาลเวลาผ่านไป สามารถจดจำทุกประสบการณ์และบทเรียนได้อย่างสมบูรณ์',
+                  en: 'All memories remain intact, never lost even as time passes. Can remember every experience and lesson perfectly.'
+                }
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-unfading-will',
+    name: {
+      th: 'เจตจำนงไม่เสื่อม',
+      en: 'Unfading Will'
+    },
+    description: {
+      th: 'จิตใจไม่เคยอ่อนแอหรือสิ้นหวัง ไม่หวั่นไหวต่อการกัดกร่อนใด ๆ ความมุ่งมั่นและความทะเยอทะยานไม่เคยลดลง',
+      en: 'The mind never weakens or despairs, unshaken by any form of erosion. Determination and ambition never diminish.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'unfading-will',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [ 
+              {
+                type: EFFECT_TYPE.PREVENT_CONDITION,
+                conditionIds: [ 'condition-sleeping', 'condition-frightened' ]
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
 
-export const mockClassMeisterSkills: SkillConfig[] = [
+  // Teknith trait
   {
-    id: 'skill-gundam-blue-print',
-    name: { 
-      en: 'Gundam Blue Print', 
-      th: 'แบบแปลน กันดั้ม' 
+    id: 'skill-body-modification',
+    name: {
+      th: 'การดัดแปลงร่างกาย',
+      en: 'Body Modification'
     },
-    description: { 
-      th: 'จากความปรารถนาที่สั่งสมมานาน คุณได้วางแผนอย่างละเอียดว่ากันดั้มในอุดมคติของคุณต้องสร้างอย่างไร', 
-      en: 'From a long-held desire, you have meticulously planned how your ideal Gundam must be built.'
+    description: {
+      th: 'สามารถติดตั้งหรือเปลี่ยนอวัยวะเทียม/อุปกรณ์เสริม เช่น แขนกล เลนส์ตาพิเศษ ระบบเร่งประสาท เพื่อปรับปรุงความสามารถของร่างกาย',
+      en: 'Can install or replace artificial organs/equipment such as mechanical arms, special lenses, neural acceleration systems to enhance body capabilities.'
     },
-    icon: 'skill-gundam-blue-print',
-    thumbnail: 'skill-gundam-blue-print',
-    tags: [ 'special', 'meister' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.CLASS,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'gundam-blue-print',
+      id: 'body-modification',
       priority: 1
     },
-    classIds: [ 'class-meister' ],
-    tier: 1,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
           {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'You have a complete blueprint for building a Gundam in your mind. The conditions and methods for its construction are subject to the Game Master\'s discretion. You cannot remove this skill.',
-              th: 'คุณมีแบบแปลนการสร้างกันดั้มอยู่ในหัว เงื่อนไขและวิธีการสร้างขึ้นอยู่กับดุลยพินิจของเกมมาสเตอร์ คุณไม่สามารถถอดสกิลนี้ออกได้'
-            }
+            effects: [
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-power',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-endurance',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-stealth',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-acrobatics',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-sprint',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-perception',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-insight',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-instinct',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-tinker',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-operate',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-finesse',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-recall',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-deduction',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-analyze',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-persuasion',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-deception',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-intimidation',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-performance',
+                isDisadvantage: false
+              }
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
   },
   {
-    id: 'skill-meister-survival',
-    name: { 
-      en: 'Meister Survival', 
-      th: 'ทักษะเอาตัวรอดของ ไมสเตอร์' 
+    id: 'skill-reboot-protocol',
+    name: {
+      th: 'โปรโตคอลรีบูต',
+      en: 'Reboot Protocol'
     },
-    description: { 
-      th: 'น็อตหนึ่งตัว ลวดหนึ่งเดียว หรือแม้แต่เทปพันสายไฟก็กลายสามารถกลายเป็นฟันเฟือง ให้ยังสามารถออกไปต่อสู้ได้', 
-      en: 'One bolt, one wire, or even a twisted wire can become a gear, allowing you to keep fighting.'
+    description: {
+      th: 'เมื่อร่างกายเสียหายจนถึงขีดสุด สามารถรีบูตเพื่อฟื้นฟูสภาพให้กลับมาใช้งานได้ แม้ไม่สมบูรณ์แบบ แต่ยัง "ดำเนินต่อไป"',
+      en: 'When the body is damaged to the limit, can reboot to restore functionality. Even if not perfect, they can still "continue on."'
     },
-    icon: 'skill-meister-survival',
-    thumbnail: 'skill-meister-survival',
-    tags: [ 'special', 'meister' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.CLASS,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'meister-survival',
+      id: 'reboot-protocol',
       priority: 1
     },
-    classIds: [ 'class-meister' ],
-    tier: 2,
-    usedSlots: 1,
-    usage: {
-      type: SKILL_USAGE_TYPE.PER_REST,
-      maxNumberOfUse: 1
-    },
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
           {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'Before combat, you can repair your mecha to restore its durability by 1d8.',
-              th: 'ก่อนเริ่มการต่อสู้ คุณสามารถซ่อมบำรุงฉุกเฉินให้หุ่นยนต์ของคุณ ฟื้นค่าความคงทาน เท่ากับ 1d8'
-            }
+            actionIds: [ 'action-reboot' ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
   },
   {
-    id: 'skill-new-type',
-    name: { 
-      en: 'New Type', 
-      th: 'นิวไทป์' 
+    id: 'skill-neuron-network',
+    name: {
+      th: 'เครือข่ายประสาท',
+      en: 'Neuron Network'
     },
-    description: { 
-      en: 'I am a Gundam.', 
-      th: 'ฉันคือ กันดั้ม' 
+    description: {
+      th: 'ทุก Teknith เชื่อมโยงกันผ่านระบบประสาทพลังงาน สามารถแบ่งปันข้อมูล ความทรงจำ หรือประสบการณ์แบบเรียลไทม์',
+      en: 'All Teknith are connected through an energy neural system, able to share data, memories, or experiences in real-time.'
     },
-    icon: 'skill-new-type',
-    thumbnail: 'skill-new-type',
-    tags: [ 'special', 'meister' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    isSystem: false,
-    type: SKILL_TYPE.CLASS,
-    archetype: SKILL_ARCHETYPE.UTILITY,
+    type: SKILL_TYPE.TRAIT,
     stack: {
       type: SKILL_STACK_TYPE.OVERWRITE,
-      id: 'new-type',
+      id: 'neuron-network',
       priority: 1
     },
-    classIds: [ 'class-meister' ],
-    tier: 3,
-    usedSlots: 1,
-    effectSelectionRule: [
-      {
-        effects: [
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
           {
-            type: EFFECT_TYPE.SPECIAL,
-            flavorText: {
-              en: 'While driving a mecha, you get a +2 bonus to your armor class and a bonus when rolling attack rolls.',
-              th: 'ในขณะที่ขับหุ่นยนต์ คุณได้รับโบนัส +2 ให้กับระดับเกราะ และได้รับความได้เปรียบเปรียบเมื่อทอยโจมตี'
-            }
+            effects: [ 
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'เครือข่ายประสาท',
+                  en: 'Neuron Network'
+                },
+                flavorText: {
+                  th: 'ทุก Teknith เชื่อมโยงกันผ่านระบบประสาทพลังงาน สามารถแบ่งปันข้อมูล ความทรงจำ หรือประสบการณ์แบบเรียลไทม์',
+                  en: 'All Teknith are connected through an energy neural system, able to share data, memories, or experiences in real-time.'
+                }
+              }
+            ],
+            numberOfSelections: 1
           }
-        ],
-        numberOfSelections: 1
+        ]
       }
-    ]
+    }
+  },
+
+  // Veylin trait
+  {
+    id: 'skill-adaptive-form',
+    name: {
+      th: 'การปรับตัวเลียนแบบ',
+      en: 'Adaptive Form'
+    },
+    description: {
+      th: 'สามารถกลายร่างเลียนแบบรูปลักษณ์ของเผ่าพันธุ์อื่นได้เกือบสมบูรณ์ แต่ไม่สามารถเลียนแบบพลังพิเศษเชิงลึกได้ทั้งหมด',
+      en: 'Can transform to mimic the appearance of other races almost perfectly, but cannot fully replicate their deep special powers.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'adaptive-form',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
+          {
+            actionIds: [ 'action-transform' ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-mimic-insight',
+    name: {
+      th: 'ความเข้าใจแห่งการเลียนแบบ',
+      en: 'Mimic Insight'
+    },
+    description: {
+      th: 'ใช้เขาพิเศษเพื่ออ่านท่าทาง จังหวะการเคลื่อนไหว หรือโครงสร้างร่างกายของเป้าหมาย เพื่อใช้ในการปลอมตัว',
+      en: 'Uses special horns to read posture, movement patterns, or body structure of targets for use in disguise.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'mimic-insight',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [ 
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'ความเข้าใจแห่งการเลียนแบบ',
+                  en: 'Mimic\'s Insight'
+                },
+                flavorText: {
+                  th: 'ใช้เขาพิเศษเพื่ออ่านท่าทาง จังหวะการเคลื่อนไหว หรือโครงสร้างร่างกายของเป้าหมาย เพื่อใช้ในการปลอมตัว',
+                  en: 'Uses special horns to read posture, movement patterns, or body structure of targets for use in disguise.'
+                }
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-echo-aptitude',
+    name: {
+      th: 'ความสามารถสะท้อน',
+      en: 'Echo Aptitude'
+    },
+    description: {
+      th: 'สามารถเรียนรู้และจำลองความสามารถที่ผู้อื่นใช้ได้ชั่วคราว ระยะเวลาและความสมบูรณ์ขึ้นอยู่กับความซับซ้อนของความสามารถ',
+      en: 'Can learn and temporarily replicate abilities used by others. Duration and completeness depend on the complexity of the ability.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'echo-aptitude',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
+          {
+            actionIds: [ 'action-mimic' ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+
+  // Furalis trait
+  {
+    id: 'skill-natural-affinity',
+    name: {
+      th: 'ความผูกพันกับธรรมชาติ',
+      en: 'Natural Affinity'
+    },
+    description: {
+      th: 'รับรู้สภาพแวดล้อมรอบตัวได้อย่างแม่นยำ ทั้งการเปลี่ยนแปลงอากาศ กลิ่น เสียง หรือพลังชีวิตของสิ่งมีชีวิต',
+      en: 'Can accurately perceive the surrounding environment, including weather changes, scents, sounds, or life force of living beings.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'natural-affinity',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-perception',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-insight',
+                isDisadvantage: false
+              },
+              {
+                type: EFFECT_TYPE.ADVANTAGE,
+                target: EFFECT_TARGET_TYPE.ATTRIBUTE,
+                id: 'skill-check-instinct',
+                isDisadvantage: false
+              }
+            ],
+            numberOfSelections: 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-beastfolk-reflex',
+    name: {
+      th: 'ปฏิกิริยาสัตว์ป่า',
+      en: 'Beastfolk Reflex'
+    },
+    description: {
+      th: 'ปฏิกิริยาตอบสนองเร็วและยืดหยุ่นกว่ามนุษย์ทั่วไป ทำให้รอดพ้นจากภัยโดยไม่ต้องคิดล่วงหน้า',
+      en: 'Faster and more flexible reflexes than ordinary humans, allowing escape from danger without prior thought.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'beastfolk-reflex',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        actionSelectionRule: [
+          {
+            actionIds: [ 'action-reflex' ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'skill-harmonized-life',
+    name: {
+      th: 'ชีวิตที่สอดคล้อง',
+      en: 'Harmonized Life'
+    },
+    description: {
+      th: 'ปรับร่างกายและจิตใจให้สอดคล้องกับธรรมชาติรอบตัว เช่น ความร้อน, ความเร็ว, หรือแรงกายตามสภาพแวดล้อม',
+      en: 'Adapts body and mind to harmonize with surrounding nature, such as heat, speed, or physical strength according to environmental conditions.'
+    },
+    type: SKILL_TYPE.TRAIT,
+    stack: {
+      type: SKILL_STACK_TYPE.OVERWRITE,
+      id: 'harmonized-life',
+      priority: 1
+    },
+    gameSystemId: 'fractured-faction',
+    ownerId: 'admin',
+    isSystem: true,
+    gain: {
+      1: {
+        effectSelectionRule: [
+          {
+            effects: [ 
+              {
+                type: EFFECT_TYPE.SPECIAL,
+                name: {
+                  th: 'ชีวิตที่สอดคล้อง',
+                  en: 'Harmonized Life'
+                },
+                flavorText: {
+                  th: 'ปรับร่างกายและจิตใจให้สอดคล้องกับธรรมชาติรอบตัว เช่น ความร้อน, ความเร็ว, หรือแรงกายตามสภาพแวดล้อม',
+                  en: 'Adapts body and mind to harmonize with surrounding nature, such as heat, speed, or physical strength according to environmental conditions.'
+                }
+              }
+            ],
+            numberOfSelections: 1
+          }
+        ]
+      }
+    }
   }
 ];
 
 // Combined export for all attributes
-export const mockAllSkills = [
-  ...mockSkills,
-  ...mockAttackSkills,
-  ...mockDefenseSkills,
-  ...mockGeneralSkills,
-  ...mockClassMeisterSkills
+export const mockAllSkills: SkillConfig[] = [
+  ...mockFactionSkills,
+  ...mockTraitSkills
 ];
 
 export default mockAllSkills;
