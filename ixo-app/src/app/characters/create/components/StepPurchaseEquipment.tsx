@@ -8,7 +8,7 @@ import ItemShop from './inventory/ItemShop';
 import ItemDetailsModal from './inventory/ItemDetailsModal';
 import type { ItemConfig } from '@/types/config/item';
 import type { InventoryItem, InventoryPosition } from '@/types/runtime/inventory';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 
 interface StepPurchaseEquipmentProps {
   gameSystemId: string;

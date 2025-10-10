@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 
 export function useCharacterConfig (gameSystemId?: string) {
   const [ config, setConfig ] = useState<CharacterConfig | null>(null);

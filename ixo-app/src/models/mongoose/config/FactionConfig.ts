@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { FactionConfig } from '@/types/config/faction';
+import type { FactionConfig } from '@/types/config/background';
 import { ActionSelectionRuleSchema, baseConfigFields, DowntimeSelectionRuleSchema, EffectSelectionRuleSchema } from './common';
 
 const FactionConfigSchema = new mongoose.Schema<FactionConfig>({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProficiencies } from '../hooks/useProficiencies';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 
 interface StepAssignProficiencyProps {
   gameSystemId: string;

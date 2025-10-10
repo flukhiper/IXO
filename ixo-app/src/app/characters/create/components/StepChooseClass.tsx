@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useClasses } from '../hooks/useClasses';
 import { useCachedSkills } from '../hooks/useCachedSkills';
 import { useCachedActions } from '../hooks/useCachedActions';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 import type { ClassConfig, ClassGainConfig } from '@/types/config/class';
 import type { StatConfig } from '@/types/config/stat';
 import type { AnyAttributeConfig } from '@/types/config/attribute';

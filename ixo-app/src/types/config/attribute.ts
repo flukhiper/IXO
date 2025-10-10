@@ -1,39 +1,37 @@
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import type { BaseConfig, DiceValue, ConstantValue } from './base';
+import { NONE_VALUE } from '@/constants/config/common';
+import { BaseConfig } from './common';
 
 export type AttributeType = typeof ATTRIBUTE_TYPE[keyof typeof ATTRIBUTE_TYPE];
-
 export interface BaseAttributeConfig extends BaseConfig {
   type: AttributeType;
   
-  value: ConstantValue | DiceValue;
   abbreviation: string;
-  modiferFomular?: string;
+  modifier: string | typeof NONE_VALUE.STRING;
 }
 
 export interface ResourceAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.RESOURCE;
-  value: ConstantValue;
+  value: number;
 }
 
 export interface ConstantAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.CONSTANT;
-  value: ConstantValue;
+  value: number;
 }
-
 export interface DiceAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.DICE;
-  value: DiceValue;
+  value: string;
 }
 
 export interface SkillCheckAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.SKILL_CHECK;
-  value: DiceValue;
+  value: string;
 }
 
 export interface SavingThrowAttributeConfig extends BaseAttributeConfig {
   type: typeof ATTRIBUTE_TYPE.SAVING_CHECK;
-  value: DiceValue;
+  value: string;
 }
 
 export type AnyAttributeConfig =

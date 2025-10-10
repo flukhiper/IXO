@@ -1,4 +1,4 @@
-import type { FactionConfig } from '@/types/config/faction';
+import type { FactionConfig } from '@/types/config/background';
 
 export const mockFactions: FactionConfig[] = [
   {

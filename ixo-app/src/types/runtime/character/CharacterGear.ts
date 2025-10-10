@@ -1,4 +1,4 @@
-import { EquipmentSlotType } from '@/types/config/character';
+import { EquipmentSlotType } from '@/types/config/gameSystem';
 
 // Gear slot mapping for non-weapon equipment (e.g., apparel, accessory, backpack, utility)
 export type GearSlotType = Exclude<EquipmentSlotType, 'main-hand' | 'off-hand'>;

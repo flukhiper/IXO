@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useGameSystems } from '../hooks/useGameSystems';
 import { useCharacterConfig } from '../hooks/useCharacterConfig';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 
 interface StepChooseGamesystemProps {
   gameSystemId: string;

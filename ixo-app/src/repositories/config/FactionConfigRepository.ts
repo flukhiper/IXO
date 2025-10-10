@@ -1,6 +1,6 @@
 import { BaseRepository } from '../BaseRepository';
 import { FactionConfigModel } from '@/models/mongoose/config/FactionConfig';
-import type { FactionConfig } from '@/types/config/faction';
+import type { FactionConfig } from '@/types/config/background';
 
 export class FactionConfigRepository extends BaseRepository<FactionConfig> {
   constructor () {

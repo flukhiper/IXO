@@ -1,4 +1,4 @@
-import { OriginConfig } from '@/types/config/faction';
+import { OriginConfig } from '@/types/config/background';
 import { useEffect, useState } from 'react';
 
 

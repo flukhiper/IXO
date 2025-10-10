@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTraits } from '../hooks/useTraits';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 import type { TraitConfig } from '@/types/config/trait';
 
 interface StepChooseTraitProps {

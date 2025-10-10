@@ -14,7 +14,7 @@ import type { CharacterWeaponSet } from '@/types/runtime/character/CharacterGear
 import type { CharacterInventory } from '@/types/runtime/character/CharacterInventory';
 import type { CharacterAttribute } from '@/types/runtime/character/CharacterAttribute';
 import type { CharacterGearSlot } from '@/types/runtime/character/CharacterGear';
-import type { CharacterConfig } from '@/types/config/character';
+import type { CharacterConfig } from '@/types/config/gameSystem';
 import StepChooseGamesystem from './components/StepChooseGamesystem';
 import StepBasicInfo from './components/StepBasicInfo';
 import StepChooseOrigin from './components/StepChooseOrigin';
