@@ -30,11 +30,11 @@ export interface SkillCheckAttributeConfig extends BaseAttributeConfig {
 }
 
 export interface SavingThrowAttributeConfig extends BaseAttributeConfig {
-  type: typeof ATTRIBUTE_TYPE.SAVING_CHECK;
+  type: typeof ATTRIBUTE_TYPE.SAVING_THROW;
   value: string;
 }
 
-export type AnyAttributeConfig =
+export type AttributeConfig =
   | ResourceAttributeConfig
   | ConstantAttributeConfig
   | DiceAttributeConfig

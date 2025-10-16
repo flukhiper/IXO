@@ -3,5 +3,5 @@ export const ATTRIBUTE_TYPE = {
   CONSTANT: 'constant',
   DICE: 'dice',
   SKILL_CHECK: 'skill-check',
-  SAVING_CHECK: 'saving-check'
+  SAVING_THROW: 'saving-throw'
 } as const;

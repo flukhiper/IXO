@@ -1,812 +1,848 @@
-import type { AnyAttributeConfig } from '@/types/config/attribute';
 import { ATTRIBUTE_TYPE } from '@/constants/config/attribute';
-import { VALUE_TYPE } from '@/constants/config/base';
+import { NONE_VALUE } from '@/constants/config/common';
+import type { AttributeConfig, ConstantAttributeConfig, DiceAttributeConfig, ResourceAttributeConfig, SavingThrowAttributeConfig, SkillCheckAttributeConfig } from '@/types/config/attribute';
 
-export const mockAttributes: AnyAttributeConfig[] = [
-  // Resource Attributes
+export const mockBaseResourceAttributes: ResourceAttributeConfig[] = [
   {
-    id: 'attribute-hit-points',
-    name: { en: 'Hit Points', th: 'แต้มชีวิต' },
-    description: { en: 'Your character\'s health.', th: 'สุขภาพของตัวละคร' },
-    icon: 'heart',
-    thumbnail: 'hp-attribute.jpg',
-    tags: [ 'resource', 'health', 'core' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'hit-points',
+    name: {
+      en: 'Hit Points',
+      th: 'พลังชีวิต'
+    },
+    description: {
+      en: 'Hit Points is the number of hit points a character has.',
+      th: 'พลังชีวิตคือค่าพลังชีวิตของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 8 },
-    modiferFomular: 'stat-strength + ((8 + stat-strength) * (character-level - 1))',
-    isSystem: true,
-    abbreviation: 'HP'
+    value: 8,
+    abbreviation: 'HP',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-temp-hit-points',
-    name: { en: 'Temporary Hit Points', th: 'แต้มชีวิตชั่วคราว' },
-    description: { en: 'A temporary buffer of health.', th: 'เกราะป้องกันสุขภาพชั่วคราว' },
-    icon: 'shield',
-    thumbnail: 'temp-hit-points-attribute.jpg',
-    tags: [ 'resource', 'temporary', 'health' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'temporary-hit-points',
+    name: {
+      en: 'Temporary Hit Points',
+      th: 'พลังชีวิตชั่วคลาว'
+    },
+    description: {
+      en: 'Temporary Hit Points is the number of temporary hit points a character has.',
+      th: 'พลังชีวิตชั่วคลาวคือค่าพลังชีวิตชั่วคลาวของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    isSystem: true,
-    abbreviation: 'Temp HP'
+    value: 0,
+    abbreviation: 'Temporary HP',
+    modifier: NONE_VALUE.STRING,
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-focus-points',
-    name: { en: 'Focus Points', th: 'แต้มโฟกัส' },
-    description: { en: 'Fuel for special abilities and Commands.', th: 'เชื้อเพลิงสำหรับความสามารถพิเศษและคำสั่ง' },
-    icon: 'brain',
-    thumbnail: 'fp-attribute.jpg',
-    tags: [ 'resource', 'focus', 'abilities' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'focus-points',
+    name: {
+      en: 'Focus Points',
+      th: 'พลังสมาธิ'
+    },
+    description: {
+      en: 'Focus Points is the number of focus points a character has.',
+      th: 'พลังสมาธิคือค่าพลังสมาธิของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 5 },
-    isSystem: true,
-    abbreviation: 'FP'
+    value: 0,
+    abbreviation: 'FP',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-action-points',
-    name: { en: 'Action Points', th: 'แต้มแอคชั่น' },
-    description: { en: 'Used to perform actions on your turn.', th: 'ใช้เพื่อทำการกระทำในเทิร์นของคุณ' },
-    icon: 'sword',
-    thumbnail: 'ap-attribute.jpg',
-    tags: [ 'resource', 'action', 'combat' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'action-points',
+    name: {
+      en: 'Action Points',
+      th: 'พลังการกระทำ'
+    },
+    description: {
+      en: 'Action Points is the number of action points a character has.',
+      th: 'พลังการกระทำคือค่าพลังการกระทำของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 2 },
-    isSystem: true,
-    abbreviation: 'AP'
+    value: 2,
+    abbreviation: 'AP',
+    modifier: NONE_VALUE.STRING,
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-reaction-points',
-    name: { en: 'Reaction Points', th: 'แต้มปฏิกิริยา' },
-    description: { en: 'Used to perform reactions outside your turn.', th: 'ใช้เพื่อทำปฏิกิริยานอกเทิร์นของคุณ' },
-    icon: 'lightning-bolt',
-    thumbnail: 'rp-attribute.jpg',
-    tags: [ 'resource', 'reaction', 'combat' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'reaction-points',
+    name: {
+      en: 'Reaction Points',
+      th: 'พลังการตอบสนอง'
+    },
+    description: {
+      en: 'Reaction Points is the number of reaction points a character has.',
+      th: 'พลังการตอบสนองคือค่าพลังการตอบสนองของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 1 },
-    isSystem: true,
-    abbreviation: 'RP'
+    value: 1,
+    abbreviation: 'RP',
+    modifier: NONE_VALUE.STRING,
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-short-rest-downtime-points',
-    name: { en: 'Short Rest Downtime Points', th: 'แต้มเวลาพักระยะสั้น' },
-    description: { en: 'Used for activities during a short rest.', th: 'ใช้สำหรับกิจกรรมในช่วงเวลาพักสั้น' },
-    icon: 'clock',
-    thumbnail: 'short-downtime-points-attribute.jpg',
-    tags: [ 'resource', 'downtime', 'short' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'movement',
+    name: {
+      en: 'Movement',
+      th: 'การเคลื่อนที่'
+    },
+    description: {
+      en: 'Movement is the number of movement points a character has.',
+      th: 'การเคลื่อนที่คือค่าการเคลื่อนที่ของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 2 },
-    isSystem: true,
-    abbreviation: 'Short DP'
+    value: 6,
+    abbreviation: 'Movement',
+    modifier: 'floor(stat(AGI)/2) + floor(stat(STR)/2)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-long-rest-downtime-points',
-    name: { en: 'Long Rest Downtime Points', th: 'แต้มเวลาพักระยะยาว' },
-    description: { en: 'Used for activities during a long rest.', th: 'ใช้สำหรับกิจกรรมในช่วงเวลาพักยาว' },
-    icon: 'calendar',
-    thumbnail: 'long-downtime-points-attribute.jpg',
-    tags: [ 'resource', 'downtime', 'long' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'short-rest-points',
+    name: {
+      en: 'Short Rest Points',
+      th: 'ความสามารถการพักผ่อนระยะสั้น'
+    },
+    description: {
+      en: 'Short Rest Points is the ability to rest for a short period of time.',
+      th: 'ความสามารถการพักผ่อนระยะสั้นคือค่าความสามารถการพักผ่อนระยะสั้นของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
-    isSystem: true,
-    abbreviation: 'Long DP'
+    value: 2,
+    abbreviation: 'Short RP',
+    modifier: NONE_VALUE.STRING,
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-movement-speed',
-    name: { en: 'Movement Speed', th: 'ความเร็วเคลื่อนไหว' },
-    description: { en: 'How far you can move in meters.', th: 'ระยะทางที่คุณสามารถเคลื่อนไหวได้เป็นเมตร' },
-    icon: 'running',
-    thumbnail: 'ms-attribute.jpg',
-    tags: [ 'resource', 'movement', 'speed' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'long-rest-points',
+    name: {
+      en: 'Long Rest Points',
+      th: 'ความสามารถการพักผ่อนระยะยาว'
+    },
+    description: {
+      en: 'Long Rest Points is the ability to rest for a long period of time.',
+      th: 'ความสามารถการพักผ่อนระยะยาวคือค่าความสามารถการพักผ่อนระยะยาวของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'MS'
+    value: 6,
+    abbreviation: 'Long RP',
+    modifier: NONE_VALUE.STRING,
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-carrying-capacity',
-    name: { en: 'Carrying Capacity', th: 'ความสามารถในการแบก' },
-    description: { en: 'How much weight you can carry.', th: 'น้ำหนักที่คุณสามารถแบกได้' },
-    icon: 'weight',
-    thumbnail: 'cc-attribute.jpg',
-    tags: [ 'resource', 'carrying', 'weight' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'carrying-capacity',
+    name: {
+      en: 'Carrying Capacity',
+      th: 'ความสามารถการรับน้ำหนัก'
+    },
+    description: {
+      en: 'Carrying Capacity is the ability to carry a weight.',
+      th: 'ความสามารถการรับน้ำหนักคือค่าความสามารถการรับน้ำหนักของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 140 },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'CC'
+    value: 140,
+    abbreviation: 'CC',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-action-slots',
-    name: { en: 'Action Slots', th: 'ช่องแอคชั่น' },
-    description: { en: 'How many active actions you can have prepared.', th: 'จำนวนการกระทำที่คุณสามารถเตรียมพร้อมได้' },
-    icon: 'slots',
-    thumbnail: 'as-attribute.jpg',
-    tags: [ 'resource', 'actions', 'slots' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'art-slots',
+    name: {
+      en: 'Art Slots',
+      th: 'ความสามารถการจดจำกระบวนท่า'
+    },
+    description: {
+      en: 'Art Slots is the ability to memorize actions.',
+      th: 'ความสามารถในการจดจำกระบวนท่าคือค่าความสามารถในการจดจำกระบวนท่าของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'AS'
+    value: 3,
+    abbreviation: 'AS',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-skill-slots',
-    name: { en: 'Skill Slots', th: 'ช่องทักษะ' },
-    description: { en: 'How many active skills you can have prepared.', th: 'จำนวนทักษะที่คุณสามารถเตรียมพร้อมได้' },
-    icon: 'skill-slots',
-    thumbnail: 'ss-attribute.jpg',
-    tags: [ 'resource', 'skills', 'slots' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'skill-slots',
+    name: {
+      en: 'Skill Slots',
+      th: 'ความสามารถการจดจำทักษะ'
+    },
+    description: {
+      en: 'Skill Slots is the ability to memorize skills.',
+      th: 'ความสามารถในการจดจำทักษะคือค่าความสามารถในการจดจำทักษะของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 5 },
-    modiferFomular: 'floor(stat-knowledge/3)',
-    isSystem: true,
-    abbreviation: 'SS'
-  },
-  {
-    id: 'attribute-death-counter',
-    name: { en: 'Death Counter', th: 'ตัวนับความตาย' },
-    description: { en: 'Used for counting how many times you fail Death saving check.', th: 'ใช้สำหรับนับจำนวนครั้งที่คุณล้มเหลวในการตรวจสอบความตาย' },
-    icon: 'skull',
-    thumbnail: 'death-counter-attribute.jpg',
-    tags: [ 'resource', 'death', 'counter' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.RESOURCE,
-    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
-    isSystem: true,
-    abbreviation: 'Death Counter'
-  },
+    value: 3,
+    abbreviation: 'SS',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
+  }
+];
 
-  // Constant Attributes
+export const mockBaseConstantAttributes: ConstantAttributeConfig[] = [
   {
-    id: 'attribute-restore-focus-points',
-    name: { en: 'Restore Focus Points', th: 'ฟื้นฟูแต้มโฟกัส' },
-    description: { en: 'How effective it is when gathering focus.', th: 'ประสิทธิภาพในการรวบรวมโฟกัส' },
-    icon: 'restore',
-    thumbnail: 'res-focus-points-attribute.jpg',
-    tags: [ 'constant', 'focus', 'restore' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'restore-focus-points',
+    name: {
+      en: 'Restore Focus Points',
+      th: 'การฟื้นฟูพลังสมาธิ'
+    },
+    description: {
+      en: 'Restore Focus Points is the ability to restore focus points.',
+      th: 'การฟื้นฟูพลังสมาธิคือค่าการฟื้นฟูพลังสมาธิของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'floor(stat-sense/2)',
-    isSystem: true,
-    abbreviation: 'Res FP'
+    value: 1,
+    abbreviation: 'Restore FP',
+    modifier: 'floor(stat(SEN)/2)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-str-based-damage',
-    name: { en: 'STR-based Damage', th: 'ความเสียหายจากความแข็งแกร่ง' },
-    description: { en: 'Bonus damage for Strength-based attacks.', th: 'ความเสียหายเพิ่มเติมสำหรับการโจมตีที่ใช้ความแข็งแกร่ง' },
-    icon: 'sword-damage',
-    thumbnail: 'str-dmg-attribute.jpg',
-    tags: [ 'constant', 'damage', 'strength' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'evasion-class',
+    name: {
+      en: 'Evasion Class',
+      th: 'ความสามารถการหลบหลีก'
+    },
+    description: {
+      en: 'Evasion Class is the ability to evade attacks.',
+      th: 'ความสามารถการหลบหลีกคือค่าความสามารถการหลบหลีกของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'STR Dmg'
+    value: 10,
+    abbreviation: 'EC',
+    modifier: 'stat(AGI)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-tec-based-damage',
-    name: { en: 'TEC-based Damage', th: 'ความเสียหายจากเทคนิค' },
-    description: { en: 'Bonus damage for Technique-based attacks.', th: 'ความเสียหายเพิ่มเติมสำหรับการโจมตีที่ใช้เทคนิค' },
-    icon: 'precision-damage',
-    thumbnail: 'tec-dmg-attribute.jpg',
-    tags: [ 'constant', 'damage', 'technique' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'block-bonus',
+    name: {
+      en: 'Block Bonus',
+      th: 'ความสามารถการป้องกัน'
+    },
+    description: {
+      en: 'Block Bonus is the ability to block attacks.',
+      th: 'ความสามารถการป้องกันคือค่าความสามารถการป้องกันของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'floor(stat-technique/2)',
-    isSystem: true,
-    abbreviation: 'TEC Dmg'
+    value: 0,
+    abbreviation: 'BB',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-difficulty-class',
-    name: { en: 'Difficulty Class', th: 'ระดับความยาก' },
-    description: { en: 'The base DC for effects you create.', th: 'ระดับความยากพื้นฐานสำหรับเอฟเฟกต์ที่คุณสร้าง' },
-    icon: 'target-dc',
-    thumbnail: 'dc-attribute.jpg',
-    tags: [ 'constant', 'dc', 'effects' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'difficulty-class',
+    name: {
+      en: 'Difficulty Class',
+      th: 'ความยากในการยับยั้ง'
+    },
+    description: {
+      en: 'Difficulty Class is the ability to resist physical activities.',
+      th: 'ความยากในการยับยั้งคือค่าความยากในการยับยั้งของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 10 },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'DC'
+    value: 10,
+    abbreviation: 'DC',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-damage-reduction',
-    name: { en: 'Damage Reduction', th: 'การลดความเสียหาย' },
-    description: { en: 'Reduces incoming damage.', th: 'ลดความเสียหายที่เข้ามา' },
-    icon: 'shield-reduction',
-    thumbnail: 'dr-attribute.jpg',
-    tags: [ 'constant', 'damage-reduction', 'defense' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'influence-bonus',
+    name: {
+      en: 'Influence Bonus',
+      th: 'ความสามารถการส่งอิทธิพล'
+    },
+    description: {
+      en: 'Influence Bonus is the ability to influence others.',
+      th: 'ความสามารถการส่งอิทธิพลคือค่าความสามารถการส่งอิทธิพลของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'floor(stat-strength/2)',
-    isSystem: true,
-    abbreviation: 'DR'
+    value: 0,
+    abbreviation: 'IC',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-armor-class',
-    name: { en: 'Armor Class', th: 'ระดับเกราะ' },
-    description: { en: 'Your base defense against attacks.', th: 'การป้องกันพื้นฐานของคุณต่อการโจมตี' },
-    icon: 'armor',
-    thumbnail: 'ac-attribute.jpg',
-    tags: [ 'constant', 'armor', 'defense' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'damage-reduction',
+    name: {
+      en: 'Damage Reduction',
+      th: 'ความสามารถการลดความเสียหาย'
+    },
+    description: {
+      en: 'Damage Reduction is the ability to reduce damage.',
+      th: 'ความสามารถการลดความเสียหายคือค่าความสามารถการลดความเสียหายของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 10 },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'AC'
+    value: 0,
+    abbreviation: 'DR',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-armor-block',
-    name: { en: 'Armor Block', th: 'การบล็อกเกราะ' },
-    description: { en: 'Bonus AC when you perform a block.', th: 'AC เพิ่มเติมเมื่อคุณทำการบล็อก' },
-    icon: 'block',
-    thumbnail: 'ab-attribute.jpg',
-    tags: [ 'constant', 'block', 'defense' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'jump-distance',
+    name: {
+      en: 'Jump Distance',
+      th: 'ความสามารถการกระโดด'
+    },
+    description: {
+      en: 'Jump Distance is the ability to jump a distance.',
+      th: 'ความสามารถการกระโดดคือค่าความสามารถการกระโดดของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'AB'
+    value: 3,
+    abbreviation: 'JD',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-influence-bonus',
-    name: { en: 'Influence Bonus', th: 'โบนัสอิทธิพล' },
-    description: { en: 'Bonus to certain social or healing abilities.', th: 'โบนัสสำหรับความสามารถทางสังคมหรือการรักษา' },
-    icon: 'influence',
-    thumbnail: 'ib-attribute.jpg',
-    tags: [ 'constant', 'influence', 'social' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'climb-distance',
+    name: {
+      en: 'Climb Distance',
+      th: 'ความสามารถการปีน'
+    },
+    description: {
+      en: 'Climb Distance is the ability to climb a distance.',
+      th: 'ความสามารถการปีนคือค่าความสามารถการปีนของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'floor(stat-presence/2)',
-    isSystem: true,
-    abbreviation: 'IB'
+    value: 1,
+    abbreviation: 'CD',
+    modifier: 'floor(stat(STR)/2)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-speed',
-    name: { en: 'Speed', th: 'ความเร็ว' },
-    description: { en: 'Raw speed value for comparisons.', th: 'ค่าความเร็วดิบสำหรับการเปรียบเทียบ' },
-    icon: 'speed',
-    thumbnail: 'speed-attribute.jpg',
-    tags: [ 'constant', 'speed', 'raw' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'swim-distance',
+    name: {
+      en: 'Swim Distance',
+      th: 'ความสามารถการว่ายน้ำ'
+    },
+    description: {
+      en: 'Swim Distance is the ability to swim a distance.',
+      th: 'ความสามารถการว่ายน้ำคือค่าความสามารถการว่ายน้ำของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 0 },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'Spd'
-  },
-  {
-    id: 'attribute-carrying-space-rows',
-    name: { en: 'Carrying Space Rows', th: 'แถวพื้นที่แบก' },
-    description: { en: 'Base inventory grid size.', th: 'ขนาดตารางคลังสินค้าพื้นฐาน' },
-    icon: 'grid-rows',
-    thumbnail: 'carrying-rows-attribute.jpg',
-    tags: [ 'constant', 'inventory', 'grid' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
-    isSystem: true,
-    abbreviation: 'CS Rows'
-  },
-  {
-    id: 'attribute-carrying-space-columns',
-    name: { en: 'Carrying Space Columns', th: 'คอลัมน์พื้นที่แบก' },
-    description: { en: 'Base inventory grid size.', th: 'ขนาดตารางคลังสินค้าพื้นฐาน' },
-    icon: 'grid-columns',
-    thumbnail: 'carrying-columns-attribute.jpg',
-    tags: [ 'constant', 'inventory', 'grid' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 6 },
-    isSystem: true,
-    abbreviation: 'CS Columns'
-  },
-  {
-    id: 'attribute-jump-distance',
-    name: { en: 'Jump Distance', th: 'ระยะการกระโดด' },
-    description: { en: 'How far you can jump.', th: 'ระยะทางที่คุณสามารถกระโดดได้' },
-    icon: 'jump',
-    thumbnail: 'jd-attribute.jpg',
-    tags: [ 'constant', 'jump', 'movement' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 3 },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'JD'
-  },
-  {
-    id: 'attribute-climb-distance',
-    name: { en: 'Climb Distance', th: 'ระยะการปีน' },
-    description: { en: 'How far you can climb in one action.', th: 'ระยะทางที่คุณสามารถปีนได้ในหนึ่งการกระทำ' },
-    icon: 'climb',
-    thumbnail: 'cd-attribute.jpg',
-    tags: [ 'constant', 'climb', 'movement' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.CONSTANT,
-    value: { type: VALUE_TYPE.CONSTANT, value: 1 },
-    modiferFomular: 'floor(stat-strength/2)',
-    isSystem: true,
-    abbreviation: 'CD'
-  },
+    value: 1,
+    abbreviation: 'SD',
+    modifier: 'floor(stat(STR)/2)',
+    gameSystemId: 'fracture-fiction'
+  }
+];
 
-  // Dice Attributes
+export const mockBaseDiceAttributes: DiceAttributeConfig[] = [
   {
-    id: 'attribute-initiative',
-    name: { en: 'Initiative', th: 'การริเริ่ม' },
-    description: { en: 'Determines turn order in combat.', th: 'กำหนดลำดับเทิร์นในการต่อสู้' },
-    icon: 'initiative',
-    thumbnail: 'initiative-attribute.jpg',
-    tags: [ 'dice', 'initiative', 'combat' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'initiative-roll',
+    name: {
+      en: 'Initiative Roll',
+      th: 'ความสามารถการชิงลำดับ'
+    },
+    description: {
+      en: 'Initiative Roll is the ability to roll a die.',
+      th: 'ความสามารถการชิงลำดับคือค่าความสามารถการชิงลำดับของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.DICE,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-sense',
-    isSystem: true,
-    abbreviation: 'Initiative'
+    value: '2d10',
+    abbreviation: 'Initiative',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'attribute-attack-roll',
-    name: { en: 'Attack Roll', th: 'ทอยโจมตี' },
-    description: { en: 'Your roll to hit an enemy.', th: 'การทอยของคุณเพื่อโจมตีศัตรู' },
-    icon: 'attack-roll',
-    thumbnail: 'ar-attribute.jpg',
-    tags: [ 'dice', 'attack', 'combat' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'attack-roll',
+    name: {
+      en: 'Attack Roll',
+      th: 'ความสามารถการโจมตี'
+    },
+    description: {
+      en: 'Attack Roll is the ability to roll a die.',
+      th: 'ความสามารถการโจมตีคือค่าความสามารถการโจมตีของตัวละคร'
+    },
     type: ATTRIBUTE_TYPE.DICE,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'AR'
+    value: '2d10',
+    abbreviation: 'AR',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
   }
 ];
 
-// Skill Check Attributes
-export const mockSkillChecks: AnyAttributeConfig[] = [
+export const mockBaseSkillCheckAttributes: SkillCheckAttributeConfig[] = [
   {
-    id: 'skill-check-power',
-    name: { en: 'Power', th: 'พลัง' },
-    description: { en: 'Feats of raw strength like lifting, breaking, or pulling.', th: 'ความสำเร็จของพลังดิบๆ เช่น การยก การทำลาย หรือการดึง' },
-    icon: 'muscle-power',
-    thumbnail: 'power-skill.jpg',
-    tags: [ 'skill-check', 'strength', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'strength-skill-check',
+    name: {
+      en: 'Strength Skill Check',
+      th: 'ความแข็งแกร่ง'
+    },
+    description: {
+      en: 'Strength Skill Check is the ability to exert physical force.',
+      th: 'ความแข็งแกร่งคือความสามารถในการขยายพลังกาย'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'Power'
+    value: '2d10',
+    abbreviation: 'STR-check',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'skill-check-endurance',
-    name: { en: 'Endurance', th: 'ความทนทาน' },
-    description: { en: 'Resisting exhaustion or performing prolonged physical tasks.', th: 'การต้านทานความเหนื่อยล้าหรือการทำงานทางกายภาพที่ยาวนาน' },
-    icon: 'endurance',
-    thumbnail: 'endurance-skill.jpg',
-    tags: [ 'skill-check', 'strength', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'agility-skill-check',
+    name: {
+      en: 'Agility Skill Check',
+      th: 'ความคล่องตัว'
+    },
+    description: {
+      en: 'Agility Skill Check is the ability to move quickly and easily.',
+      th: 'ความคล่องตัวคือความสามารถในการเคลื่อนไหวอย่างรวดเร็วและง่าย'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'Endurance'
+    value: '2d10',
+    abbreviation: 'AGI-check',
+    modifier: 'stat(AGI)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'skill-check-stealth',
-    name: { en: 'Stealth', th: 'การหลบซ่อน' },
-    description: { en: 'Moving silently and avoiding detection.', th: 'การเคลื่อนไหวอย่างเงียบๆ และหลีกเลี่ยงการถูกค้นพบ' },
-    icon: 'stealth',
-    thumbnail: 'stealth-skill.jpg',
-    tags: [ 'skill-check', 'speed', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'sense-skill-check',
+    name: {
+      en: 'Sense Skill Check',
+      th: 'ประสาทสัมผัส'
+    },
+    description: {
+      en: 'Sense Skill Check is the ability to perceive the world around you.',
+      th: 'ประสาทสัมผัสคือความสามารถในการรับรู้โลกรอบตัว'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'Stealth'
+    value: '2d10',
+    abbreviation: 'SEN-check',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'skill-check-acrobatics',
-    name: { en: 'Acrobatics', th: 'กายกรรม' },
-    description: { en: 'Feats of balance, agility, and bodily control.', th: 'ความสำเร็จของความสมดุล ความคล่องแคล่ว และการควบคุมร่างกาย' },
-    icon: 'acrobatics',
-    thumbnail: 'acrobatics-skill.jpg',
-    tags: [ 'skill-check', 'speed', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'intelligence-skill-check',
+    name: {
+      en: 'Intelligence Skill Check',
+      th: 'สติปัญญา'
+    },
+    description: {
+      en: 'Intelligence Skill Check is the ability to understand and reason.',
+      th: 'สติปัญญาคือความสามารถในการเข้าใจและคิด'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'Acrobatics'
+    value: '2d10',
+    abbreviation: 'INT-check',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'skill-check-sprint',
-    name: { en: 'Sprint', th: 'การวิ่งเร็ว' },
-    description: { en: 'Short bursts of speed and athletic maneuvering.', th: 'การระเบิดความเร็วสั้นๆ และการเคลื่อนไหวทางกีฬา' },
-    icon: 'sprint',
-    thumbnail: 'sprint-skill.jpg',
-    tags: [ 'skill-check', 'speed', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'technique-skill-check',
+    name: {
+      en: 'Technique Skill Check',
+      th: 'ทักษะ'
+    },
+    description: {
+      en: 'Technique Skill Check is the ability to use tools and objects or actions in a skillful manner.',
+      th: 'ทักษะคือความสามารถในการใช้เครื่องมือ,วัตถุ หรือการกระทำต่าง ๆ อย่างมีประสิทธิภาพ'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'Sprint'
+    value: '2d10',
+    abbreviation: 'TEC-check',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'skill-check-perception',
-    name: { en: 'Perception', th: 'การรับรู้' },
-    description: { en: 'Perception through physical senses (sight, hearing, smell, touch).', th: 'การรับรู้ผ่านร่างกาย/ประสาทสัมผัส (การมองเห็น, การได้ยิน, กลิ่น, สัมผัส)' },
-    icon: 'perception',
-    thumbnail: 'perception-skill.jpg',
-    tags: [ 'skill-check', 'sense', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
+    id: 'charisma-skill-check',
+    name: {
+      en: 'Charisma Skill Check',
+      th: 'เสน่ห์'
+    },
+    description: {
+      en: 'Charisma Skill Check is the ability to influence and persuade others.',
+      th: 'เสน่ห์คือความสามารถในการสัมผัสและทำให้ผู้อื่นรู้สึกอบอุ่น'
+    },
     type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-sense',
-    isSystem: true,
-    abbreviation: 'Perception'
-  },
-  {
-    id: 'skill-check-insight',
-    name: { en: 'Insight', th: 'ความเข้าใจ' },
-    description: { en: 'Perception through emotions/feelings (understanding intentions, detecting lies, reading emotions).', th: 'การรับรู้ผ่านอารมณ์/ความรู้สึกนึกคิด (การเข้าใจเจตนา, การจับโกหก, การอ่านอารมณ์)' },
-    icon: 'insight',
-    thumbnail: 'insight-skill.jpg',
-    tags: [ 'skill-check', 'sense', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-sense',
-    isSystem: true,
-    abbreviation: 'Insight'
-  },
-  {
-    id: 'skill-check-instinct',
-    name: { en: 'Instinct', th: 'สัญชาตญาณ' },
-    description: { en: 'Perception through instinct/intuition (sensing danger, predicting situations without clear information, sensing the mysterious).', th: 'การรับรู้ผ่านสัญชาตญาณ/ความรู้สึก (การรับรู้ถึงอันตราย, การคาดเดาสถานการณ์ล่วงหน้าโดยไม่มีข้อมูลชัดเจน, การสัมผัสถึงสิ่งเร้นลับ)' },
-    icon: 'instinct',
-    thumbnail: 'instinct-skill.jpg',
-    tags: [ 'skill-check', 'sense', 'intuition' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-sense',
-    isSystem: true,
-    abbreviation: 'Instinct'
-  },
-  {
-    id: 'skill-check-tinker',
-    name: { en: 'Tinker', th: 'การซ่อมแซม' },
-    description: { en: 'Working with mechanical objects, including repairing gear.', th: 'การทำงานกับวัตถุทางกล รวมถึงการซ่อมแซมอุปกรณ์' },
-    icon: 'tinker',
-    thumbnail: 'tinker-skill.jpg',
-    tags: [ 'skill-check', 'technique', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'Tinker'
-  },
-  {
-    id: 'skill-check-operate',
-    name: { en: 'Operate', th: 'การควบคุม' },
-    description: { en: 'Controlling complex machinery or vehicles.', th: 'การควบคุมเครื่องจักรหรือยานพาหนะที่ซับซ้อน' },
-    icon: 'operate',
-    thumbnail: 'operate-skill.jpg',
-    tags: [ 'skill-check', 'technique', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'Operate'
-  },
-  {
-    id: 'skill-check-finesse',
-    name: { en: 'Finesse', th: 'ความประณีต' },
-    description: { en: 'Performing delicate tasks requiring precise manual dexterity.', th: 'การทำงานที่ละเอียดอ่อนที่ต้องการความคล่องแคล่วของมือที่แม่นยำ' },
-    icon: 'finesse',
-    thumbnail: 'finesse-skill.jpg',
-    tags: [ 'skill-check', 'technique', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'Finesse'
-  },
-  {
-    id: 'skill-check-recall',
-    name: { en: 'Recall', th: 'การระลึก' },
-    description: { en: 'Remembering information you have previously learned.', th: 'การจำข้อมูลที่คุณได้เรียนรู้มาก่อนหน้านี้' },
-    icon: 'recall',
-    thumbnail: 'recall-skill.jpg',
-    tags: [ 'skill-check', 'knowledge', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'Recall'
-  },
-  {
-    id: 'skill-check-deduction',
-    name: { en: 'Deduction', th: 'การอนุมาน' },
-    description: { en: 'Drawing logical conclusions from evidence.', th: 'การสรุปผลทางตรรกะจากหลักฐาน' },
-    icon: 'deduction',
-    thumbnail: 'deduction-skill.jpg',
-    tags: [ 'skill-check', 'knowledge', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'Deduction'
-  },
-  {
-    id: 'skill-check-analyze',
-    name: { en: 'Analyze', th: 'การวิเคราะห์' },
-    description: { en: 'Scrutinizing an object or situation to understand its properties.', th: 'การตรวจสอบวัตถุหรือสถานการณ์อย่างละเอียดเพื่อเข้าใจคุณสมบัติของมัน' },
-    icon: 'analyze',
-    thumbnail: 'analyze-skill.jpg',
-    tags: [ 'skill-check', 'knowledge', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'Analyze'
-  },
-  {
-    id: 'skill-check-persuasion',
-    name: { en: 'Persuasion', th: 'การโน้มน้าว' },
-    description: { en: 'Convincing others with charm, reason, or etiquette.', th: 'การโน้มน้าวผู้อื่นด้วยเสน่ห์ เหตุผล หรือมารยาท' },
-    icon: 'persuasion',
-    thumbnail: 'persuasion-skill.jpg',
-    tags: [ 'skill-check', 'presence', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-presence',
-    isSystem: true,
-    abbreviation: 'Persuasion'
-  },
-  {
-    id: 'skill-check-deception',
-    name: { en: 'Deception', th: 'การหลอกลวง' },
-    description: { en: 'Misleading others through lies or disguises.', th: 'การทำให้ผู้อื่นเข้าใจผิดผ่านการโกหกหรือการปลอมตัว' },
-    icon: 'deception',
-    thumbnail: 'deception-skill.jpg',
-    tags: [ 'skill-check', 'presence', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-presence',
-    isSystem: true,
-    abbreviation: 'Deception'
-  },
-  {
-    id: 'skill-check-intimidation',
-    name: { en: 'Intimidation', th: 'การข่มขู่' },
-    description: { en: 'Influencing others through threats or shows of force.', th: 'การมีอิทธิพลต่อผู้อื่นผ่านการข่มขู่หรือการแสดงพลัง' },
-    icon: 'intimidation',
-    thumbnail: 'intimidation-skill.jpg',
-    tags: [ 'skill-check', 'presence', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-presence',
-    isSystem: true,
-    abbreviation: 'Intimidation'
-  },
-  {
-    id: 'skill-check-performance',
-    name: { en: 'Performance', th: 'การแสดง' },
-    description: { en: 'Entertaining or captivating an audience.', th: 'การให้ความบันเทิงหรือดึงดูดผู้ชม' },
-    icon: 'performance',
-    thumbnail: 'performance-skill.jpg',
-    tags: [ 'skill-check', 'presence', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-presence',
-    isSystem: true,
-    abbreviation: 'Performance'
-  },
-  {
-    id: 'skill-check-utility',
-    name: { en: 'Utility', th: 'การใช้งาน' },
-    description: { en: 'A general check for using common tools or items.', th: 'การตรวจสอบทั่วไปสำหรับการใช้เครื่องมือหรือไอเทมทั่วไป' },
-    icon: 'utility',
-    thumbnail: 'utility-skill.jpg',
-    tags: [ 'skill-check', 'general', 'utility' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SKILL_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    isSystem: true,
-    abbreviation: 'Utility'
+    value: '2d10',
+    abbreviation: 'CHA-check',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
   }
 ];
 
-// Saving Throw Attributes
-export const mockSavingThrows: AnyAttributeConfig[] = [
+export const mockAbilitySkillCheckAttributes: SkillCheckAttributeConfig[] = [
   {
-    id: 'saving-check-strength',
-    name: { en: 'Strength', th: 'การเซฟความแข็งแกร่ง' },
-    description: { en: 'Resisting effects that would physically move or restrain you.', th: 'การต้านทานเอฟเฟกต์ที่อาจเคลื่อนย้ายหรือจำกัดคุณทางกายภาพ' },
-    icon: 'saving-strength',
-    thumbnail: 'strength-saving.jpg',
-    tags: [ 'saving-check', 'strength', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-strength',
-    isSystem: true,
-    abbreviation: 'Strength'
+    id: 'power-skill-check',
+    name: {
+      en: 'Power Skill Check',
+      th: 'การออกแรง'
+    },
+    description: {
+      en: 'Power Skill Check is the ability to perform physical activities.',
+      th: 'การออกแรงทางกายภาพคือความสามารถในการออกแรงทางกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'power-check',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-speed',
-    name: { en: 'Speed', th: 'การเซฟความเร็ว' },
-    description: { en: 'Dodging out of the way of area effects or moving quickly to safety.', th: 'การหลบหลีกจากเอฟเฟกต์พื้นที่หรือการเคลื่อนไหวอย่างรวดเร็วไปยังที่ปลอดภัย' },
-    icon: 'save-speed',
-    thumbnail: 'speed-save.jpg',
-    tags: [ 'saving-check', 'speed', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-speed',
-    isSystem: true,
-    abbreviation: 'Speed'
+    id: 'endurance-skill-check',
+    name: {
+      en: 'Endurance Skill Check',
+      th: 'ความทนทาน'
+    },
+    description: {
+      en: 'Endurance Skill Check is the ability to withstand physical activities.',
+      th: 'ความทนทานทางกายภาพคือความสามารถในการทนทานทางกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'endurance-check',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-sense',
-    name: { en: 'Sense', th: 'การเซฟประสาทสัมผัส' },
-    description: { en: 'Resisting effects that target your awareness or perception.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่ความตระหนักหรือการรับรู้ของคุณ' },
-    icon: 'save-sense',
-    thumbnail: 'sense-save.jpg',
-    tags: [ 'saving-check', 'sense', 'physical' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-sense',
-    isSystem: true,
-    abbreviation: 'Sense'
+    id: 'stealth-skill-check',
+    name: {
+      en: 'Stealth Skill Check',
+      th: 'การซ่อนตัว'
+    },
+    description: {
+      en: 'Stealth Skill Check is the ability to hide from others.',
+      th: 'การซ่อนตัวทางกายภาพคือความสามารถในการซ่อนตัวทางกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'stealth-check',
+    modifier: 'stat(AGI)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-knowledge',
-    name: { en: 'Knowledge', th: 'การเซฟความรู้' },
-    description: { en: 'Resisting effects that target your intellect or memory.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่สติปัญญาหรือความจำของคุณ' },
-    icon: 'save-knowledge',
-    thumbnail: 'knowledge-save.jpg',
-    tags: [ 'saving-check', 'knowledge', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-knowledge',
-    isSystem: true,
-    abbreviation: 'Knowledge'
+    id: 'acrobatics-skill-check',
+    name: {
+      en: 'Acrobatics Skill Check',
+      th: 'การกระทำทางกายภาพ'
+    },
+    description: {
+      en: 'Acrobatics Skill Check is the ability to perform physical activities.',
+      th: 'การกระทำทางกายภาพคือความสามารถในการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'acrobatics-check',
+    modifier: 'stat(AGI)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-technique',
-    name: { en: 'Technique', th: 'การเซฟเทคนิค' },
-    description: { en: 'Resisting effects that disrupt your skills or precision.', th: 'การต้านทานเอฟเฟกต์ที่รบกวนทักษะหรือความแม่นยำของคุณ' },
-    icon: 'save-technique',
-    thumbnail: 'technique-save.jpg',
-    tags: [ 'saving-check', 'technique', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-technique',
-    isSystem: true,
-    abbreviation: 'Technique'
+    id: 'perception-skill-check',
+    name: {
+      en: 'Perception Skill Check',
+      th: 'ประสาทสัมผัสด้านกายภาพ'
+    },
+    description: {
+      en: 'Perception Skill Check is the ability to perceive the world around you.',
+      th: 'ประสาทสัมผัสด้านกายภาพคือความสามารถในการรับรู้โลกรอบตัว'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'perception-check',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-presence',
-    name: { en: 'Presence', th: 'การเซฟการปรากฏตัว' },
-    description: { en: 'Resisting effects that target your force of will, such as charms or fear.', th: 'การต้านทานเอฟเฟกต์ที่มุ่งเป้าไปที่แรงแห่งเจตจำนงของคุณ เช่น การเสน่ห์หรือความกลัว' },
-    icon: 'save-presence',
-    thumbnail: 'presence-save.jpg',
-    tags: [ 'saving-check', 'presence', 'mental' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    modiferFomular: 'stat-presence',
-    isSystem: true,
-    abbreviation: 'Presence'
+    id: 'aura-sense-skill-check',
+    name: {
+      en: 'Aura Sense Skill Check',
+      th: 'ประสาทสัมผัสด้านพลังงาน'
+    },
+    description: {
+      en: 'Aura Sense Skill Check is the ability to perceive the aura of others.',
+      th: 'ประสาทสัมผัสด้านพลังงานคือความสามารถในการรับรู้พลังงานของผู้อื่น'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'aura-sense-check',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
   },
   {
-    id: 'saving-check-death',
-    name: { en: 'Death', th: 'การเซฟความตาย' },
-    description: { en: 'A special save made when you are Downed to avoid dying.', th: 'การเซฟพิเศษที่ทำเมื่อคุณถูกทำให้ล้มลงเพื่อหลีกเลี่ยงความตาย' },
-    icon: 'save-death',
-    thumbnail: 'death-save.jpg',
-    tags: [ 'saving-check', 'death', 'special' ],
-    ownerId: 'admin',
-    gameSystemId: 'fractured-faction',
-    type: ATTRIBUTE_TYPE.SAVING_CHECK,
-    value: { type: VALUE_TYPE.DICE, formula: '2d10' },
-    isSystem: true,
-    abbreviation: 'Death'
+    id: 'insight-skill-check',
+    name: {
+      en: 'Insight Skill Check',
+      th: 'ความคิดรู้สึก'
+    },
+    description: {
+      en: 'Insight Skill Check is the ability to understand and reason.',
+      th: 'ความคิดรู้สึกคือความสามารถในการเข้าใจและคิด'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'insight-check',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'knowledge-skill-check',
+    name: {
+      en: 'Knowledge Skill Check',
+      th: 'ความรู้'
+    },
+    description: {
+      en: 'Knowledge Skill Check is the ability to know and understand.',
+      th: 'ความรู้คือความสามารถในการรู้และเข้าใจ'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'knowledge-check',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'analysis-skill-check',
+    name: {
+      en: 'Analysis Skill Check',
+      th: 'การวิเคราะห์'
+    },
+    description: {
+      en: 'Analysis Skill Check is the ability to analyze and reason.',
+      th: 'การวิเคราะห์คือความสามารถในการวิเคราะห์'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'analysis-check',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'problem-solving-skill-check',
+    name: {
+      en: 'Problem Solving Skill Check',
+      th: 'การแก้ไขปัญหา'
+    },
+    description: {
+      en: 'Problem Solving Skill Check is the ability to solve problems.',
+      th: 'การแก้ไขปัญหาคือความสามารถในการแก้ไขปัญหา'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'problem-solving-check',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'tinker-skill-check',
+    name: {
+      en: 'Tinker Skill Check',
+      th: 'การปรับแต่ง'
+    },
+    description: {
+      en: 'Tinker Skill Check is the ability to tinker with objects and machines.',
+      th: 'การปรับแต่งคือความสามารถในการปรับแต่งวัตถุและเครื่องจักร'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'tinker-check',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'operation-skill-check',
+    name: {
+      en: 'Operation Skill Check',
+      th: 'การดำเนินการ'
+    },
+    description: {
+      en: 'Operation Skill Check is the ability to operate machines and objects.',
+      th: 'การดำเนินการคือความสามารถในการดำเนินการวัตถุและเครื่องจักร'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'operation-check',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'finesse-skill-check',
+    name: {
+      en: 'Finesse Skill Check',
+      th: 'ความละเอียด'
+    },
+    description: {
+      en: 'Finesse Skill Check is the ability to perform physical activities with precision.',
+      th: 'ความละเอียดคือความสามารถในการกระทำกายภาพอย่างละเอียด'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'finesse-check',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'persuasion-skill-check',
+    name: {
+      en: 'Persuasion Skill Check',
+      th: 'การโน้มน้าว'
+    },
+    description: {
+      en: 'Persuasion Skill Check is the ability to persuade others.',
+      th: 'การโน้มน้าวคือความสามารถในการโน้มน้าวผู้อื่น'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'persuasion-check',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'deception-skill-check',
+    name: {
+      en: 'Deception Skill Check',
+      th: 'การหลอกลวง'
+    },
+    description: {
+      en: 'Deception Skill Check is the ability to deceive others.',
+      th: 'การหลอกลวงคือความสามารถในการหลอกลวงผู้อื่น'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'deception-check',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'intimidation-skill-check',
+    name: {
+      en: 'Intimidation Skill Check',
+      th: 'การข่มขวัญ'
+    },
+    description: {
+      en: 'Intimidation Skill Check is the ability to intimidate others.',
+      th: 'การข่มขวัญคือความสามารถในการข่มขวัญผู้อื่น'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'intimidation-check',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'performance-skill-check',
+    name: {
+      en: 'Performance Skill Check',
+      th: 'การแสดง'
+    },
+    description: {
+      en: 'Performance Skill Check is the ability to perform.',
+      th: 'การแสดงคือความสามารถในการแสดง'
+    },
+    type: ATTRIBUTE_TYPE.SKILL_CHECK,
+    value: '2d10',
+    abbreviation: 'performance-check',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
   }
 ];
 
-// Combined export for all attributes
-export const mockAllAttributes = [
-  ...mockAttributes,
-  ...mockSkillChecks,
-  ...mockSavingThrows
+export const mockSavingThrowAttributes: SavingThrowAttributeConfig[] = [
+  {
+    id: 'strength-saving-throw',
+    name: {
+      en: 'Strength Saving Throw',
+      th: 'ยับยั้งด้วยความแข็งแกร่ง'
+    },
+    description: {
+      en: 'Strength Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความแข็งแกร่งคือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'strength-save',
+    modifier: 'stat(STR)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'agility-saving-throw',
+    name: {
+      en: 'Agility Saving Throw',
+      th: 'ยับยั้งด้วยความคล่องตัว'
+    },
+    description: {
+      en: 'Agility Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความคล่องตัวคือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'agility-save',
+    modifier: 'stat(AGI)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'sense-saving-throw',
+    name: {
+      en: 'Sense Saving Throw',
+      th: 'ยับยั้งด้วยความประสาทสัมผัส'
+    },
+    description: {
+      en: 'Sense Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความประสาทสัมผัสคือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'sense-save',
+    modifier: 'stat(SEN)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'intelligence-saving-throw',
+    name: {
+      en: 'Intelligence Saving Throw',
+      th: 'ยับยั้งด้วยความสติปัญญา'
+    },
+    description: {
+      en: 'Intelligence Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความสติปัญญาคือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'intelligence-save',
+    modifier: 'stat(INT)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'technique-saving-throw',
+    name: {
+      en: 'Technique Saving Throw',
+      th: 'ยับยั้งด้วยความทักษะ'
+    },
+    description: {
+      en: 'Technique Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความทักษะคือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'technique-save',
+    modifier: 'stat(TEC)',
+    gameSystemId: 'fracture-fiction'
+  },
+  {
+    id: 'charisma-saving-throw',
+    name: {
+      en: 'Charisma Saving Throw',
+      th: 'ยับยั้งด้วยความเสน่ห์'
+    },
+    description: {
+      en: 'Charisma Saving Throw is the ability to resist physical activities.',
+      th: 'ยับยั้งด้วยความเสน่ห์คือความสามารถในการยับยั้งการกระทำกายภาพ'
+    },
+    type: ATTRIBUTE_TYPE.SAVING_THROW,
+    value: '2d10',
+    abbreviation: 'charisma-save',
+    modifier: 'stat(CHA)',
+    gameSystemId: 'fracture-fiction'
+  }
 ];
 
-export default mockAllAttributes;
+export const mockAttribute: AttributeConfig[] = [
+  ...mockBaseResourceAttributes,
+  ...mockBaseConstantAttributes,
+  ...mockBaseDiceAttributes,
+
+  ...mockBaseSkillCheckAttributes,
+  ...mockAbilitySkillCheckAttributes,
+
+  ...mockSavingThrowAttributes
+];
